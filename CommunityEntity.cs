@@ -11,8 +11,6 @@ public partial class CommunityEntity : PointEntity
 		if ( isServer ) ServerInstance = this;
 		else ClientInstance = this;
 
-		Log( "ServerInstance = " + ServerInstance );
-
 		base.InitShared();
 	}
 
