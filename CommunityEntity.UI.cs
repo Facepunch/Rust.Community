@@ -116,6 +116,7 @@ public partial class CommunityEntity : PointEntity
 		serverCreatedUI.Clear();
 	}
 
+
 	
 	[RPC_Client]
 	public void AddUI( RPCMessage msg )
@@ -281,13 +282,23 @@ public partial class CommunityEntity : PointEntity
 		www.Dispose();
 	}
 
+
+	[RPC_Client]
+	public void DestroyUI( RPCMessage msg )
+	{
+		DestroyPanel( msg.read.String() );
+	}
+
 	private void DestroyPanel( string pnlName )
 	{
-		foreach( var pnl in serverCreatedUI.Where( x => x.name == pnlName ).ToArray() )
+		serverCreatedUI.RemoveAll( panel =>
 		{
-			Object.Destroy( pnl );
-			serverCreatedUI.Remove( pnl );
-		}
+			if ( !panel ) return true;
+			if ( panel.name != pnlName ) return false;
+
+			Object.Destroy( panel );
+			return true;
+		} );
 	}
 
 #endif
