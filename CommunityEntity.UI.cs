@@ -107,7 +107,7 @@ public partial class CommunityEntity : PointEntity
 	private static Dictionary<string, List<GameObject>> serverCreatedUI;
 	private static Dictionary<uint, List<UnityEngine.UI.RawImage>> requestingTextureImages;
 
-	static CommunityEntity2()
+	static CommunityEntity()
 	{
 		serverCreatedUI = new Dictionary<string, List<GameObject>>();
 		requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.RawImage>>();
