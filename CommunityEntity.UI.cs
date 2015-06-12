@@ -104,25 +104,44 @@ public partial class CommunityEntity : PointEntity
 {
 #if CLIENT
 
-	private static List<GameObject> serverCreatedUI = new List<GameObject>();
+	private static Dictionary<string, List<GameObject>> serverCreatedUI;
+	private static Dictionary<uint, List<UnityEngine.UI.RawImage>> requestingTextureImages;
+
+	static CommunityEntity2()
+	{
+		serverCreatedUI = new Dictionary<string, List<GameObject>>();
+		requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.RawImage>>();
+	}
 
 	public static void DestroyServerCreatedUI()
 	{
-		foreach ( var obj in serverCreatedUI )
+		foreach ( var gameObjects in serverCreatedUI.Values )
 		{
-			GameObject.Destroy( obj );
+			foreach ( var go in gameObjects )
+			{
+				if ( go ) GameObject.Destroy( go );
+			}
 		}
 
 		serverCreatedUI.Clear();
+		requestingTextureImages.Clear();
 	}
 
+	public static void ServerUICreated( GameObject go )
+	{
+		List<GameObject> gameObjects;
+		if ( !serverCreatedUI.TryGetValue( go.name, out gameObjects ) )
+		{
+			gameObjects = new List<GameObject>();
+			serverCreatedUI[go.name] = gameObjects;
+		}
+		gameObjects.Add( go );
+	}
 
-	
 	[RPC_Client]
 	public void AddUI( RPCMessage msg )
 	{
 		var str = msg.read.String();
-		Log( str );
 		var jsonArray = JSON.Array.Parse( str );
 
 		foreach ( var value in jsonArray )
@@ -137,8 +156,8 @@ public partial class CommunityEntity : PointEntity
 			}
 
 			var go = new GameObject( json.GetString( "name", "AddUI CreatedPanel" ) );
-			go.transform.SetParent( parentPanel, false );
-			serverCreatedUI.Add( go );
+			go.transform.SetParent( parentPanel.transform, false );
+			ServerUICreated( go );
 
 			var rt = go.GetComponent<RectTransform>();
 			if ( rt )
@@ -153,12 +172,22 @@ public partial class CommunityEntity : PointEntity
 			{
 				CreateComponents( go, component.Obj );
 			}
+
+			if ( json.ContainsKey( "fadeOut" ) )
+			{
+				go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
+			}
 		}
 	}
 
-	private Transform FindPanel( string name )
+	private GameObject FindPanel( string name )
 	{
-		return UIHUD.Instance.transform.FindChildRecursive( name );
+		List<GameObject> panels;
+		if ( serverCreatedUI.TryGetValue( name, out panels ) )
+		{
+			return panels.FirstOrDefault();
+		}
+		return UIHUD.Instance.transform.FindChildRecursive( name ).gameObject;
 	}
 
 	private void CreateComponents( GameObject go, JSON.Object obj )
@@ -176,6 +205,7 @@ public partial class CommunityEntity : PointEntity
 					c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
 					c.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
 					c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+					GraphicComponentCreated( c, obj );
 					break;
 				}
 
@@ -187,13 +217,14 @@ public partial class CommunityEntity : PointEntity
 					c.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
 					c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
 					c.type = (UnityEngine.UI.Image.Type)System.Enum.Parse( typeof( UnityEngine.UI.Image.Type ), obj.GetString( "imagetype", "Simple" ) );
+					GraphicComponentCreated( c, obj );
 					break;
 				}
 
 			case "UnityEngine.UI.RawImage":
 				{
 					var c = go.AddComponent<UnityEngine.UI.RawImage>();
-					c.texture = FileSystem.Load<Texture>( obj.GetString( "sprite", "Assets/Icons/rust.png" ) );
+					c.texture = FileSystem.Load<Texture>( obj.GetString( "sprite", "Assets/Icons/rust.png" ) ); //TODO: test what is rendered if texture is not set at all
 					c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
 
 					if ( obj.ContainsKey( "material" ) )
@@ -205,6 +236,31 @@ public partial class CommunityEntity : PointEntity
 					{
 						StartCoroutine( LoadTextureFromWWW( c, obj.GetString( "url" ) ) );
 					}
+
+					if ( obj.ContainsKey( "png" ) )
+					{
+						var textureID = uint.Parse( obj.GetString( "png", "0" ) );
+						var data = FileStorage.client.Get( textureID, FileStorage.Type.png );
+						if ( data == null )
+						{
+							List<UnityEngine.UI.RawImage> components;
+							if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
+							{
+								components = new List<UnityEngine.UI.RawImage>();
+								requestingTextureImages[textureID] = components;
+								RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
+							}
+							components.Add( c );
+						}
+						else
+						{
+							var texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false );
+							texture.LoadImage( data );
+							c.texture = texture;
+						}
+					}
+
+					GraphicComponentCreated( c, obj );
 
 					break;
 				}
@@ -234,6 +290,8 @@ public partial class CommunityEntity : PointEntity
 
 					c.image = img;
 
+					GraphicComponentCreated( img, obj );
+
 					break;
 				}
 
@@ -255,6 +313,15 @@ public partial class CommunityEntity : PointEntity
 					}
 					break;
 				}
+		}
+	}
+
+	private void GraphicComponentCreated( UnityEngine.UI.Graphic c, JSON.Object obj )
+	{
+		if ( obj.ContainsKey( "fadeIn" ) )
+		{
+			c.canvasRenderer.SetAlpha( 0f );
+			c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
 		}
 	}
 
@@ -281,7 +348,31 @@ public partial class CommunityEntity : PointEntity
 		c.texture = texture;
 		www.Dispose();
 	}
+	
+	[RPC_Client]
+	public void CL_ReceiveFilePng( BaseEntity.RPCMessage msg )
+	{
+		var textureID = msg.read.UInt32();
+		var bytes = msg.read.BytesWithSize();
+		
+		if ( FileStorage.client.Store( bytes, FileStorage.Type.png ) != textureID )
+		{
+			Log( "Client/Server FileStorage CRC differs" );
+		}
 
+		List<UnityEngine.UI.RawImage> components;
+		if ( !requestingTextureImages.TryGetValue( textureID, out components ) ) return;
+
+		requestingTextureImages.Remove( textureID );
+
+		var texture = new Texture2D( 1, 1 );
+		texture.LoadImage( bytes );
+
+		foreach ( var c in components )
+		{
+			if ( c ) c.texture = texture;
+		}
+	}
 
 	[RPC_Client]
 	public void DestroyUI( RPCMessage msg )
@@ -291,14 +382,44 @@ public partial class CommunityEntity : PointEntity
 
 	private void DestroyPanel( string pnlName )
 	{
-		serverCreatedUI.RemoveAll( panel =>
-		{
-			if ( !panel ) return true;
-			if ( panel.name != pnlName ) return false;
+		List<GameObject> gameObjects;
+		if ( !serverCreatedUI.TryGetValue( pnlName, out gameObjects ) ) return;
 
-			Object.Destroy( panel );
-			return true;
-		} );
+		serverCreatedUI.Remove( pnlName );
+
+		foreach ( var go in gameObjects )
+		{
+			if ( !go ) continue;
+
+			var fadeOut = go.GetComponent<FadeOut>();
+			if ( fadeOut )
+			{
+				fadeOut.FadeOutAndDestroy();
+			}
+			else
+			{
+				Object.Destroy( go );
+			}
+		}
+	}
+
+	private class FadeOut : MonoBehaviour
+	{
+		public float duration;
+
+		public void FadeOutAndDestroy()
+		{
+			Invoke( "Kill", duration + .1f );
+			foreach ( var c in gameObject.GetComponents<UnityEngine.UI.Graphic>() )
+			{
+				c.CrossFadeAlpha( 0f, duration, false );
+			}
+		}
+
+		public void Kill()
+		{
+			Destroy( gameObject );
+		}
 	}
 
 #endif
