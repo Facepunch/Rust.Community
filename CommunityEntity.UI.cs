@@ -127,13 +127,13 @@ public partial class CommunityEntity : PointEntity
 		requestingTextureImages.Clear();
 	}
 
-	public static void ServerUICreated( GameObject go )
+	public static void ServerUICreated(string parent, GameObject go )
 	{
 		List<GameObject> gameObjects;
-		if ( !serverCreatedUI.TryGetValue( go.name, out gameObjects ) )
+		if ( !serverCreatedUI.TryGetValue( parent, out gameObjects ) )
 		{
 			gameObjects = new List<GameObject>();
-			serverCreatedUI[go.name] = gameObjects;
+			serverCreatedUI[parent] = gameObjects;
 		}
 		gameObjects.Add( go );
 	}
@@ -157,7 +157,7 @@ public partial class CommunityEntity : PointEntity
 
 			var go = new GameObject( json.GetString( "name", "AddUI CreatedPanel" ) );
 			go.transform.SetParent( parentPanel.transform, false );
-			ServerUICreated( go );
+			ServerUICreated( parentPanel.name, go );
 
 			var rt = go.GetComponent<RectTransform>();
 			if ( rt )
@@ -385,7 +385,12 @@ public partial class CommunityEntity : PointEntity
 		List<GameObject> gameObjects;
 		if ( !serverCreatedUI.TryGetValue( pnlName, out gameObjects ) ) return;
 
-		serverCreatedUI.Remove( pnlName );
+		RemoveChildOfParent(pnlName);
+        // Remove Main panel
+        serverCreatedUI.Remove(pnlName);
+        // Remove panel from overlay
+        foreach (var overlayItem in serverCreatedUI.Single(x => x.Key == "Overlay").Value.Select(x => x).Where(x => x.name == pnlName).ToList())
+            serverCreatedUI.Single(x => x.Key == "Overlay").Value.Remove(overlayItem);
 
 		foreach ( var go in gameObjects )
 		{
@@ -402,6 +407,29 @@ public partial class CommunityEntity : PointEntity
 			}
 		}
 	}
+
+    private void RemoveChildOfParent(string parentName)
+    {
+        foreach (var items in serverCreatedUI.Select(x => x).Where(x => x.Key == parentName))
+        {
+            foreach (var item in items.Value)
+            {
+                if (hasChildOfParent(item.name))
+                    RemoveChildOfParent(item.name);
+
+                serverCreatedUI.Remove(item.name);
+            }
+            break;
+        }
+    }
+
+    private bool hasChildOfParent(string parentName)
+    {
+        if (serverCreatedUI.Select(x => x).Where(x => x.Key == parentName).ToList().Count > 0)
+                return true;
+
+        return false;
+    }
 
 	private class FadeOut : MonoBehaviour
 	{
