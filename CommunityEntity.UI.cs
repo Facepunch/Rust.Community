@@ -182,11 +182,9 @@ public partial class CommunityEntity : PointEntity
 
 	private GameObject FindPanel( string name )
 	{
-		List<GameObject> panels;
-		if ( serverCreatedUI.TryGetValue( name, out panels ) )
-		{
-			return panels.FirstOrDefault();
-		}
+		foreach (var item in serverCreatedUI)
+            if (item.Value.Exists(x => x.name == name))
+                return item.Value.Find(x => x.name == name);
 		return UIHUD.Instance.transform.FindChildRecursive( name ).gameObject;
 	}
 
@@ -385,7 +383,7 @@ public partial class CommunityEntity : PointEntity
 		List<GameObject> gameObjects;
 		if ( !serverCreatedUI.TryGetValue( pnlName, out gameObjects ) ) return;
 
-		RemoveChildOfParent(pnlName);
+        RemoveChildOfParent(pnlName);
         // Remove Main panel
         serverCreatedUI.Remove(pnlName);
         // Remove panel from overlay
