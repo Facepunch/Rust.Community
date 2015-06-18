@@ -105,12 +105,12 @@ public partial class CommunityEntity : PointEntity
 #if CLIENT
 
 	private static Dictionary<string, List<GameObject>> serverCreatedUI;
-	private static Dictionary<uint, List<UnityEngine.UI.RawImage>> requestingTextureImages;
+	private static Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>> requestingTextureImages;
 
 	static CommunityEntity()
 	{
 		serverCreatedUI = new Dictionary<string, List<GameObject>>();
-		requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.RawImage>>();
+		requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>>();
 	}
 
 	public static void DestroyServerCreatedUI()
@@ -187,7 +187,9 @@ public partial class CommunityEntity : PointEntity
 		{
 			return panels.FirstOrDefault();
 		}
-		return UIHUD.Instance.transform.FindChildRecursive( name ).gameObject;
+		var transform = UIHUD.Instance.transform.FindChildRecursive( name );
+		if ( transform ) return transform.gameObject;
+		return null;
 	}
 
 	private void CreateComponents( GameObject go, JSON.Object obj )
@@ -217,14 +219,21 @@ public partial class CommunityEntity : PointEntity
 					c.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
 					c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
 					c.type = (UnityEngine.UI.Image.Type)System.Enum.Parse( typeof( UnityEngine.UI.Image.Type ), obj.GetString( "imagetype", "Simple" ) );
+
+					if ( obj.ContainsKey( "png" ) )
+					{
+						PngGraphicLoadRequested( c, uint.Parse( obj.GetString( "png" ) ) );
+					}
+
 					GraphicComponentCreated( c, obj );
+
 					break;
 				}
 
 			case "UnityEngine.UI.RawImage":
 				{
 					var c = go.AddComponent<UnityEngine.UI.RawImage>();
-					c.texture = FileSystem.Load<Texture>( obj.GetString( "sprite", "Assets/Icons/rust.png" ) ); //TODO: test what is rendered if texture is not set at all
+					c.texture = FileSystem.Load<Texture>( obj.GetString( "sprite", "Assets/Icons/rust.png" ) );
 					c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
 
 					if ( obj.ContainsKey( "material" ) )
@@ -239,25 +248,7 @@ public partial class CommunityEntity : PointEntity
 
 					if ( obj.ContainsKey( "png" ) )
 					{
-						var textureID = uint.Parse( obj.GetString( "png", "0" ) );
-						var data = FileStorage.client.Get( textureID, FileStorage.Type.png );
-						if ( data == null )
-						{
-							List<UnityEngine.UI.RawImage> components;
-							if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
-							{
-								components = new List<UnityEngine.UI.RawImage>();
-								requestingTextureImages[textureID] = components;
-								RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
-							}
-							components.Add( c );
-						}
-						else
-						{
-							var texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false );
-							texture.LoadImage( data );
-							c.texture = texture;
-						}
+						PngGraphicLoadRequested( c, uint.Parse( obj.GetString( "png" ) ) );
 					}
 
 					GraphicComponentCreated( c, obj );
@@ -295,6 +286,14 @@ public partial class CommunityEntity : PointEntity
 					break;
 				}
 
+			case "UnityEngine.UI.Outline":
+				{
+					var c = go.AddComponent<UnityEngine.UI.Outline>();
+					c.effectColor = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+					c.effectDistance = Vector2Ex.Parse( obj.GetString( "distance", "1.0 -1.0" ) );
+					c.useGraphicAlpha = obj.ContainsKey( "useGraphicAlpha" );
+					break;
+				}
 			case "NeedsCursor":
 				{
 					go.AddComponent<NeedsCursor>();
@@ -323,6 +322,42 @@ public partial class CommunityEntity : PointEntity
 			c.canvasRenderer.SetAlpha( 0f );
 			c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
 		}
+	}
+
+	private void PngGraphicLoadRequested( UnityEngine.UI.MaskableGraphic component, uint textureID )
+	{
+		var bytes = FileStorage.client.Get( textureID, FileStorage.Type.png );
+		if ( bytes == null )
+		{
+			List<UnityEngine.UI.MaskableGraphic> components;
+			if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
+			{
+				components = new List<UnityEngine.UI.MaskableGraphic>();
+				requestingTextureImages[textureID] = components;
+				RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
+			}
+			components.Add( component );
+		}
+		else
+		{
+			LoadPngIntoGraphic( component, bytes );
+		}
+	}
+
+	private void LoadPngIntoGraphic( UnityEngine.UI.MaskableGraphic component, byte[] bytes )
+	{
+		var texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false );
+		texture.LoadImage( bytes );
+
+		var image = component as UnityEngine.UI.Image;
+		if ( image )
+		{
+			image.sprite = Sprite.Create( texture, new Rect( 0, 0, texture.width, texture.height ), new Vector2( 0.5f, 0.5f ) );
+			return;
+		}
+
+		var rawImage = component as UnityEngine.UI.RawImage;
+		if ( rawImage ) rawImage.texture = texture;
 	}
 
 	private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
@@ -360,17 +395,14 @@ public partial class CommunityEntity : PointEntity
 			Log( "Client/Server FileStorage CRC differs" );
 		}
 
-		List<UnityEngine.UI.RawImage> components;
+		List<UnityEngine.UI.MaskableGraphic> components;
 		if ( !requestingTextureImages.TryGetValue( textureID, out components ) ) return;
 
 		requestingTextureImages.Remove( textureID );
 
-		var texture = new Texture2D( 1, 1 );
-		texture.LoadImage( bytes );
-
 		foreach ( var c in components )
 		{
-			if ( c ) c.texture = texture;
+			LoadPngIntoGraphic( c, bytes );
 		}
 	}
 
