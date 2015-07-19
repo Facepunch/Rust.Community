@@ -19,7 +19,6 @@ public class cui : ConsoleSystem
 							[
 								{
 									""type"":""UnityEngine.UI.RawImage"",
-									""imagetype"": ""Tiled"",
 									""color"": ""1.0 1.0 1.0 1.0"",
 									""url"": ""http://files.facepunch.com/garry/2015/June/03/2015-06-03_12-19-17.jpg"",
 								},
