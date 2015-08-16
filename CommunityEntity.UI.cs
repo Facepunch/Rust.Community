@@ -210,6 +210,28 @@ public partial class CommunityEntity : PointEntity
 					GraphicComponentCreated( c, obj );
 					break;
 				}
+				
+			case "CountDown":
+				{
+					var c = go.AddComponent<UnityEngine.UI.Text>();
+					c.text = obj.GetString( "wrapperText", "%TIME_LEFT% sec." );
+					c.fontSize = obj.GetInt( "fontSize", 14 );
+					c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
+					c.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
+					c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+					
+					var cd = go.AddComponent<CountDown>();
+					cd.timeLeft = obj.GetInt( "timeLeft", 0 );
+					cd.wrapperText = obj.GetString( "wrapperText", "%TIME_LEFT% sec." );
+					
+					if ( obj.ContainsKey( "command" ) )
+					{
+						cd.command = obj.GetString( "command" );
+					}
+					
+					GraphicComponentCreated( c, obj );
+					break;
+				}
 
 
 			case "UnityEngine.UI.Image":
@@ -451,6 +473,35 @@ public partial class CommunityEntity : PointEntity
 		public void Kill()
 		{
 			Destroy( gameObject );
+		}
+	}
+	
+	private class CountDown : MonoBehaviour
+	{
+		public string command = "";
+		
+		public int timeLeft = 0;
+		string placeHolderText = "%TIME_LEFT%";
+		public string wrapperText = "";
+		
+		UnityEngine.UI.Text text;
+		
+		void Start()
+		{
+			text = GetComponent<UnityEngine.UI.Text>();
+			text.text = wrapperText.Replace(placeHolderText, timeLeft.ToString());
+			InvokeRepeating( "UpdateCountDown", 1f, 1f );
+		}
+		
+		void UpdateCountDown()
+		{
+			timeLeft--;
+			if (timeLeft == -1) {
+				if ( command != "" ) ConsoleSystem.ClientRunOnServer( cmd );
+				
+				Destroy( gameObject );
+			}
+			text.text = wrapperText.Replace(placeHolderText, timeLeft.ToString());
 		}
 	}
 
