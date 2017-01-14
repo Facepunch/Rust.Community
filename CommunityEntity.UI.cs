@@ -312,6 +312,26 @@ public partial class CommunityEntity : PointEntity
 					}
 					break;
 				}
+
+            case "InputField":
+                {
+                    var i = go.AddComponent<UnityEngine.UI.InputField>();
+                    if (i)
+                    {
+                        if (obj.ContainsKey("command"))
+                        {
+                            var cmd = obj.GetString("command");
+                            i.onEndEdit.AddListener((text) => { ConsoleSystem.ClientRunOnServer(cmd + "," + text); } );
+                        }
+                        i.characterLimit = 1024;
+                        if (obj.ContainsKey("password"))
+                        {
+                            i.inputType = UnityEngine.UI.InputField.InputType.Password;
+                        }
+                        var textComp = go.GetComponent<UnityEngine.UI.Text>();
+                    }
+                    break;
+                }
 		}
 	}
 
