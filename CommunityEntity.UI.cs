@@ -116,29 +116,6 @@ public partial class CommunityEntity : PointEntity
                     break;
                 }
 
-            case "CountDown":
-                {
-                    var c = go.AddComponent<UnityEngine.UI.Text>();
-                    c.text = obj.GetString( "wrapperText", "%TIME_LEFT% sec." );
-                    c.fontSize = obj.GetInt( "fontSize", 14 );
-                    c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
-                    c.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
-                    c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-
-                    var cd = go.AddComponent<CountDown>();
-                    cd.timeLeft = obj.GetInt( "timeLeft", 0 );
-                    cd.wrapperText = obj.GetString( "wrapperText", "%TIME_LEFT% sec." );
-
-                    if ( obj.ContainsKey( "command" ) )
-                    {
-                        cd.command = obj.GetString( "command" );
-                    }
-
-                    GraphicComponentCreated( c, obj );
-                    break;
-                }
-
-
             case "UnityEngine.UI.Image":
                 {
                     var c = go.AddComponent<UnityEngine.UI.Image>();
@@ -221,6 +198,7 @@ public partial class CommunityEntity : PointEntity
                     c.useGraphicAlpha = obj.ContainsKey( "useGraphicAlpha" );
                     break;
                 }
+
             case "NeedsCursor":
                 {
                     go.AddComponent<NeedsCursor>();
@@ -237,6 +215,19 @@ public partial class CommunityEntity : PointEntity
                         rt.offsetMin = Vector2Ex.Parse( obj.GetString( "offsetmin", "0.0 0.0" ) );
                         rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
                     }
+                    break;
+                }
+
+            case "Countdown":
+                {
+                    var c = go.AddComponent<Countdown>();
+                    c.timeLeft = obj.GetInt( "timeLeft", 0 );
+
+                    if ( obj.ContainsKey( "command" ) )
+                    {
+                        c.command = obj.GetString( "command" );
+                    }
+
                     break;
                 }
 
@@ -404,36 +395,48 @@ public partial class CommunityEntity : PointEntity
         }
     }
 
-    private class CountDown : MonoBehaviour
+    private class Countdown : MonoBehaviour
     {
         public string command = "";
-
         public int timeLeft = 0;
-        string placeHolderText = "%TIME_LEFT%";
-        public string wrapperText = "";
-
-        UnityEngine.UI.Text text;
+        private UnityEngine.UI.Text textComponent;
 
         void Start()
         {
-            text = GetComponent<UnityEngine.UI.Text>();
-            text.text = wrapperText.Replace( placeHolderText, timeLeft.ToString() );
-            InvokeRepeating( "UpdateCountDown", 1f, 1f );
+            textComponent = GetComponent<UnityEngine.UI.Text>();
+            if ( textComponent ) 
+            {
+                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", timeLeft.ToString() );
+            }
+            InvokeRepeating( "UpdateCountdown", 1f, 1f );
         }
 
-        void UpdateCountDown()
+        void UpdateCountdown()
         {
             timeLeft--;
 
             if ( timeLeft == -1 )
             {
                 if ( !string.IsNullOrEmpty( command ) )
+                {
                     ConsoleNetwork.ClientRunOnServer( command );
+                }
 
-                Destroy( gameObject );
+                var fadeOut = GetComponent<FadeOut>();
+                if ( fadeOut )
+                {
+                    fadeOut.FadeOutAndDestroy();
+                }
+                else
+                {
+                    Object.Destroy( gameObject );
+                }
             }
 
-            text.text = wrapperText.Replace( placeHolderText, timeLeft.ToString() );
+            if ( textComponent )
+            {
+                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", timeLeft.ToString() );
+            }
         }
     }
 
