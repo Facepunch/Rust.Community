@@ -199,6 +199,35 @@ public partial class CommunityEntity : PointEntity
                     break;
                 }
 
+            case "UnityEngine.UI.InputField":
+                {
+                    var t = go.AddComponent<UnityEngine.UI.Text>();
+                    t.text = obj.GetString( "text", "Text" );
+                    t.fontSize = obj.GetInt( "fontSize", 14 );
+                    t.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
+                    t.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
+                    t.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+
+                    var c = go.AddComponent<UnityEngine.UI.InputField>();
+                    c.textComponent = t;
+                    c.characterLimit = obj.GetInt( "characterLimit", 0 );
+
+                    if ( obj.ContainsKey( "command" ) )
+                    {
+                        var cmd = obj.GetString( "command" );
+                        c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
+                    }
+
+                    if ( obj.ContainsKey( "password" ) )
+                    {
+                        c.inputType = UnityEngine.UI.InputField.InputType.Password;
+                    }
+
+                    GraphicComponentCreated( t, obj );
+
+                    break;
+                }
+
             case "NeedsCursor":
                 {
                     go.AddComponent<NeedsCursor>();
@@ -221,33 +250,15 @@ public partial class CommunityEntity : PointEntity
             case "Countdown":
                 {
                     var c = go.AddComponent<Countdown>();
-                    c.timeLeft = obj.GetInt( "timeLeft", 0 );
+                    c.endTime = obj.GetInt( "endTime", 0 );
+                    c.startTime = obj.GetInt( "startTime", 0 );
+                    c.step = obj.GetInt( "step", 1 );
 
                     if ( obj.ContainsKey( "command" ) )
                     {
                         c.command = obj.GetString( "command" );
                     }
 
-                    break;
-                }
-
-            case "InputField":
-                {
-                    var i = go.AddComponent<UnityEngine.UI.InputField>();
-                    if ( i )
-                    {
-                        if ( obj.ContainsKey( "command" ) )
-                        {
-                            var cmd = obj.GetString( "command" );
-                            i.onEndEdit.AddListener( ( text ) => { ConsoleNetwork.ClientRunOnServer( cmd + "," + text ); } );
-                        }
-                        i.characterLimit = 1024;
-                        if ( obj.ContainsKey( "password" ) )
-                        {
-                            i.inputType = UnityEngine.UI.InputField.InputType.Password;
-                        }
-                        var textComp = go.GetComponent<UnityEngine.UI.Text>();
-                    }
                     break;
                 }
         }
@@ -398,7 +409,10 @@ public partial class CommunityEntity : PointEntity
     private class Countdown : MonoBehaviour
     {
         public string command = "";
-        public int timeLeft = 0;
+        public int endTime = 0;
+        public int startTime = 0;
+        public int step = 1;
+        private int sign = 1;
         private UnityEngine.UI.Text textComponent;
 
         void Start()
@@ -406,36 +420,57 @@ public partial class CommunityEntity : PointEntity
             textComponent = GetComponent<UnityEngine.UI.Text>();
             if ( textComponent ) 
             {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", timeLeft.ToString() );
+                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
             }
-            InvokeRepeating( "UpdateCountdown", 1f, 1f );
+            if ( startTime == endTime )
+            {
+                End();
+            }
+            if ( step == 0 )
+            {
+                step = 1;
+            }
+            if ( startTime > endTime && step > 0 )
+            {
+                sign = -1;
+            }
+
+            InvokeRepeating( "UpdateCountdown", step, step );
         }
 
         void UpdateCountdown()
         {
-            timeLeft--;
+            startTime = startTime + step * sign;
 
-            if ( timeLeft == -1 )
+            if ( startTime < endTime || startTime > endTime)
             {
                 if ( !string.IsNullOrEmpty( command ) )
                 {
                     ConsoleNetwork.ClientRunOnServer( command );
                 }
 
-                var fadeOut = GetComponent<FadeOut>();
-                if ( fadeOut )
-                {
-                    fadeOut.FadeOutAndDestroy();
-                }
-                else
-                {
-                    Object.Destroy( gameObject );
-                }
+                End();
+                return;
             }
 
             if ( textComponent )
             {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", timeLeft.ToString() );
+                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
+            }
+        }
+
+        void End()
+        {
+            CancelInvoke( "UpdateCountdown" );
+
+            var fadeOut = GetComponent<FadeOut>();
+            if ( fadeOut )
+            {
+                fadeOut.FadeOutAndDestroy();
+            }
+            else
+            {
+                Object.Destroy( gameObject );
             }
         }
     }
