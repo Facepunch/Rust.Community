@@ -442,7 +442,12 @@ public partial class CommunityEntity : PointEntity
         {
             startTime = startTime + step * sign;
 
-            if ( startTime < endTime || startTime > endTime)
+            if ( textComponent )
+            {
+                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
+            }
+
+            if ( startTime == endTime )
             {
                 if ( !string.IsNullOrEmpty( command ) )
                 {
@@ -450,12 +455,6 @@ public partial class CommunityEntity : PointEntity
                 }
 
                 End();
-                return;
-            }
-
-            if ( textComponent )
-            {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
             }
         }
 
