@@ -5,42 +5,38 @@ using System.Linq;
 using Facepunch.Extend;
 using System.IO;
 
-public partial class CommunityEntity : PointEntity
-{
 #if CLIENT
 
-    private static Dictionary<string, List<GameObject>> serverCreatedUI;
-    private static Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>> requestingTextureImages;
-
-    static CommunityEntity()
-    {
-        serverCreatedUI = new Dictionary<string, List<GameObject>>();
-        requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>>();
-    }
+public partial class CommunityEntity
+{
+    private static List<GameObject> AllUi = new List<GameObject>();
+    private static Dictionary<string, GameObject> UiDict = new Dictionary<string, GameObject>();
 
     public static void DestroyServerCreatedUI()
     {
-        foreach ( var gameObjects in serverCreatedUI.Values )
+        foreach ( var go in AllUi )
         {
-            foreach ( var go in gameObjects )
-            {
-                if ( go ) GameObject.Destroy( go );
-            }
+            if ( !go ) continue;
+            GameObject.Destroy( go );
         }
 
-        serverCreatedUI.Clear();
+        AllUi.Clear();
+        UiDict.Clear();
         requestingTextureImages.Clear();
     }
 
-    public static void ServerUICreated( GameObject go )
+    public void SetVisible( bool b )
     {
-        List<GameObject> gameObjects;
-        if ( !serverCreatedUI.TryGetValue( go.name, out gameObjects ) )
+        foreach ( var c in GetComponentsInChildren<Canvas>( true ) )
         {
-            gameObjects = new List<GameObject>();
-            serverCreatedUI[go.name] = gameObjects;
+            c.gameObject.SetActive( b );
         }
-        gameObjects.Add( go );
+    }
+
+    private static void RegisterUi( GameObject go )
+    {
+        AllUi.Add( go );
+        UiDict[go.name] = go;
     }
 
     [RPC_Client]
@@ -56,13 +52,13 @@ public partial class CommunityEntity : PointEntity
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
             if ( parentPanel == null )
             {
-                Debug.LogWarning( "AddUI: Unknown Parent: " + json.GetString( "parent", "Overlay" ) );
+                Debug.LogWarning( "AddUI: Unknown Parent for \""+ json.GetString( "name", "AddUI CreatedPanel" ) + "\": " + json.GetString( "parent", "Overlay" ) );
                 return;
             }
 
             var go = new GameObject( json.GetString( "name", "AddUI CreatedPanel" ) );
             go.transform.SetParent( parentPanel.transform, false );
-            ServerUICreated( go );
+            RegisterUi( go );
 
             var rt = go.GetComponent<RectTransform>();
             if ( rt )
@@ -87,13 +83,15 @@ public partial class CommunityEntity : PointEntity
 
     private GameObject FindPanel( string name )
     {
-        List<GameObject> panels;
-        if ( serverCreatedUI.TryGetValue( name, out panels ) )
+        GameObject panel;
+        if ( UiDict.TryGetValue( name, out panel ) )
         {
-            return panels.FirstOrDefault();
+            return panel;
         }
-        var transform = UIHUD.Instance.transform.FindChildRecursive( name );
-        if ( transform ) return transform.gameObject;
+
+        var tx = transform.FindChildRecursive( name );
+        if ( tx ) return tx.gameObject;
+
         return null;
     }
 
@@ -126,7 +124,7 @@ public partial class CommunityEntity : PointEntity
 
                     if ( obj.ContainsKey( "png" ) )
                     {
-                        PngGraphicLoadRequested( c, uint.Parse( obj.GetString( "png" ) ) );
+                        SetImageFromServer( c, uint.Parse( obj.GetString( "png" ) ) );
                     }
 
                     GraphicComponentCreated( c, obj );
@@ -147,12 +145,12 @@ public partial class CommunityEntity : PointEntity
 
                     if ( obj.ContainsKey( "url" ) )
                     {
-                        StartCoroutine( LoadTextureFromWWW( c, obj.GetString( "url" ) ) );
+                        Rust.Global.Runner.StartCoroutine( LoadTextureFromWWW( c, obj.GetString( "url" ) ) );
                     }
 
                     if ( obj.ContainsKey( "png" ) )
                     {
-                        PngGraphicLoadRequested( c, uint.Parse( obj.GetString( "png" ) ) );
+                        SetImageFromServer( c, uint.Parse( obj.GetString( "png" ) ) );
                     }
 
                     GraphicComponentCreated( c, obj );
@@ -273,50 +271,18 @@ public partial class CommunityEntity : PointEntity
         }
     }
 
-    private void PngGraphicLoadRequested( UnityEngine.UI.MaskableGraphic component, uint textureID )
-    {
-        var bytes = FileStorage.client.Get( textureID, FileStorage.Type.png, net.ID );
-        if ( bytes == null )
-        {
-            List<UnityEngine.UI.MaskableGraphic> components;
-            if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
-            {
-                components = new List<UnityEngine.UI.MaskableGraphic>();
-                requestingTextureImages[textureID] = components;
-                RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
-            }
-            components.Add( component );
-        }
-        else
-        {
-            LoadPngIntoGraphic( component, bytes );
-        }
-    }
-
-    private void LoadPngIntoGraphic( UnityEngine.UI.MaskableGraphic component, byte[] bytes )
-    {
-        var texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false );
-        texture.LoadImage( bytes );
-
-        var image = component as UnityEngine.UI.Image;
-        if ( image )
-        {
-            image.sprite = Sprite.Create( texture, new Rect( 0, 0, texture.width, texture.height ), new Vector2( 0.5f, 0.5f ) );
-            return;
-        }
-
-        var rawImage = component as UnityEngine.UI.RawImage;
-        if ( rawImage ) rawImage.texture = texture;
-    }
-
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
     {
-        var www = new WWW( p );
+        var www = new WWW( p.Trim() );
 
-        yield return www;
+        while ( !www.isDone )
+        {
+            yield return null;
+        }
 
         if ( !string.IsNullOrEmpty( www.error ) )
         {
+            Debug.Log( "Error downloading image: " + p + " (" + www.error + ")" );
             www.Dispose();
             yield break;
         }
@@ -325,6 +291,7 @@ public partial class CommunityEntity : PointEntity
         var texture = www.texture;
         if ( texture == null || c == null )
         {
+            Debug.Log( "Error downloading image: " + p + " (not an image)" );
             www.Dispose();
             yield break;
         }
@@ -333,30 +300,6 @@ public partial class CommunityEntity : PointEntity
         www.Dispose();
     }
 
-    [RPC_Client]
-    public void CL_ReceiveFilePng( BaseEntity.RPCMessage msg )
-    {
-        var textureID = msg.read.UInt32();
-        var bytes = msg.read.BytesWithSize();
-
-        using ( var ms = new MemoryStream( bytes, 0, bytes.Length, true, true ) )
-        {
-            if ( FileStorage.client.Store( ms, FileStorage.Type.png, net.ID ) != textureID )
-            {
-                Log( "Client/Server FileStorage CRC differs" );
-            }
-        }
-
-        List<UnityEngine.UI.MaskableGraphic> components;
-        if ( !requestingTextureImages.TryGetValue( textureID, out components ) ) return;
-
-        requestingTextureImages.Remove( textureID );
-
-        foreach ( var c in components )
-        {
-            LoadPngIntoGraphic( c, bytes );
-        }
-    }
 
     [RPC_Client]
     public void DestroyUI( RPCMessage msg )
@@ -366,113 +309,24 @@ public partial class CommunityEntity : PointEntity
 
     private void DestroyPanel( string pnlName )
     {
-        List<GameObject> gameObjects;
-        if ( !serverCreatedUI.TryGetValue( pnlName, out gameObjects ) ) return;
+        GameObject panel;
+        if ( !UiDict.TryGetValue( pnlName, out panel ) ) return;
 
-        serverCreatedUI.Remove( pnlName );
+        UiDict.Remove( pnlName );
 
-        foreach ( var go in gameObjects )
+        if ( !panel )
+            return;
+
+        var fadeOut = panel.GetComponent<FadeOut>();
+        if ( fadeOut )
         {
-            if ( !go ) continue;
-
-            var fadeOut = go.GetComponent<FadeOut>();
-            if ( fadeOut )
-            {
-                fadeOut.FadeOutAndDestroy();
-            }
-            else
-            {
-                Object.Destroy( go );
-            }
+            fadeOut.FadeOutAndDestroy();
+        }
+        else
+        {
+            Object.Destroy( panel );
         }
     }
-
-    private class FadeOut : MonoBehaviour
-    {
-        public float duration;
-
-        public void FadeOutAndDestroy()
-        {
-            Invoke( "Kill", duration + .1f );
-            foreach ( var c in gameObject.GetComponents<UnityEngine.UI.Graphic>() )
-            {
-                c.CrossFadeAlpha( 0f, duration, false );
-            }
-        }
-
-        public void Kill()
-        {
-            Destroy( gameObject );
-        }
-    }
-
-    private class Countdown : MonoBehaviour
-    {
-        public string command = "";
-        public int endTime = 0;
-        public int startTime = 0;
-        public int step = 1;
-        private int sign = 1;
-        private UnityEngine.UI.Text textComponent;
-
-        void Start()
-        {
-            textComponent = GetComponent<UnityEngine.UI.Text>();
-            if ( textComponent ) 
-            {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
-            }
-            if ( startTime == endTime )
-            {
-                End();
-            }
-            if ( step == 0 )
-            {
-                step = 1;
-            }
-            if ( startTime > endTime && step > 0 )
-            {
-                sign = -1;
-            }
-
-            InvokeRepeating( "UpdateCountdown", step, step );
-        }
-
-        void UpdateCountdown()
-        {
-            startTime = startTime + step * sign;
-
-            if ( textComponent )
-            {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
-            }
-
-            if ( startTime == endTime )
-            {
-                if ( !string.IsNullOrEmpty( command ) )
-                {
-                    ConsoleNetwork.ClientRunOnServer( command );
-                }
-
-                End();
-            }
-        }
-
-        void End()
-        {
-            CancelInvoke( "UpdateCountdown" );
-
-            var fadeOut = GetComponent<FadeOut>();
-            if ( fadeOut )
-            {
-                fadeOut.FadeOutAndDestroy();
-            }
-            else
-            {
-                Object.Destroy( gameObject );
-            }
-        }
-    }
+}
 
 #endif
-}
