@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Facepunch.Extend;
 using System.IO;
+using Rust.Workshop;
 
 #if CLIENT
 
@@ -125,6 +126,33 @@ public partial class CommunityEntity
                     if ( obj.ContainsKey( "png" ) )
                     {
                         SetImageFromServer( c, uint.Parse( obj.GetString( "png" ) ) );
+                    }
+
+                    if ( obj.ContainsKey( "itemid" ) )
+                    {
+                        var itemdef = ItemManager.FindItemDefinition( obj.GetInt( "itemid" ) );
+                        if ( itemdef != null )
+                        {
+                            c.sprite = itemdef.iconSprite;
+
+                            if ( obj.ContainsKey( "skinid" ) )
+                            {
+                                var requestedSkin = obj.GetInt( "skinid" );
+                                var skin = itemdef.skins.FirstOrDefault( x => x.id == requestedSkin );
+                                if ( skin.id == requestedSkin )
+                                {
+                                    c.sprite = skin.invItem.icon;
+                                }
+                                else
+                                {
+                                    var workshopSprite = WorkshopIconLoader.Find( (ulong)requestedSkin );
+                                    if ( workshopSprite != null )
+                                    {
+                                        c.sprite = workshopSprite;
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     GraphicComponentCreated( c, obj );
