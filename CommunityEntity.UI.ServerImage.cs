@@ -17,12 +17,11 @@ public partial class CommunityEntity
         var textureID = msg.read.UInt32();
         var bytes = msg.read.BytesWithSize();
 
-        using ( var ms = new MemoryStream( bytes, 0, bytes.Length, true, true ) )
+        if ( bytes == null ) return;
+
+        if ( FileStorage.client.Store( bytes, FileStorage.Type.png, net.ID ) != textureID )
         {
-            if ( FileStorage.client.Store( ms, FileStorage.Type.png, net.ID ) != textureID )
-            {
-                Log( "Client/Server FileStorage CRC differs" );
-            }
+            Log( "Client/Server FileStorage CRC differs" );
         }
 
         List<UnityEngine.UI.MaskableGraphic> components;
