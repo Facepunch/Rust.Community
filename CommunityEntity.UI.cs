@@ -43,7 +43,12 @@ public partial class CommunityEntity
     public void AddUI( RPCMessage msg )
     {
         var str = msg.read.String();
+
+        if ( string.IsNullOrEmpty( str ) ) return;
+
         var jsonArray = JSON.Array.Parse( str );
+
+        if ( jsonArray == null ) return;
 
         foreach ( var value in jsonArray )
         {
