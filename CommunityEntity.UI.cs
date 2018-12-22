@@ -113,8 +113,8 @@ public partial class CommunityEntity
                     c.text = obj.GetString( "text", "Text" );
                     c.fontSize = obj.GetInt( "fontSize", 14 );
                     c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
-                    c.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
-                    c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    TextAnchor.TryParse( obj.GetString( "align", "UpperLeft" ), out c.alignment );
+                    ColorEx.TryParse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ), out c.color );
                     GraphicComponentCreated( c, obj );
                     break;
                 }
@@ -124,8 +124,8 @@ public partial class CommunityEntity
                     var c = go.AddComponent<UnityEngine.UI.Image>();
                     c.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
                     c.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
-                    c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-                    c.type = (UnityEngine.UI.Image.Type)System.Enum.Parse( typeof( UnityEngine.UI.Image.Type ), obj.GetString( "imagetype", "Simple" ) );
+                    ColorEx.TryParse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ), out c.color );
+                    UnityEngine.UI.Image.Type.TryParse( obj.GetString( "imagetype", "Simple" ), c.type );
 
                     if ( obj.ContainsKey( "png" ) )
                     {
@@ -141,7 +141,7 @@ public partial class CommunityEntity
                 {
                     var c = go.AddComponent<UnityEngine.UI.RawImage>();
                     c.texture = FileSystem.Load<Texture>( obj.GetString( "sprite", "Assets/Icons/rust.png" ) );
-                    c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    ColorEx.TryParse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ), out c.color );
 
                     if ( obj.ContainsKey( "material" ) )
                     {
@@ -183,8 +183,8 @@ public partial class CommunityEntity
                     var img = go.AddComponent<UnityEngine.UI.Image>();
                     img.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
                     img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
-                    img.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-                    img.type = (UnityEngine.UI.Image.Type)System.Enum.Parse( typeof( UnityEngine.UI.Image.Type ), obj.GetString( "imagetype", "Simple" ) );
+                    ColorEx.TryParse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ), img.color );
+                    UnityEngine.UI.Image.Type.TryParse( obj.GetString( "imagetype", "Simple" ), out img.type );
 
                     c.image = img;
 
@@ -196,8 +196,8 @@ public partial class CommunityEntity
             case "UnityEngine.UI.Outline":
                 {
                     var c = go.AddComponent<UnityEngine.UI.Outline>();
-                    c.effectColor = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-                    c.effectDistance = Vector2Ex.Parse( obj.GetString( "distance", "1.0 -1.0" ) );
+                    ColorEx.TryParse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ), out c.effectColor );
+                    Vector2Ex.TryParse( obj.GetString( "distance", "1.0 -1.0" ), out c.effectDistance );
                     c.useGraphicAlpha = obj.ContainsKey( "useGraphicAlpha" );
                     break;
                 }
@@ -244,10 +244,10 @@ public partial class CommunityEntity
                     var rt = go.GetComponent<RectTransform>();
                     if ( rt )
                     {
-                        rt.anchorMin = Vector2Ex.Parse( obj.GetString( "anchormin", "0.0 0.0" ) );
-                        rt.anchorMax = Vector2Ex.Parse( obj.GetString( "anchormax", "1.0 1.0" ) );
-                        rt.offsetMin = Vector2Ex.Parse( obj.GetString( "offsetmin", "0.0 0.0" ) );
-                        rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
+                        Vector2Ex.TryParse( obj.GetString( "anchormin", "0.0 0.0" ), rt.anchorMin );
+                        Vector2Ex.TryParse( obj.GetString( "anchormax", "1.0 1.0" ), rt.anchorMax );
+                        Vector2Ex.TryParse( obj.GetString( "offsetmin", "0.0 0.0" ), rt.offsetMin );
+                        Vector2Ex.TryParse( obj.GetString( "offsetmax", "1.0 1.0" ), rt.offsetMax );
                     }
                     break;
                 }
