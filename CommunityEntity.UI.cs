@@ -208,8 +208,8 @@ public partial class CommunityEntity
                     t.text = obj.GetString( "text", "Text" );
                     t.fontSize = obj.GetInt( "fontSize", 14 );
                     t.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
-                    t.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
-                    t.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    TextAnchor.TryParse( obj.GetString( "align", "UpperLeft" ), out t.alignment );
+                    ColorEx.TryParse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ), out t.color );
 
                     var c = go.AddComponent<UnityEngine.UI.InputField>();
                     c.textComponent = t;
@@ -220,6 +220,8 @@ public partial class CommunityEntity
                         var cmd = obj.GetString( "command" );
                         c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
                     }
+
+                    UnityEngine.UI.InputField.CharacterValidation.TryParse( obj.GetString( "validation", "None" )), out c.characterValidation )
 
                     if ( obj.ContainsKey( "password" ) )
                     {
