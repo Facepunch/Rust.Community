@@ -78,7 +78,10 @@ public partial class CommunityEntity
             {
                 CreateComponents( go, component.Obj );
             }
-
+            if (json.ContainsKey( "rotate" ) )
+			{
+				go.transform.Rotate(Vector3Ex.Parse(json.GetString( "rotate", "0.0 0.0 0.0" ) ) );
+			}
             if ( json.ContainsKey( "fadeOut" ) )
             {
                 go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
