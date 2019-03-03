@@ -264,6 +264,55 @@ public partial class CommunityEntity
 
                     break;
                 }
+
+            case "UnityEngine.UI.VerticalLayoutGroup":
+                {
+                    var vlg = go.AddComponent<VerticalLayoutGroup>();
+                    var paddingArray = obj.GetString( "padding", "0" ).Split( ' ' );
+                    if ( paddingArray.Length > 0 )
+                    {
+                        vlg.padding.left = int.Parse( paddingArray[0] );
+                    }
+
+                    if ( paddingArray.Length > 1 )
+                    {
+                        vlg.padding.right = int.Parse( paddingArray[1] );
+                    }
+
+                    if ( paddingArray.Length > 2 )
+                    {
+                        vlg.padding.top = int.Parse( paddingArray[2] );
+                    }
+
+                    if ( paddingArray.Length > 3 )
+                    {
+                        vlg.padding.bottom = int.Parse( paddingArray[3] );
+                    }
+
+                    vlg.spacing = obj.GetInt( "spacing", 0 );
+                    vlg.childAlignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "childAlignment", "UpperLeft" ) );
+
+                    if ( obj.ContainsKey( "childControlWidth" ) )
+                    {
+                        vlg.childControlWidth = true;
+                    }
+
+                    if ( obj.ContainsKey( "childControlHeight" ) )
+                    {
+                        vlg.childControlHeight = true;
+                    }
+
+                    if ( obj.ContainsKey( "childForceExpandWidth" ) )
+                    {
+                        vlg.childForceExpandWidth = true;
+                    }
+
+                    if ( obj.ContainsKey( "childForceExpandHeight" ) )
+                    {
+                        vlg.childForceExpandHeight = true;
+                    }
+                    break;
+                }
         }
     }
 
