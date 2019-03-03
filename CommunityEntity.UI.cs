@@ -313,6 +313,54 @@ public partial class CommunityEntity
                     }
                     break;
                 }
+
+            case "UnityEngine.UI.LayoutElement":
+                {
+                    var le = go.AddComponent<LayoutElement>();
+
+                    if ( obj.ContainsKey( "ignoreLayout" ) )
+                    {
+                        le.ignoreLayout = true;
+                        break;
+                    }
+
+                    if ( obj.ContainsKey( "minWidth" ) )
+                    {
+                        le.minWidth = obj.GetFloat( "minWidth", 0 );
+                    }
+
+                    if ( obj.ContainsKey( "minHeight" ) )
+                    {
+                        le.minHeight = obj.GetFloat( "minHeight", 0 );
+                    }
+
+                    if ( obj.ContainsKey( "preferredWidth" ) )
+                    {
+                        le.preferredWidth = obj.GetFloat( "preferredWidth", 0 );
+                    }
+
+                    if ( obj.ContainsKey( "preferredHeight" ) )
+                    {
+                        le.preferredHeight = obj.GetFloat( "preferredHeight", 0 );
+                    }
+
+                    if ( obj.ContainsKey( "flexibleWidth" ) )
+                    {
+                        le.flexibleWidth = obj.GetFloat( "flexibleWidth", 0 );
+                    }
+
+                    if ( obj.ContainsKey( "flexibleHeight" ) )
+                    {
+                        le.flexibleHeight = obj.GetFloat( "flexibleHeight", 0 );
+                    }
+
+                    if ( obj.ContainsKey( "layoutPriority" ) )
+                    {
+                        le.layoutPriority = obj.GetInt( "layoutPriority", 1 );
+                    }
+
+                    break;
+                }
         }
     }
 
