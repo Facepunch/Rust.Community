@@ -274,21 +274,21 @@ public partial class CommunityEntity
                     {
                         padding = new RectOffset();
                         padding.left = int.Parse( paddingArray[0] );
-                    }
 
-                    if ( paddingArray.Length > 1 )
-                    {
-                        padding.right = int.Parse( paddingArray[1] );
-                    }
+                        if ( paddingArray.Length > 1 )
+                        {
+                            padding.right = int.Parse( paddingArray[1] );
 
-                    if ( paddingArray.Length > 2 )
-                    {
-                        padding.top = int.Parse( paddingArray[2] );
-                    }
+                            if ( paddingArray.Length > 2 )
+                            {
+                                padding.top = int.Parse( paddingArray[2] );
 
-                    if ( paddingArray.Length > 3 )
-                    {
-                        padding.bottom = int.Parse( paddingArray[3] );
+                                if ( paddingArray.Length > 3 )
+                                {
+                                    padding.bottom = int.Parse( paddingArray[3] );
+                                }
+                            }
+                        }
                     }
 
                     if ( padding != null )
@@ -330,21 +330,21 @@ public partial class CommunityEntity
                     {
                         padding = new RectOffset();
                         padding.left = int.Parse( paddingArray[0] );
-                    }
 
-                    if ( paddingArray.Length > 1 )
-                    {
-                        padding.right = int.Parse( paddingArray[1] );
-                    }
+                        if ( paddingArray.Length > 1 )
+                        {
+                            padding.right = int.Parse( paddingArray[1] );
 
-                    if ( paddingArray.Length > 2 )
-                    {
-                        padding.top = int.Parse( paddingArray[2] );
-                    }
+                            if ( paddingArray.Length > 2 )
+                            {
+                                padding.top = int.Parse( paddingArray[2] );
 
-                    if ( paddingArray.Length > 3 )
-                    {
-                        padding.bottom = int.Parse( paddingArray[3] );
+                                if ( paddingArray.Length > 3 )
+                                {
+                                    padding.bottom = int.Parse( paddingArray[3] );
+                                }
+                            }
+                        }
                     }
 
                     if ( padding != null )
