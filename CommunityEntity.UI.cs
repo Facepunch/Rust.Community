@@ -269,24 +269,31 @@ public partial class CommunityEntity
                 {
                     var vlg = go.AddComponent<VerticalLayoutGroup>();
                     var paddingArray = obj.GetString( "padding", "0" ).Split( ' ' );
+                    RectOffset padding = null;
                     if ( paddingArray.Length > 0 )
                     {
-                        vlg.padding.left = int.Parse( paddingArray[0] );
+                        padding = new RectOffset();
+                        padding.left = int.Parse( paddingArray[0] );
                     }
 
                     if ( paddingArray.Length > 1 )
                     {
-                        vlg.padding.right = int.Parse( paddingArray[1] );
+                        padding.right = int.Parse( paddingArray[1] );
                     }
 
                     if ( paddingArray.Length > 2 )
                     {
-                        vlg.padding.top = int.Parse( paddingArray[2] );
+                        padding.top = int.Parse( paddingArray[2] );
                     }
 
                     if ( paddingArray.Length > 3 )
                     {
-                        vlg.padding.bottom = int.Parse( paddingArray[3] );
+                        padding.bottom = int.Parse( paddingArray[3] );
+                    }
+
+                    if ( padding != null )
+                    {
+                        vlg.padding = padding;
                     }
 
                     vlg.spacing = obj.GetInt( "spacing", 0 );
@@ -318,24 +325,31 @@ public partial class CommunityEntity
                 {
                     var hlg = go.AddComponent<HorizontalLayoutGroup>();
                     var paddingArray = obj.GetString( "padding", "0" ).Split( ' ' );
+                    RectOffset padding = null;
                     if ( paddingArray.Length > 0 )
                     {
-                        hlg.padding.left = int.Parse( paddingArray[0] );
+                        padding = new RectOffset();
+                        padding.left = int.Parse( paddingArray[0] );
                     }
 
                     if ( paddingArray.Length > 1 )
                     {
-                        hlg.padding.right = int.Parse( paddingArray[1] );
+                        padding.right = int.Parse( paddingArray[1] );
                     }
 
                     if ( paddingArray.Length > 2 )
                     {
-                        hlg.padding.top = int.Parse( paddingArray[2] );
+                        padding.top = int.Parse( paddingArray[2] );
                     }
 
                     if ( paddingArray.Length > 3 )
                     {
-                        hlg.padding.bottom = int.Parse( paddingArray[3] );
+                        padding.bottom = int.Parse( paddingArray[3] );
+                    }
+
+                    if ( padding != null )
+                    {
+                        hlg.padding = padding;
                     }
 
                     hlg.spacing = obj.GetInt( "spacing", 0 );
