@@ -314,6 +314,55 @@ public partial class CommunityEntity
                     break;
                 }
 
+            case "UnityEngine.UI.HorizontalLayoutGroup":
+                {
+                    var hlg = go.AddComponent<HorizontalLayoutGroup>();
+                    var paddingArray = obj.GetString( "padding", "0" ).Split( ' ' );
+                    if ( paddingArray.Length > 0 )
+                    {
+                        hlg.padding.left = int.Parse( paddingArray[0] );
+                    }
+
+                    if ( paddingArray.Length > 1 )
+                    {
+                        hlg.padding.right = int.Parse( paddingArray[1] );
+                    }
+
+                    if ( paddingArray.Length > 2 )
+                    {
+                        hlg.padding.top = int.Parse( paddingArray[2] );
+                    }
+
+                    if ( paddingArray.Length > 3 )
+                    {
+                        hlg.padding.bottom = int.Parse( paddingArray[3] );
+                    }
+
+                    hlg.spacing = obj.GetInt( "spacing", 0 );
+                    hlg.childAlignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "childAlignment", "UpperLeft" ) );
+
+                    if ( obj.ContainsKey( "childControlWidth" ) )
+                    {
+                        hlg.childControlWidth = true;
+                    }
+
+                    if ( obj.ContainsKey( "childControlHeight" ) )
+                    {
+                        hlg.childControlHeight = true;
+                    }
+
+                    if ( obj.ContainsKey( "childForceExpandWidth" ) )
+                    {
+                        hlg.childForceExpandWidth = true;
+                    }
+
+                    if ( obj.ContainsKey( "childForceExpandHeight" ) )
+                    {
+                        hlg.childForceExpandHeight = true;
+                    }
+                    break;
+                }
+
             case "UnityEngine.UI.LayoutElement":
                 {
                     var le = go.AddComponent<LayoutElement>();
