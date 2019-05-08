@@ -61,7 +61,7 @@ public partial class CommunityEntity
                 return;
             }
 
-            var go = new GameObject( json.GetString( "name", "AddUI CreatedPanel" ) );
+            var go = new GameObject( json.GetString( "name", "AddUI CreatedPanel" ) , typeof(RectTransform) );
             go.transform.SetParent( parentPanel.transform, false );
             RegisterUi( go );
 
