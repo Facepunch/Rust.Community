@@ -295,6 +295,11 @@ public partial class CommunityEntity
 
                     break;
                 }
+                case "NeedsKeyboard":
+                {
+                    go.AddComponent<NeedsKeyboard>();
+                    break;
+                }
         }
     }
 
