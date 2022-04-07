@@ -251,7 +251,7 @@ public partial class CommunityEntity
                     }
                     c.text = obj.GetString("text", "Text");
 			        c.readOnly = obj.GetBoolean("readOnly", false);
-			        c.lineType = (InputField.LineType)Enum.Parse(typeof(InputField.LineType), obj.GetString("lineType", "SingleLine"));
+			        c.lineType = (InputField.LineType)System.Enum.Parse(typeof(InputField.LineType), obj.GetString("lineType", "SingleLine"));
                     if ( obj.ContainsKey( "password" ) )
                     {
                         c.inputType = UnityEngine.UI.InputField.InputType.Password;
