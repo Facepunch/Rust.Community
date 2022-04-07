@@ -44,7 +44,7 @@ public partial class CommunityEntity
     [RPC_Client]
     public void AddUI( RPCMessage msg )
     {
-        var str = msg.read.String();
+        var str = msg.read.StringRaw();
 
         if ( string.IsNullOrEmpty( str ) ) return;
 
@@ -115,7 +115,7 @@ public partial class CommunityEntity
                     c.text = obj.GetString( "text", "Text" );
                     c.fontSize = obj.GetInt( "fontSize", 14 );
                     c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
-                    c.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
+                    c.alignment = ParseEnum( obj.GetString( "align" ), TextAnchor.UpperLeft );
                     c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
                     GraphicComponentCreated( c, obj );
                     break;
@@ -127,11 +127,11 @@ public partial class CommunityEntity
                     c.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
                     c.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
                     c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-                    c.type = (UnityEngine.UI.Image.Type)System.Enum.Parse( typeof( UnityEngine.UI.Image.Type ), obj.GetString( "imagetype", "Simple" ) );
+                    c.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
 
-                    if ( obj.ContainsKey( "png" ) )
+                    if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, uint.Parse( obj.GetString( "png" ) ) );
+                        SetImageFromServer( c, id );
                     }
 
                     if ( obj.ContainsKey( "itemid" ) )
@@ -183,9 +183,9 @@ public partial class CommunityEntity
                         Rust.Global.Runner.StartCoroutine( LoadTextureFromWWW( c, obj.GetString( "url" ) ) );
                     }
 
-                    if ( obj.ContainsKey( "png" ) )
+                    if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, uint.Parse( obj.GetString( "png" ) ) );
+                        SetImageFromServer( c, id );
                     }
 
                     GraphicComponentCreated( c, obj );
@@ -214,7 +214,7 @@ public partial class CommunityEntity
                     img.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
                     img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
                     img.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-                    img.type = (UnityEngine.UI.Image.Type)System.Enum.Parse( typeof( UnityEngine.UI.Image.Type ), obj.GetString( "imagetype", "Simple" ) );
+                    img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
 
                     c.image = img;
 
@@ -237,7 +237,7 @@ public partial class CommunityEntity
                     var t = go.AddComponent<UnityEngine.UI.Text>();
                     t.fontSize = obj.GetInt( "fontSize", 14 );
                     t.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
-                    t.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
+                    t.alignment = ParseEnum( obj.GetString( "align" ), TextAnchor.UpperLeft );
                     t.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
 
                     var c = go.AddComponent<UnityEngine.UI.InputField>();
@@ -251,7 +251,7 @@ public partial class CommunityEntity
                     }
                     c.text = obj.GetString("text", "Text");
 			        c.readOnly = obj.GetBoolean("readOnly", false);
-			        c.lineType = (InputField.LineType)System.Enum.Parse(typeof(InputField.LineType), obj.GetString("lineType", "SingleLine"));
+                    c.lineType = ParseEnum(obj.GetString("lineType", "SingleLine"), InputField.LineType.SingleLine);
                     if ( obj.ContainsKey( "password" ) )
                     {
                         c.inputType = UnityEngine.UI.InputField.InputType.Password;
@@ -302,6 +302,13 @@ public partial class CommunityEntity
                 }
         }
     }
+    
+    private static T ParseEnum<T>(string value, T defaultValue)
+        where T : struct, System.Enum
+    {
+        if (string.IsNullOrWhiteSpace(value)) return defaultValue;
+        return System.Enum.TryParse<T>(value, true, out var parsedValue) ? parsedValue : defaultValue;
+    }
 
     private void GraphicComponentCreated( UnityEngine.UI.Graphic c, JSON.Object obj )
     {
@@ -345,7 +352,7 @@ public partial class CommunityEntity
     [RPC_Client]
     public void DestroyUI( RPCMessage msg )
     {
-        DestroyPanel( msg.read.String() );
+        DestroyPanel( msg.read.StringRaw() );
     }
 
     private void DestroyPanel( string pnlName )
