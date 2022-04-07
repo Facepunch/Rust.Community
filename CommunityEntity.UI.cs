@@ -139,6 +139,7 @@ public partial class CommunityEntity
                         var itemdef = ItemManager.FindItemDefinition( obj.GetInt( "itemid" ) );
                         if ( itemdef != null )
                         {
+                            c.material = null;
                             c.sprite = itemdef.iconSprite;
 
                             if ( obj.ContainsKey( "skinid" ) )
