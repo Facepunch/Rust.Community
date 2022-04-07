@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -205,7 +206,6 @@ public partial class CommunityEntity
             case "UnityEngine.UI.InputField":
                 {
                     var t = go.AddComponent<UnityEngine.UI.Text>();
-                    t.text = obj.GetString( "text", "Text" );
                     t.fontSize = obj.GetInt( "fontSize", 14 );
                     t.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
                     t.alignment = (TextAnchor)System.Enum.Parse( typeof( TextAnchor ), obj.GetString( "align", "UpperLeft" ) );
@@ -220,7 +220,9 @@ public partial class CommunityEntity
                         var cmd = obj.GetString( "command" );
                         c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
                     }
-
+                    c.text = obj.GetString("text", "Text");
+			        c.readOnly = obj.GetBoolean("readOnly", false);
+			        c.lineType = (InputField.LineType)Enum.Parse(typeof(InputField.LineType), obj.GetString("lineType", "SingleLine"));
                     if ( obj.ContainsKey( "password" ) )
                     {
                         c.inputType = UnityEngine.UI.InputField.InputType.Password;
