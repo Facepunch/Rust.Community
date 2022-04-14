@@ -15,6 +15,7 @@ public partial class CommunityEntity
         public int startTime = 0;
         public int step = 1;
         private int sign = 1;
+        private string tempText = "";
         private UnityEngine.UI.Text textComponent;
 
         void Start()
@@ -22,7 +23,8 @@ public partial class CommunityEntity
             textComponent = GetComponent<UnityEngine.UI.Text>();
             if ( textComponent )
             {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
+				tempText = textComponent.text;
+                textComponent.text = tempText.Replace( "%TIME_LEFT%", startTime.ToString() );
             }
             if ( startTime == endTime )
             {
@@ -46,7 +48,7 @@ public partial class CommunityEntity
 
             if ( textComponent )
             {
-                textComponent.text = textComponent.text.Replace( "%TIME_LEFT%", startTime.ToString() );
+                textComponent.text = tempText.Replace( "%TIME_LEFT%", startTime.ToString() );
             }
 
             if ( startTime == endTime )
