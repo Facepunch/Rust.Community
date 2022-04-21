@@ -257,6 +257,11 @@ public partial class CommunityEntity
                         c.inputType = UnityEngine.UI.InputField.InputType.Password;
                     }
 
+                    if (obj.ContainsKey("needsKeyboard"))
+                    {
+                        go.AddComponent<NeedsKeyboardInputField>();
+                    }
+
                     GraphicComponentCreated( t, obj );
 
                     break;
@@ -295,7 +300,7 @@ public partial class CommunityEntity
 
                     break;
                 }
-                case "NeedsKeyboard":
+            case "NeedsKeyboard":
                 {
                     go.AddComponent<NeedsKeyboard>();
                     break;
