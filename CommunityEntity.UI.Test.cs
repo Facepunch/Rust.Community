@@ -37,7 +37,7 @@ public class cui
 
 						{
 							""parent"": ""TestPanel7766"",
-
+							""name"": ""buttonText"",
 							""components"":
 							[
 								{
@@ -89,19 +89,125 @@ public class cui
 									""align"": ""MiddleCenter""
 								}
 							]
-						}
+						},
+						{
+							""name"": ""ItemIcon"",
+							""parent"": ""TestPanel7766"",
+
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Image"",
+									""color"": ""1.0 1.0 1.0 1.0"",
+									""imagetype"": ""Simple"",
+									""itemid"": -151838493,
+								},
+
+								{
+									""type"":""RectTransform"",
+									""anchormin"":""0.4 0.4"",
+									""anchormax"":""0.4 0.4"",
+									""offsetmin"": ""-32 -32"",
+									""offsetmax"": ""32 32""
+								}
+							]
+						},
+						{
+							""name"": ""ItemIconSkinTest"",
+							""parent"": ""TestPanel7766"",
+
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Image"",
+									""color"": ""1.0 1.0 1.0 1.0"",
+									""imagetype"": ""Simple"",
+									""itemid"": -733625651,
+									""skinid"": 13035
+								},
+
+								{
+									""type"":""RectTransform"",
+									""anchormin"":""0.6 0.6"",
+									""anchormax"":""0.6 0.6"",
+									""offsetmin"": ""-32 -32"",
+									""offsetmax"": ""32 32""
+								}
+							]
+						},
 
 					]
 					";
 
-	    CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "AddUI", new Facepunch.ObjectList( json ) );
+	    CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "AddUI", json );
+	}
+	
+	[ServerUserVar]
+	public static void update( ConsoleSystem.Arg args )
+	{
+		//adding an allowUpdate field will try and update components based on the name
+		//if a gameObject isn't named then update will not work
+		//only fields that are included will be updated, so it's not necessary to pass every variable
+		//for instance, the below update json will update the background image and text of the test command above
+		const string json = @"[	
+						{
+							""name"": ""TestPanel7766"",
+							""update"": true,
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.RawImage"",
+									""url"": ""https://files.facepunch.com/paddy/20220405/zipline_01.jpg"",
+								},
+							]
+						},
+
+						{
+							""name"": ""buttonText"",
+							""update"": true,
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Text"",
+									""text"":""This text just got updated!"",
+								},
+							]
+						},
+						{
+							""name"": ""ItemIcon"",
+							""update"": true,
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Image"",
+									""itemid"": -2067472972,
+								},
+							]
+						},
+						{
+							""name"": ""Button88"",
+							""update"": true,
+
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Button"",
+									""color"": ""0.9 0.3 0.3 0.8"",
+								},
+							]
+						},
+
+					]
+					";
+
+		CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "AddUI", json );
 	}
 
     [ServerUserVar]
     public static void endtest( ConsoleSystem.Arg args )
     {
         args.ReplyWith( "Ending Test!" );
-        CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "DestroyUI", new Facepunch.ObjectList( "TestPanel7766" ) );
+        CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "DestroyUI", "TestPanel7766" );
     }
 }
 #endif
