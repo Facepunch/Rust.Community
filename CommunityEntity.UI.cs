@@ -124,11 +124,6 @@ public partial class CommunityEntity
         rt.offsetMax = offsetMax;
     }
     
-    private float Flip(float f)
-    {
-        return 1 - f;
-    }
-    
     private float EaseIn(float f)
     {
         return f * f;
@@ -136,7 +131,7 @@ public partial class CommunityEntity
     
     private float EaseOut(float f)
     {
-        return Flip(EaseIn(Flip(f)));
+        return 1 - EaseIn(1 - f);
     }
     
     private float EaseInOut(float f)
