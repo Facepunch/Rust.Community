@@ -40,6 +40,109 @@ public partial class CommunityEntity
         AllUi.Add( go );
         UiDict[go.name] = go;
     }
+	
+
+    [RPC_Client]
+    public void MoveUI( RpcMessage msg )
+    {        
+        var str = msg.read.StringRaw();
+
+        if (string.IsNullOrEmpty(str)) return; 
+
+        var jsonArray = JSON.Array.Parse( str );
+        if (jsonArray == null) return;
+
+        foreach (var value in jsonArray)
+        {
+            var json = value.Obj;
+            var parentPanel = json.GetString("name", "Overlay");
+            
+            // break if existing panel cannot be found, name is null, or is not registered
+            GameObject go;
+            if (string.IsNullOrEmpty(parentPanel) || !UiDict.TryGetValue(parentPanel, out go))
+            {
+                return;
+            }
+            
+            StartCoroutine(
+                MoveUIRoutine(go, 
+                    json.GetFloat("duration", 0f), 
+                    json.GetString("easing", null), 
+                    Vector2Ex.Parse( json.GetString( "anchormin", "0.0 0.0" ) ),
+                    Vector2Ex.Parse( json.GetString( "anchormax", "1.0 1.0" ) ),
+                    Vector2Ex.Parse( json.GetString( "offsetmin", "0.0 0.0" ) ),
+                    Vector2Ex.Parse( json.GetString( "offsetmax", "1.0 1.0" ) ))
+            );
+
+        }
+    }
+    
+    
+    private IEnumerator MoveUIRoutine(GameObject go, float lerpDuration, string easing, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
+    {
+        var rt = go.GetComponent<RectTransform>();
+        if (!rt)
+            yield break;
+        
+        Vector2 fromAnchorMin = rt.anchorMin;
+        Vector2 fromAnchorMax = rt.anchorMax;
+        Vector2 fromOffsetMin = rt.offsetMin;
+        Vector2 fromOffsetMax = rt.offsetMax;
+        
+        if (lerpDuration > 0)
+        {
+            float time = 0;
+            while (time < lerpDuration)
+            {
+                time += Time.deltaTime;
+                float lerpInterval = time / lerpDuration;
+
+                switch (easing)
+                {
+                    case "in-out":
+                        lerpInterval = EaseInOut(lerpInterval);
+                        break;
+                    case "out":
+                        lerpInterval = EaseOut(lerpInterval);
+                        break;
+                    case "in":
+                        lerpInterval = EaseIn(lerpInterval);
+                        break;
+                }
+                
+                rt.anchorMin = Vector2.Lerp(fromAnchorMin, anchorMin, lerpInterval);
+                rt.anchorMax = Vector2.Lerp(fromAnchorMax, anchorMax, lerpInterval);                
+                rt.offsetMin = Vector2.Lerp(fromOffsetMin, offsetMin, lerpInterval);                
+                rt.offsetMax = Vector2.Lerp(fromOffsetMax, offsetMax, lerpInterval);                
+                yield return null;
+            }
+        }
+        
+        rt.anchorMin = anchorMin;
+        rt.anchorMax = anchorMax;
+        rt.offsetMin = offsetMin;
+        rt.offsetMax = offsetMax;
+    }
+    
+    private float Flip(float f)
+    {
+        return 1 - f;
+    }
+    
+    private float EaseIn(float f)
+    {
+        return f * f;
+    }
+    
+    private float EaseOut(float f)
+    {
+        return Flip(EaseIn(Flip(f)));
+    }
+    
+    private float EaseInOut(float f)
+    {
+        return Mathf.Lerp(EaseIn(f), EaseOut(f), f);
+    }
 
     [RPC_Client]
     public void AddUI( RPCMessage msg )
