@@ -249,7 +249,7 @@ public partial class CommunityEntity
                         var cmd = obj.GetString( "command" );
                         c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
                     }
-                    c.text = obj.GetString("text", "Text");
+                    c.text = obj.GetString("text", string.Empty);
 			        c.readOnly = obj.GetBoolean("readOnly", false);
                     c.lineType = ParseEnum(obj.GetString("lineType", "SingleLine"), InputField.LineType.SingleLine);
                     if ( obj.ContainsKey( "password" ) )
