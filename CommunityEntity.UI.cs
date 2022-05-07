@@ -188,6 +188,12 @@ public partial class CommunityEntity
                     {
                         SetImageFromServer( c, id );
                     }
+			
+                    if ( obj.ContainsKey( "steamid" ) )
+                    {
+			ulong.TryParse( obj.GetString( "steamid" ), out var steamid )
+                        c.texture = SteamClientWrapper.GetAvatarTexture(steamid);
+                    }
 
                     GraphicComponentCreated( c, obj );
 
