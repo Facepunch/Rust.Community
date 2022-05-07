@@ -144,9 +144,10 @@ public partial class CommunityEntity
 
                             if ( obj.ContainsKey( "skinid" ) )
                             {
-                                var requestedSkin = obj.GetInt( "skinid" );
-                                var skin = itemdef.skins.FirstOrDefault( x => x.id == requestedSkin );
-                                if ( skin.id == requestedSkin )
+                                ulong requestedSkin;
+				ulong.TryParse(obj.GetString( "skinid" ), out requestedSkin);
+                                var skin = itemdef.skins.FirstOrDefault( x => x.id == (int)requestedSkin );
+                                if ( skin.id == (int)requestedSkin )
                                 {
                                     c.sprite = skin.invItem.icon;
                                 }
@@ -186,6 +187,12 @@ public partial class CommunityEntity
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
                         SetImageFromServer( c, id );
+                    }
+			
+                    if ( obj.ContainsKey( "steamid" ) )
+                    {
+			ulong.TryParse( obj.GetString( "steamid" ), out var steamid );
+                        c.texture = SingletonComponent<SteamClientWrapper>.Instance.GetAvatarTexture(steamid);
                     }
 
                     GraphicComponentCreated( c, obj );
