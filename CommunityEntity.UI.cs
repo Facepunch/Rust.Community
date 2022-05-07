@@ -144,9 +144,10 @@ public partial class CommunityEntity
 
                             if ( obj.ContainsKey( "skinid" ) )
                             {
-                                var requestedSkin = obj.GetInt( "skinid" );
-                                var skin = itemdef.skins.FirstOrDefault( x => x.id == requestedSkin );
-                                if ( skin.id == requestedSkin )
+                                ulong requestedSkin;
+				ulong.TryParse(obj.GetString( "skinid" ), out requestedSkin);
+                                var skin = itemdef.skins.FirstOrDefault( x => x.id == (int)requestedSkin );
+                                if ( skin.id == (int)requestedSkin )
                                 {
                                     c.sprite = skin.invItem.icon;
                                 }
