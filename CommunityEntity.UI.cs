@@ -192,7 +192,7 @@ public partial class CommunityEntity
                     if ( obj.ContainsKey( "steamid" ) )
                     {
 			ulong.TryParse( obj.GetString( "steamid" ), out var steamid );
-                        c.texture = SteamClientWrapper.GetAvatarTexture(steamid);
+                        c.texture = SingletonComponent<SteamClientWrapper>.Instance.GetAvatarTexture(steamid);
                     }
 
                     GraphicComponentCreated( c, obj );
