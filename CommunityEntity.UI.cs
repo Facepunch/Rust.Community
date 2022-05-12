@@ -152,7 +152,7 @@ public partial class CommunityEntity
                                 }
                                 else
                                 {
-                                    var workshopSprite = WorkshopIconLoader.Find( (ulong)requestedSkin );
+                                    var workshopSprite = WorkshopIconLoader.Find( (ulong)requestedSkin, null,  () => c.sprite = WorkshopIconLoader.Find( (ulong)requestedSkin) );
                                     if ( workshopSprite != null )
                                     {
                                         c.sprite = workshopSprite;
