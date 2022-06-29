@@ -267,6 +267,12 @@ public partial class CommunityEntity
                         go.AddComponent<NeedsKeyboardInputField>();
                     }
 
+                    //blocks keyboard input the same as NeedsKeyboard, but is used for UI in the inventory/crafting
+                    if (obj.ContainsKey("hudMenuInput"))
+                    {
+                        go.AddComponent<HudMenuInput>();
+                    }
+
                     if (obj.ContainsKey("autofocus"))
                     {
                         c.Select();
