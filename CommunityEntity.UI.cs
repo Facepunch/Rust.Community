@@ -117,6 +117,7 @@ public partial class CommunityEntity
                     c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
                     c.alignment = ParseEnum( obj.GetString( "align" ), TextAnchor.UpperLeft );
                     c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    c.verticalOverflow = ParseEnum( obj.GetString( "verticalOverflow", "Truncate" ), VerticalWrapMode.Truncate );
                     GraphicComponentCreated( c, obj );
                     break;
                 }
@@ -144,15 +145,19 @@ public partial class CommunityEntity
 
                             if ( obj.ContainsKey( "skinid" ) )
                             {
-                                var requestedSkin = obj.GetInt( "skinid" );
-                                var skin = itemdef.skins.FirstOrDefault( x => x.id == requestedSkin );
-                                if ( skin.id == requestedSkin )
+                                var requestedSkin = (ulong)obj.GetNumber("skinid" );
+                                var skin = itemdef.skins.FirstOrDefault( x => x.id == (int)requestedSkin );
+                                if ( skin.id == (int)requestedSkin )
                                 {
                                     c.sprite = skin.invItem.icon;
                                 }
                                 else
                                 {
-                                    var workshopSprite = WorkshopIconLoader.Find( (ulong)requestedSkin );
+                                    var workshopSprite = WorkshopIconLoader.Find(requestedSkin, null, () =>
+                                    {
+                                        if (c != null)
+                                            c.sprite = WorkshopIconLoader.Find(requestedSkin);
+                                    });
                                     if ( workshopSprite != null )
                                     {
                                         c.sprite = workshopSprite;
@@ -260,6 +265,11 @@ public partial class CommunityEntity
                     if (obj.ContainsKey("needsKeyboard"))
                     {
                         go.AddComponent<NeedsKeyboardInputField>();
+                    }
+
+                    if (obj.ContainsKey("autofocus"))
+                    {
+                        c.Select();
                     }
 
                     GraphicComponentCreated( t, obj );
