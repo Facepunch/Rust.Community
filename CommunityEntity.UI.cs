@@ -321,6 +321,30 @@ public partial class CommunityEntity
                     go.AddComponent<NeedsKeyboard>();
                     break;
                 }
+			case "Animation":
+				{
+					List<AnimationProperty> props = new List<AnimationProperty>();
+					foreach(var prop in Obj.GetArray("properties"))
+					{
+						props.Add(new AnimationProperty{
+							duration = prop.GetFloat("duration", 0f),
+							delay = prop.GetFloat("delay", 0f),
+							repeat = prop.GetBoolean("repeat", false),
+							repeatDelay = prop.GetFloat("repeatDelay", 0f),
+							type = prop.GetString("type", null),
+							from = prop.GetString("from", null),
+							to = prop.GetString("to", null)
+						});
+					}
+					// dont bother creating the animation component if it has no properties
+					if(props.Count == 0) break;
+					
+					var a = go.AddComponent<Animation>();
+					a.properties = props;
+					
+					a.Start();
+					break;
+				}
         }
     }
     
@@ -386,6 +410,12 @@ public partial class CommunityEntity
         if ( !panel )
             return;
 
+
+        var animation = panel.GetComponent<Animation>();
+		if(animation){
+			animation.Kill();
+		}
+		
         var fadeOut = panel.GetComponent<FadeOut>();
         if ( fadeOut )
         {
