@@ -53,6 +53,7 @@ public partial class CommunityEntity
 			{
 				AnimateProperty();
 				if(repeatDelay > 0f) yield return new WaitForSeconds(repeatDelay);
+				else  yield return null;
 			}
 			while(repeat);
 		}
