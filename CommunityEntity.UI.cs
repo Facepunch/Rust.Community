@@ -329,7 +329,7 @@ public partial class CommunityEntity
 						props.Add(new AnimationProperty{
 							duration = prop.GetFloat("duration", 0f),
 							delay = prop.GetFloat("delay", 0f),
-							repeat = prop.GetBoolean("repeat", false),
+							repeat = prop.GetInt("repeat", 0),
 							repeatDelay = prop.GetFloat("repeatDelay", 0f),
 							type = prop.GetString("type", null),
 							from = prop.GetString("from", null),
