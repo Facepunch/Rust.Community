@@ -13,6 +13,8 @@ public partial class CommunityEntity
 	{
 		public List<AnimationProperty> properties = new List<AnimationProperty>();
 		
+		public bool isKilled = false;
+		
 		public void Start()
 		{
 			foreach(var prop in properties)
@@ -23,11 +25,15 @@ public partial class CommunityEntity
 		
 		public void Kill()
 		{
+			isKilled = true;
 			foreach(var prop in properties)
 			{
 				StopCoroutine(prop.routine);
 			}
 			properties.Clear();
+		}
+		private void OnDestroy(){
+			if(!isKilled) Kill();
 		}
 	}
 	
