@@ -35,13 +35,15 @@ public partial class CommunityEntity
 	{
 		public float duration = 0f;
 		public float delay = 0f;
-		public bool repeat = false;
+		public int repeat = 0;
 		public bool repeatDelay = 0f;
 		public string type;
 		public string from;
 		public string to;
 		
 		public Coroutine routine;
+		
+		public int completedRounds = 0;
 		
 		public IEnumerator Animate()
 		{
@@ -52,10 +54,11 @@ public partial class CommunityEntity
 			do
 			{
 				AnimateProperty();
+				completedRounds++;
 				if(repeatDelay > 0f) yield return new WaitForSeconds(repeatDelay);
 				else  yield return null;
 			}
-			while(repeat);
+			while(repeat < 0 || (repeat > 0 && completedRounds <= repeat));
 		}
 		
 		public void AnimateProperty()
