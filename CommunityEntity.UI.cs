@@ -80,6 +80,12 @@ public partial class CommunityEntity
             {
                 CreateComponents( go, component.Obj );
             }
+			
+			Animation anim = go.GetComponent<Animation>();
+			if(anim){
+				if(anim.properties.Count == 0) Object.Destroy(anim);
+				else anim.Start();
+			}
 
             if ( json.ContainsKey( "fadeOut" ) )
             {
@@ -104,7 +110,7 @@ public partial class CommunityEntity
 
     private void CreateComponents( GameObject go, JSON.Object obj )
     {
-        //
+		//
         // This is the 'stupid' but 'safe & predictable way of doing this.
         //
         switch ( obj.GetString( "type", "UnityEngine.UI.Text" ) )
@@ -323,10 +329,12 @@ public partial class CommunityEntity
                 }
 			case "Animation":
 				{
-					List<AnimationProperty> props = new List<AnimationProperty>();
+					// Ensure there's only ever one Animation Component per gameObject, adding onto their existing Properties if one allready exists
+					Animation anim = go.GetComponent<Animation>();
+					if(!anim) anim = go.AddComponent<Animation>();
 					foreach(var prop in Obj.GetArray("properties"))
 					{
-						props.Add(new AnimationProperty{
+						anim.properties.Add(new AnimationProperty{
 							duration = prop.GetFloat("duration", 0f),
 							delay = prop.GetFloat("delay", 0f),
 							repeat = prop.GetInt("repeat", 0),
@@ -336,13 +344,6 @@ public partial class CommunityEntity
 							to = prop.GetString("to", null)
 						});
 					}
-					// dont bother creating the animation component if it has no properties
-					if(props.Count == 0) break;
-					
-					var a = go.AddComponent<Animation>();
-					a.properties = props;
-					
-					a.Start();
 					break;
 				}
         }
