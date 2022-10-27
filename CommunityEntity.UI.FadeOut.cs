@@ -17,7 +17,7 @@ public partial class CommunityEntity
         public void FadeOutAndDestroy()
         {
             Invoke( "Kill", duration + .1f );
-            foreach ( var c in gameObject.GetComponents<UnityEngine.UI.Graphic>() )
+            foreach ( var c in gameObject.GetComponentsInChildren<UnityEngine.UI.Graphic>() )
             {
                 c.CrossFadeAlpha( 0f, duration, false );
             }
