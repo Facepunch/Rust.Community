@@ -357,8 +357,9 @@ public partial class CommunityEntity
         }
 
 
-        var texture = www.texture;
-        if ( texture == null || c == null )
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        www.LoadImageIntoTexture(texture);
+        if ( c == null )
         {
             Debug.Log( "Error downloading image: " + p + " (not an image)" );
             www.Dispose();
