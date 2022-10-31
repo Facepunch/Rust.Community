@@ -8,7 +8,7 @@ using System.IO;
 
 #if CLIENT
 
-public partial class NuCommunityEntity
+public partial class CommunityEntity
 {
 
     public class BezierEasing {
