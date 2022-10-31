@@ -80,12 +80,24 @@ public partial class CommunityEntity
             {
                 CreateComponents( go, component.Obj );
             }
+            
+            Animation anim = go.GetComponent<Animation>();
+            if(anim){
+                if(anim.properties.Count == 0) GameObject.Destroy(anim);
+                else anim.StartAnimation();
+            }
+            if ( json.ContainsKey( "addCanvas" ) )
+            {
+                go.AddComponent<Canvas>();
+                go.AddComponent<GraphicRaycaster>();
+            }
 
             if ( json.ContainsKey( "fadeOut" ) )
             {
                 go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
             }
         }
+        ApplyMouseListeners();
     }
 
     private GameObject FindPanel( string name )
@@ -321,6 +333,46 @@ public partial class CommunityEntity
                     go.AddComponent<NeedsKeyboard>();
                     break;
                 }
+            case "UnityEngine.UI.RectMask2D":
+                {
+                    go.AddComponent<RectMask2D>();
+                    break;
+                }
+            case "UnityEngine.UI.Mask":
+                {
+                    var c = go.AddComponent<Mask>();
+                    c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
+                    break;
+                }
+			case "Animation":
+				{
+					// Ensure there's only ever one Animation Component per gameObject, adding onto their existing Properties if one allready exists
+					Animation anim = go.GetComponent<Animation>();
+					if(!anim) anim = go.AddComponent<Animation>();
+
+                    string mouseTarget = obj.GetString("mouseTarget", "");
+        			if(!string.IsNullOrEmpty(mouseTarget) && anim.mouseTarget == "") // only ever apply a single mouse listener
+        				ScheduleMouseListener(mouseTarget, anim);
+
+					foreach(var prop in obj.GetArray("properties"))
+					{
+                        var propobj = prop.Obj;
+                        var condition = propobj.GetString("condition", "Generic");
+
+                        if(!anim.ValidCondition(condition)) condition = "Generic";
+                        anim.properties[condition].Add(new AnimationProperty{
+							duration = propobj.GetFloat("duration", 0f),
+							delay = propobj.GetFloat("delay", 0f),
+							repeat = propobj.GetInt("repeat", 0),
+							repeatDelay = propobj.GetFloat("repeatDelay", 0f),
+							easing = propobj.GetString("easing", "Linear"),
+							type = propobj.GetString("type", null),
+							from = propobj.GetString("from", ""),
+							to = propobj.GetString("to", null)
+						});
+					}
+					break;
+				}
         }
     }
     
@@ -387,7 +439,11 @@ public partial class CommunityEntity
             return;
 
         var fadeOut = panel.GetComponent<FadeOut>();
-        if ( fadeOut )
+        if(animation && animation.HasForCondition("OnDestroy"))
+        {
+            animation.Kill();
+        }
+        else if ( fadeOut )
         {
             fadeOut.FadeOutAndDestroy();
         }
