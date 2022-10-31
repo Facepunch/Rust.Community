@@ -32,6 +32,8 @@ public partial class CommunityEntity
 
 		public bool ValidCondition(string condition) => properties.ContainsKey(condition);
 
+		public bool HasForCondition(string condition) => ValidCondition(condition) && properties[condition].Count > 0;
+
 		public void StartAnimation(){
 			CacheGraphicComponent();
 			StartByCondition("Generic");
