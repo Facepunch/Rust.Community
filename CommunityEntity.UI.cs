@@ -58,7 +58,10 @@ public partial class CommunityEntity
         foreach ( var value in jsonArray )
         {
             var json = value.Obj;
-
+            if ( json.ContainsKey( "destroyUi" ) )
+            {
+                DestroyPanel( json.GetString( "destroyUi", "AddUI CreatedPanel" ) );
+            }
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
             if ( parentPanel == null )
             {
