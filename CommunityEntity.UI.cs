@@ -25,6 +25,7 @@ public partial class CommunityEntity
         AllUi.Clear();
         UiDict.Clear();
         requestingTextureImages.Clear();
+        UnloadTextureCache();
     }
 
     public void SetVisible( bool b )
@@ -44,6 +45,8 @@ public partial class CommunityEntity
     [RPC_Client]
     public void AddUI( RPCMessage msg )
     {
+        if (Client.IsPlayingDemo && !ConVar.Demo.showCommunityUI)
+            return;
         var str = msg.read.StringRaw();
 
         if ( string.IsNullOrEmpty( str ) ) return;
@@ -132,7 +135,7 @@ public partial class CommunityEntity
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, id );
+                        ApplyTextureToImage( c, id );
                     }
 
                     if ( obj.ContainsKey( "itemid" ) )
@@ -190,7 +193,7 @@ public partial class CommunityEntity
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, id );
+                        ApplyTextureToImage( c, id );
                     }
 
                     GraphicComponentCreated( c, obj );
