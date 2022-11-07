@@ -13,7 +13,9 @@ public partial class CommunityEntity
 {
     private static List<GameObject> AllUi = new List<GameObject>();
     private static Dictionary<string, GameObject> UiDict = new Dictionary<string, GameObject>();
+	
     private static Dictionary<string, Texture2D> WebImageCache = new Dictionary<string, Texture2D>();
+    private static Dictionary<string, List<UnityEngine.UI.RawImage>> requestingWebImages = new Dictionary<string, List<UnityEngine.UI.RawImage>>();
 
     public static void DestroyServerCreatedUI()
     {
@@ -353,6 +355,13 @@ public partial class CommunityEntity
             if(c != null) c.texture = WebImageCache[p];
             yield break;
         }
+        // add to the existing request Queue if one exists, if not create one and become the main coroutine that applies the texture at the end
+        if(requestingWebImages.ContainsKey(p)){
+            requestingWebImages[p].Add(c);
+            yield break;
+        }else{
+            requestingWebImages.Add(p, new List<UnityEngine.UI.RawImage>());
+        }
         
         var www = new WWW( p.Trim() );
 
@@ -370,11 +379,18 @@ public partial class CommunityEntity
 
 
         Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-        www.LoadImageIntoTexture(texture);
+
+        if(!WebImageCache.ContainsKey(p)) WebImageCache.Add(p, texture);
+        if(requestingWebImages[p].Count > 0){
+            foreach(var graphic in requestingWebImages[p]){
+                graphic.texture = texture;
+            }
+        }
+        requestingWebImages.Remove(p);
            
         c.texture = texture;
            
-        WebImageCache.Add(texture);
+        if(!WebImageCache.ContainsKey(p)) WebImageCache.Add(p, texture);
         www.Dispose();
     }
 
