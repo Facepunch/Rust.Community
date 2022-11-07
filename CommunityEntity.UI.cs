@@ -349,7 +349,7 @@ public partial class CommunityEntity
 
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
     {
-        if(WebImageCache.ContainsKey(p){
+        if(WebImageCache.ContainsKey(p)){
             if(c != null) c.texture = WebImageCache[p];
             yield break;
         }
