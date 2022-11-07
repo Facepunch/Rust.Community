@@ -13,6 +13,7 @@ public partial class CommunityEntity
 {
     private static List<GameObject> AllUi = new List<GameObject>();
     private static Dictionary<string, GameObject> UiDict = new Dictionary<string, GameObject>();
+    private static Dictionary<string, Texture2D> WebImageCache = new Dictionary<string, Texture2D>();
 
     public static void DestroyServerCreatedUI()
     {
@@ -348,6 +349,11 @@ public partial class CommunityEntity
 
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
     {
+        if(WebImageCache.ContainsKey(p){
+            if(c != null) c.texture = WebImageCache[p];
+            yield break;
+        }
+        
         var www = new WWW( p.Trim() );
 
         while ( !www.isDone )
@@ -365,14 +371,10 @@ public partial class CommunityEntity
 
         Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
         www.LoadImageIntoTexture(texture);
-        if ( c == null )
-        {
-            Debug.Log( "Error downloading image: " + p + " (not an image)" );
-            www.Dispose();
-            yield break;
-        }
-
+           
         c.texture = texture;
+           
+        WebImageCache.Add(texture);
         www.Dispose();
     }
 
