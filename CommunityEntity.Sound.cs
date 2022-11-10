@@ -182,7 +182,6 @@ public partial class CommunityEntity
             }
             else if(def == null) continue;
             bool firstPerson = (parent == null && position == Vector3.zero);
-            Debug.Log($"Playing sound with settings {parent} {position} {firstPerson}");
             sound = SoundManager.RequestSoundInstance(def, parent?.gameObject, position, firstPerson);
             if(!sound) continue;
 
