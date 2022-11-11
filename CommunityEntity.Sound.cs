@@ -160,27 +160,16 @@ public partial class CommunityEntity
             }
 
 
-            string type = json.GetString("definitionType", "Rust");
             string definition = json.GetString("definition", null);
             uint parentID = (uint)json.GetNumber("parent", 0);
             Vector3 position = Vector3Ex.Parse(json.GetString("offset", "0 0 0"));
             if(string.IsNullOrEmpty(definition)) continue;
 
             SoundDefinition def = FindDefinition(definition);
+            if(def == null) continue;
             BaseEntity parent = null;
             if(parentID != 0)
             parent = (BaseNetworkable.clientEntities.Find(parentID) as BaseEntity);
-            if(type == "Rust"){
-                if(def == null){
-                    def = FileSystem.Load<SoundDefinition>(definition);
-                    if(def == null){
-                        continue;
-                    }else{
-                        RegisterDefinition(definition, def);
-                    }
-                }
-            }
-            else if(def == null) continue;
             bool firstPerson = (parent == null && position == Vector3.zero);
             sound = SoundManager.RequestSoundInstance(def, parent?.gameObject, position, firstPerson);
             if(!sound) continue;
@@ -244,6 +233,15 @@ public partial class CommunityEntity
         if ( ServerDefinitions.TryGetValue( name, out def ) )
         {
             return def;
+        }
+        if(name.StartsWith("assets")){
+            def = FileSystem.Load<SoundDefinition>(name);
+            if(def == null){
+                return null;
+            }else{
+                RegisterDefinition(name, def);
+                return def;
+            }
         }
 
         return null;
