@@ -16,7 +16,7 @@ public partial class CommunityEntity
 
     public class MouseListener : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
 
-        public static List<Animation> pendingListeners = new List<Animation>();
+        public static List<IMouseReceiver> pendingListeners = new List<IMouseReceiver>();
 
         public Action onEnter;
         public Action onExit;
@@ -43,42 +43,58 @@ public partial class CommunityEntity
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.pointerExitHandler);
         }
     }
-    public void ScheduleMouseListener(string name, Animation anim){
-        anim.mouseTarget = name;
-        if(!MouseListener.pendingListeners.Contains(anim)) MouseListener.pendingListeners.Add(anim);
+
+    public interface IMouseReceiver{
+
+        string mouseTarget {
+            get;
+            set;
+        }
+
+        void OnHoverEnter();
+
+        void OnHoverExit();
+
+        void OnClick();
+    }
+
+
+    public void ScheduleMouseListener(string name, IMouseReceiver receiver){
+        receiver.mouseTarget = name;
+        if(!MouseListener.pendingListeners.Contains(receiver)) MouseListener.pendingListeners.Add(receiver);
     }
 
     public void ApplyMouseListeners(){
-        foreach(var anim in MouseListener.pendingListeners){
-            if(string.IsNullOrEmpty(anim.mouseTarget)) continue;
-            ApplyMouseListener(anim.mouseTarget, anim);
+        foreach(var receiver in MouseListener.pendingListeners){
+            if(string.IsNullOrEmpty(receiver.mouseTarget)) continue;
+            ApplyMouseListener(receiver.mouseTarget, receiver);
         }
         MouseListener.pendingListeners.Clear();
     }
-    public void ApplyMouseListener(string name, Animation anim){
+    public void ApplyMouseListener(string name, IMouseReceiver receiver){
         GameObject hObj = FindPanel(name);
         if(!hObj) return;
 
         var c = hObj.GetComponent<MouseListener>();
         if(!c) c = hObj.AddComponent<MouseListener>();
 
-        c.onEnter += new Action(anim.OnHoverEnter);
-        c.onExit += new Action(anim.OnHoverExit);
-        c.onClick += new Action(anim.OnClick);
+        c.onEnter += new Action(receiver.OnHoverEnter);
+        c.onExit += new Action(receiver.OnHoverExit);
+        c.onClick += new Action(receiver.OnClick);
 
     }
-    public void RemoveMouseListener(string name, Animation anim){
+    public void RemoveMouseListener(string name, IMouseReceiver receiver){
         GameObject hObj = FindPanel(name);
         if(!hObj) return;
 
         var c = hObj.GetComponent<MouseListener>();
         if(!c) return;
 
-        c.onEnter -= new Action(anim.OnHoverEnter);
-        c.onExit -= new Action(anim.OnHoverExit);
-        c.onClick -= new Action(anim.OnClick);
+        c.onEnter -= new Action(receiver.OnHoverEnter);
+        c.onExit -= new Action(receiver.OnHoverExit);
+        c.onClick -= new Action(receiver.OnClick);
 
-        anim.mouseTarget = "";
+        receiver.mouseTarget = "";
     }
 }
 #endif
