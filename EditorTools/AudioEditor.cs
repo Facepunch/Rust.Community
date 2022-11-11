@@ -122,17 +122,17 @@ public class AudioEditor : MonoBehaviour
         }
 
         stringBuilder.Append("}]");
-        NuCommunityEntity.ClientInstance?.AddSoundDefinition( stringBuilder.ToString());
+        CommunityEntity.ClientInstance?.AddSoundDefinition( stringBuilder.ToString());
     }
 
     public void ApplySound(){
         string LoadSound = "[{\"instanceName\": \"" + instanceName + "\", \"definition\": \"" + definition + "\", \"fadeIn\": " + fadeIn + ",  \"parent\": " + parentNetID + ",  \"offset\": \"" + $"{offset.x} {offset.y} {offset.z}" + "\", \"maxDistance\": " + maxDistance + ", \"dopplerScale\": " + dopplerScale + "}]";
-        NuCommunityEntity.ClientInstance?.PlaySound( LoadSound );
+        CommunityEntity.ClientInstance?.PlaySound( LoadSound );
     }
 
     public void StopSound(){
         string EndSound = "[{\"instanceName\": \"" + instanceToKill + "\", \"fadeOut\": " + fadeOut + ", \"kill\": " + (killSound ? "true" : "false") + ",}]";
-        NuCommunityEntity.ClientInstance?.StopSound( EndSound );
+        CommunityEntity.ClientInstance?.StopSound( EndSound );
 
     }
 
