@@ -327,6 +327,35 @@ public partial class CommunityEntity
                     go.AddComponent<NeedsKeyboard>();
                     break;
                 }
+			case "SoundTrigger":
+				{
+
+					SoundTrigger trig = go.GetComponent<SoundTrigger>();
+					if(!trig) trig = go.AddComponent<SoundTrigger>();
+                    ScheduleMouseListener(go.name, trig);
+
+                    foreach(var prop in obj.GetArray("sounds"))
+					{
+                        var propobj = prop.Obj;
+                        if(!propobj.ContainsKey("trigger") || !propobj.ContainsKey("definitionToPlay")) continue;
+
+                        var condition = propobj.GetString("trigger", "Hover");
+
+                        SoundTrigger.SoundEvent ev = new SoundTrigger.SoundEvent{
+                            definitionToPlay = propobj.GetString("definitionToPlay", ""),
+                            fadeIn = propobj.GetFloat("fadeIn", 0f),
+                            killOnExit = propobj.GetBoolean("killOnExit", true),
+                            fadeOut = propobj.GetFloat("fadeOut", 0f)
+                        };
+
+                        if(condition == "Click"){
+                            trig.OnClickEvents.Add(ev);
+                        }else{
+                            trig.OnHoverEvents.Add(ev);
+                        }
+					}
+					break;
+				}
         }
     }
     
