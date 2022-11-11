@@ -53,9 +53,6 @@ public class AudioEditor : MonoBehaviour
     [Tooltip("Required, the path/name of the definition to use")]
     public string definition = "";
 
-    [Tooltip("Optional, the type of definition to use. Defaults to 'Rust' Meaning it will load an existing sound from the FileSystem")]
-    public string definitionType = "";
-
     [Tooltip("Optional, if higher than 0 the sound will linearly fade in instead of playing at full volume immediately")]
     public float fadeIn = 0f;
 
@@ -129,7 +126,7 @@ public class AudioEditor : MonoBehaviour
     }
 
     public void ApplySound(){
-        string LoadSound = "[{\"instanceName\": \"" + instanceName + "\", \"definition\": \"" + definition + "\", \"definitionType\": \"" + definitionType + "\", \"fadeIn\": " + fadeIn + ",  \"parent\": " + parentNetID + ",  \"offset\": \"" + $"{offset.x} {offset.y} {offset.z}" + "\", \"maxDistance\": " + maxDistance + ", \"dopplerScale\": " + dopplerScale + "}]";
+        string LoadSound = "[{\"instanceName\": \"" + instanceName + "\", \"definition\": \"" + definition + "\", \"fadeIn\": " + fadeIn + ",  \"parent\": " + parentNetID + ",  \"offset\": \"" + $"{offset.x} {offset.y} {offset.z}" + "\", \"maxDistance\": " + maxDistance + ", \"dopplerScale\": " + dopplerScale + "}]";
         NuCommunityEntity.ClientInstance?.PlaySound( LoadSound );
     }
 
