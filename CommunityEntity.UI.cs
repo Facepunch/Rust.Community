@@ -25,6 +25,7 @@ public partial class CommunityEntity
         AllUi.Clear();
         UiDict.Clear();
         requestingTextureImages.Clear();
+        UnloadTextureCache();
     }
 
     public void SetVisible( bool b )
@@ -44,6 +45,8 @@ public partial class CommunityEntity
     [RPC_Client]
     public void AddUI( RPCMessage msg )
     {
+        if (Client.IsPlayingDemo && !ConVar.Demo.showCommunityUI)
+            return;
         var str = msg.read.StringRaw();
 
         if ( string.IsNullOrEmpty( str ) ) return;
@@ -55,7 +58,10 @@ public partial class CommunityEntity
         foreach ( var value in jsonArray )
         {
             var json = value.Obj;
-
+            if ( json.ContainsKey( "destroyUi" ) )
+            {
+                DestroyPanel( json.GetString( "destroyUi", "AddUI CreatedPanel" ) );
+            }
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
             if ( parentPanel == null )
             {
@@ -144,7 +150,7 @@ public partial class CommunityEntity
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, id );
+                        ApplyTextureToImage( c, id );
                     }
 
                     if ( obj.ContainsKey( "itemid" ) )
@@ -202,7 +208,7 @@ public partial class CommunityEntity
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, id );
+                        ApplyTextureToImage( c, id );
                     }
 
                     GraphicComponentCreated( c, obj );
@@ -409,8 +415,9 @@ public partial class CommunityEntity
         }
 
 
-        var texture = www.texture;
-        if ( texture == null || c == null )
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        www.LoadImageIntoTexture(texture);
+        if ( c == null )
         {
             Debug.Log( "Error downloading image: " + p + " (not an image)" );
             www.Dispose();

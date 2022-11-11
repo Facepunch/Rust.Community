@@ -4,12 +4,35 @@ using System.Collections.Generic;
 using System.Linq;
 using Facepunch.Extend;
 using System.IO;
+using MaskableGraphic = UnityEngine.UI.MaskableGraphic;
 
 #if CLIENT
 
 public partial class CommunityEntity
 {
     private static Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>> requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>>();
+    private static Dictionary<uint, CachedTexture> _textureCache = new Dictionary<uint, CachedTexture>();
+
+    private class CachedTexture
+    {
+        public Texture2D Texture;
+        public Sprite Sprite;
+
+        public void Destroy()
+        {
+            if ( Texture != null )
+            {
+                UnityEngine.Object.Destroy( Texture );
+                Texture = null;
+            }
+
+            if ( Sprite != null )
+            {
+                UnityEngine.Object.Destroy( Sprite );
+                Sprite = null;
+            }
+        }
+    }
 
     [RPC_Client]
     public void CL_ReceiveFilePng( BaseEntity.RPCMessage msg )
@@ -24,53 +47,104 @@ public partial class CommunityEntity
             Log( "Client/Server FileStorage CRC differs" );
         }
 
+        var texture = StoreCachedTexture( textureID, bytes );
+
         List<UnityEngine.UI.MaskableGraphic> components;
-        if ( !requestingTextureImages.TryGetValue( textureID, out components ) ) return;
-
-        requestingTextureImages.Remove( textureID );
-
-        foreach ( var c in components )
+        if ( requestingTextureImages.TryGetValue( textureID, out components ) )
         {
-            LoadPngIntoGraphic( c, bytes );
-        }
-    }
+            requestingTextureImages.Remove( textureID );
 
-    private void SetImageFromServer( UnityEngine.UI.MaskableGraphic component, uint textureID )
-    {
-        var bytes = FileStorage.client.Get( textureID, FileStorage.Type.png, net.ID );
-        if ( bytes == null )
-        {
-            List<UnityEngine.UI.MaskableGraphic> components;
-            if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
+            foreach ( var c in components )
             {
-                components = new List<UnityEngine.UI.MaskableGraphic>();
-                requestingTextureImages[textureID] = components;
-                RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
+                ApplyCachedTextureToImage( c, texture );
             }
-            components.Add( component );
-        }
-        else
-        {
-            LoadPngIntoGraphic( component, bytes );
         }
     }
 
-    private void LoadPngIntoGraphic( UnityEngine.UI.MaskableGraphic component, byte[] bytes )
+    private static CachedTexture GetCachedTexture( uint textureId )
     {
-        var texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false );
-        texture.LoadImage( bytes );
+        _textureCache.TryGetValue( textureId, out var texture );
+        return texture;
+    }
 
+    private CachedTexture StoreCachedTexture( uint textureId, byte[] bytes )
+    {
+        var texture = new CachedTexture()
+        {
+            Texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false ),
+        };
+
+        texture.Texture.LoadImage( bytes );
+
+        // Check for duplicate textureId and unload old one ( dont think they will conflict but safety first)
+        if ( _textureCache.TryGetValue( textureId, out var oldTexture ) )
+        {
+            oldTexture.Destroy(); 
+        }
+
+        _textureCache[ textureId ] = texture;
+
+        return texture;
+    }
+
+    private void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID )
+    {
+        var texture = GetCachedTexture( textureID );
+
+        if ( texture == null )
+        {
+            var bytes = FileStorage.client.Get( textureID, FileStorage.Type.png, net.ID );
+            if ( bytes != null )
+            {
+                texture = StoreCachedTexture( textureID, bytes );
+            }
+            else
+            {
+                List<UnityEngine.UI.MaskableGraphic> components;
+                if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
+                {
+                    components = new List<UnityEngine.UI.MaskableGraphic>();
+                    requestingTextureImages[ textureID ] = components;
+                    RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
+                }
+                components.Add( component );
+                return;
+            }
+        }
+
+        ApplyCachedTextureToImage( component, texture );
+    }
+
+    private void ApplyCachedTextureToImage( UnityEngine.UI.MaskableGraphic component, CachedTexture texture )
+    {
         var image = component as UnityEngine.UI.Image;
         if ( image )
         {
-            image.sprite = Sprite.Create( texture, new Rect( 0, 0, texture.width, texture.height ), new Vector2( 0.5f, 0.5f ) );
+            if ( texture.Sprite == null )
+            {
+                texture.Sprite = Sprite.Create( texture.Texture, new Rect( 0, 0, texture.Texture.width, texture.Texture.height ), new Vector2( 0.5f, 0.5f ) );
+            }
+
+            image.sprite = texture.Sprite;
             return;
         }
 
         var rawImage = component as UnityEngine.UI.RawImage;
-        if ( rawImage ) rawImage.texture = texture;
+        if ( rawImage )
+        {
+            rawImage.texture = texture.Texture;
+        }
     }
 
+    private static void UnloadTextureCache()
+    {
+        foreach( var texture in _textureCache.Values )
+        {
+            texture.Destroy();
+        }
+
+        _textureCache.Clear();
+    }
 }
 
-#endif
+#endif 
