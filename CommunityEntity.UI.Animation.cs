@@ -11,7 +11,7 @@ using System.IO;
 
 public partial class CommunityEntity
 {
-	public class Animation : FacepunchBehaviour
+	public class Animation : FacepunchBehaviour, IMouseReceiver
 	{
 		public Dictionary<string, List<AnimationProperty>> properties = new Dictionary<string, List<AnimationProperty>>(){
 			["Generic"] = new List<AnimationProperty>(),
@@ -21,7 +21,12 @@ public partial class CommunityEntity
 			["OnClick"] = new List<AnimationProperty>(),
 		};
 
-		public string mouseTarget = "";
+		public string _mouseTarget = "";
+
+		public string mouseTarget{
+			get => _mouseTarget;
+			set => _mouseTarget = value;
+		}
 
 		public UnityEngine.UI.Graphic cachedGraphic;
 		public RectTransform cachedRect;
