@@ -519,47 +519,47 @@ public partial class CommunityEntity
             GameObject go;
             if (string.IsNullOrEmpty(panel) || !UiDict.TryGetValue(panel, out go))
                 return;
-
-			Animation anim = go.GetComponent<Animation>();
-
-			string mouseTarget = "";
-			if(obj.ContainsKey("mouseTarget") && anim){
-				mouseTarget = obj.GetString("mouseTarget", "");
-
-				// Remove the existing animation's Enter/Exit Actions from the mouseListener, assuming its different from the current target
-				if(anim && !string.IsNullOrEmpty(anim.mouseTarget) && !string.IsNullOrEmpty(mouseTarget) && anim.mouseTarget != mouseTarget)
-					RemoveMouseListener(anim.mouseTarget, anim);
-			}
-			if(!anim){
-				anim = go.AddComponent<Animation>();
-				anim.CacheGraphicComponent();
-			}
-
-			// Apply new mouse target if its valid & different than the existing target
-			if(!string.IsNullOrEmpty(mouseTarget) && anim.mouseTarget != mouseTarget)
-				ScheduleMouseListener(mouseTarget, anim);
-
-			foreach(var prop in obj.GetArray("properties"))
-			{
-				var propobj = prop.Obj;
-				var condition = propobj.GetString("condition", "Generic");
-
-				if(!anim.ValidCondition(condition)) condition = "Generic";
-				var animprop = new AnimationProperty{
-					duration = propobj.GetFloat("duration", 0f),
-					delay = propobj.GetFloat("delay", 0f),
-					repeat = propobj.GetInt("repeat", 0),
-					repeatDelay = propobj.GetFloat("repeatDelay", 0f),
-					easing = propobj.GetString("easing", "Linear"),
-					type = propobj.GetString("type", null),
-					from = propobj.GetString("from", null),
-					to = propobj.GetString("to", null)
-				};
-				anim.properties[condition].Add(animprop);
-
-				if(condition == "Generic") anim.StartProperty(animprop);
-			}
-			break;
+            
+            Animation anim = null;
+            Animation[] animations = go.GetComponents<Animation>();
+            
+            string mouseTarget = obj.GetString("mouseTarget", "");
+            if(animations.Length == 0){
+                // do nothing
+            } else if(!string.IsNullOrEmpty(mouseTarget)){
+                // find an existing animation component with the same mouse target, if not create one
+                anim = animations.FirstOrDefault((animation) => animation.mouseTarget == mouseTarget);
+            }else{
+                anim = animations[0];
+            }
+            
+            if(anim == null){
+                anim = go.AddComponent<Animation>();
+                anim.CacheGraphicComponent();
+                if(!string.IsNullOrEmpty(mouseTarget)) ScheduleMouseListener(mouseTarget, anim);
+            }
+            
+            foreach(var prop in obj.GetArray("properties"))
+            {
+                var propobj = prop.Obj;
+                var condition = propobj.GetString("condition", "Generic");
+                
+                if(!anim.ValidCondition(condition)) condition = "Generic";
+                var animprop = new AnimationProperty{
+                    duration = propobj.GetFloat("duration", 0f),
+                    delay = propobj.GetFloat("delay", 0f),
+                    repeat = propobj.GetInt("repeat", 0),
+                    repeatDelay = propobj.GetFloat("repeatDelay", 0f),
+                    easing = propobj.GetString("easing", "Linear"),
+                    type = propobj.GetString("type", null),
+                    from = propobj.GetString("from", null),
+                    to = propobj.GetString("to", null)
+                };
+                anim.properties[condition].Add(animprop);
+                
+                if(condition == "Generic") anim.StartProperty(animprop);
+            }
+            break;
         }
 		ApplyMouseListeners();
     }
