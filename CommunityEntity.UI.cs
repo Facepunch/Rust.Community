@@ -86,12 +86,13 @@ public partial class CommunityEntity
             {
                 CreateComponents( go, component.Obj );
             }
-            
-            Animation anim = go.GetComponent<Animation>();
-            if(anim){
-                if(anim.properties.Count == 0) GameObject.Destroy(anim);
-                else anim.StartAnimation();
-            }
+
+            Animation[] animations = go.GetComponents<Animation>();
+			if(animations.Length > 0){
+                for(var i = 0; i < animations.Length; i++){
+                    animations[i].StartAnimation();
+                }
+			}
             if ( json.ContainsKey( "addCanvas" ) )
             {
                 go.AddComponent<Canvas>();
@@ -351,14 +352,23 @@ public partial class CommunityEntity
                     break;
                 }
 			case "Animation":
-				{
-					// Ensure there's only ever one Animation Component per gameObject, adding onto their existing Properties if one allready exists
-					Animation anim = go.GetComponent<Animation>();
-					if(!anim) anim = go.AddComponent<Animation>();
-
+                {
+                    Animation anim = null;
+                    Animation[] animations = go.GetComponents<Animation>();
                     string mouseTarget = obj.GetString("mouseTarget", "");
-        			if(!string.IsNullOrEmpty(mouseTarget) && anim.mouseTarget == "") // only ever apply a single mouse listener
-        				ScheduleMouseListener(mouseTarget, anim);
+                    if(animations.Length == 0){
+                        // do nothing
+                    } else if(!string.IsNullOrEmpty(mouseTarget)){
+                        // find an existing animation component with the same mouse target, if not create one
+        				anim = animations.FirstOrDefault((animation) => animation.mouseTarget == mouseTarget);
+                    }else{
+                        anim = animations[0];
+                    }
+                    
+                    if(anim == null){
+                        anim = go.AddComponent<Animation>();
+                        if(!string.IsNullOrEmpty(mouseTarget)) ScheduleMouseListener(mouseTarget, anim);
+                    }
 
 					foreach(var prop in obj.GetArray("properties"))
 					{
@@ -445,10 +455,13 @@ public partial class CommunityEntity
         if ( !panel )
             return;
 
+        Animation[] animations = panel.GetComponents<Animation>();
         var fadeOut = panel.GetComponent<FadeOut>();
-        if(animation && animation.HasForCondition("OnDestroy"))
+        if(animations.Length > 0)
         {
-            animation.Kill();
+            for(var i = 0; i < animations.Length; i++){
+                if(animations[i].HasForCondition("OnDestroy")) animations[i].Kill();
+            }
         }
         else if ( fadeOut )
         {

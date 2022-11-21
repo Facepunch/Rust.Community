@@ -38,7 +38,7 @@ public partial class CommunityEntity
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
-            if(onEnter != null) onExit();
+            if(onExit != null) onExit();
             // Manually Bubble it up
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.pointerExitHandler);
         }
