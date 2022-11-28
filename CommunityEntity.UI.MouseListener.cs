@@ -44,20 +44,6 @@ public partial class CommunityEntity
         }
     }
 
-    public interface IMouseReceiver{
-
-        string mouseTarget {
-            get;
-            set;
-        }
-
-        void OnHoverEnter();
-
-        void OnHoverExit();
-
-        void OnClick();
-    }
-
 
     public void ScheduleMouseListener(string name, IMouseReceiver receiver){
         receiver.mouseTarget = name;
@@ -78,9 +64,9 @@ public partial class CommunityEntity
         var c = hObj.GetComponent<MouseListener>();
         if(!c) c = hObj.AddComponent<MouseListener>();
 
-        c.onEnter += new Action(receiver.OnHoverEnter);
-        c.onExit += new Action(receiver.OnHoverExit);
-        c.onClick += new Action(receiver.OnClick);
+        c.onEnter += receiver.OnHoverEnter;
+        c.onExit += receiver.OnHoverExit;
+        c.onClick += receiver.OnClick;
 
     }
     public void RemoveMouseListener(string name, IMouseReceiver receiver){
@@ -90,9 +76,9 @@ public partial class CommunityEntity
         var c = hObj.GetComponent<MouseListener>();
         if(!c) return;
 
-        c.onEnter -= new Action(receiver.OnHoverEnter);
-        c.onExit -= new Action(receiver.OnHoverExit);
-        c.onClick -= new Action(receiver.OnClick);
+        c.onEnter -= receiver.OnHoverEnter;
+        c.onExit -= receiver.OnHoverExit;
+        c.onClick -= receiver.OnClick;
 
         receiver.mouseTarget = "";
     }
