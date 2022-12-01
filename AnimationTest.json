@@ -201,7 +201,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -209,7 +209,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -287,7 +287,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 1.5,
@@ -297,7 +297,7 @@
                         "to": "1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 1.5,
                         "duration": 1.5,
@@ -336,7 +336,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "delay": 0,
                         "duration": 1.5,
@@ -346,7 +346,7 @@
                         "to": "0.2 1 0.2 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "delay": 1.5,
                         "duration": 1.5,
@@ -377,7 +377,7 @@
                 "mouseTarget": "Slide0_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 1.5,
@@ -387,7 +387,7 @@
                         "to": "1.5 1.5"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Scale",
                         "delay": 1.5,
                         "duration": 1.5,
@@ -436,7 +436,7 @@
                 "mouseTarget": "Slide0_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 1.5,
@@ -446,7 +446,7 @@
                         "to": "0 0 -45"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Rotate",
                         "delay": 1.5,
                         "duration": 1.5,
@@ -495,7 +495,7 @@
                 "mouseTarget": "Slide0_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -504,7 +504,7 @@
                         "to": "0 -0.3"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 1.5,
                         "duration": 1.5,
@@ -572,7 +572,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -580,7 +580,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -633,7 +633,7 @@
                 "mouseTarget": "Slide1_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 1.5,
@@ -643,7 +643,7 @@
                         "to": "1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 1.5,
                         "duration": 1.5,
@@ -692,28 +692,28 @@
                 "mouseTarget": "Slide2_Block2",
                 "properties": [
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.5,
                         "to": "1.2 1.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 0.5,
                         "to": "0 0 180"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.5,
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Rotate",
                         "delay": 0.51,
                         "duration": 0,
@@ -760,14 +760,14 @@
                 "mouseTarget": "Slide2_Block3",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
                         "to": "1.2 1.2"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Scale",
                         "delay": 0.5,
                         "duration": 0.2,
@@ -813,14 +813,14 @@
                 "type": "Animation",
                 "properties": [
                     {
-                        "condition": "OnDestroy",
+                        "trigger": "OnDestroy",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 0.5,
                         "to": "1 0"
                     },
                     {
-                        "condition": "OnDestroy",
+                        "trigger": "OnDestroy",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.5,
@@ -919,7 +919,7 @@
                 "mouseTarget": "Slide1_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "delay": 0,
                         "duration": 1.5,
@@ -929,7 +929,7 @@
                         "to": "0.45 0.35 0.65 1.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -979,7 +979,7 @@
                 "mouseTarget": "Slide1_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 0.4,
@@ -988,7 +988,7 @@
                         "to": "0.15 0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0.4,
                         "duration": 0.4,
@@ -997,7 +997,7 @@
                         "to": "0 -0.15"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0.8,
                         "duration": 0.4,
@@ -1006,7 +1006,7 @@
                         "to": "-0.15 0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 1.2,
                         "duration": 0.4,
@@ -1055,7 +1055,7 @@
                 "mouseTarget": "Slide1_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "delay": 0,
                         "duration": 1.5,
@@ -1065,7 +1065,7 @@
                         "to": "0.45 0.35 0.65 1.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 0.75,
@@ -1074,7 +1074,7 @@
                         "to": "0.15 0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 0.75,
@@ -1084,7 +1084,7 @@
                         "to": "0 -0.15"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0.75,
                         "duration": 0.75,
@@ -1093,7 +1093,7 @@
                         "to": "-0.15 0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0.75,
                         "duration": 0.75,
@@ -1179,7 +1179,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -1187,7 +1187,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -1242,7 +1242,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1296,7 +1296,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1351,7 +1351,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1406,7 +1406,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1461,7 +1461,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1516,7 +1516,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1571,7 +1571,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1626,7 +1626,7 @@
                 "mouseTarget": "Slide2_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Translate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1715,7 +1715,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -1723,7 +1723,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Opacity",
                         "delay": 0.2,
                         "duration": 0.5,
@@ -1779,7 +1779,7 @@
                 "mouseTarget": "Slide4_Block1",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1827,7 +1827,7 @@
                 "mouseTarget": "Slide3_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 1.5,
@@ -1862,14 +1862,14 @@
                 "mouseTarget": "Slide4_Block1",
                 "properties": [
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.5,
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.5,
@@ -1919,7 +1919,7 @@
                 "mouseTarget": "Slide4_Block2",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 1.5,
@@ -1967,7 +1967,7 @@
                 "mouseTarget": "Slide3_Kill",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 1.5,
@@ -2002,14 +2002,14 @@
                 "mouseTarget": "Slide4_Block2",
                 "properties": [
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.5,
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.5,

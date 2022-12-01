@@ -215,13 +215,13 @@
                         "to": "0.15 0.15 0.15 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.15 0.15 0.15 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.15 0.15 0.15 0.8"
@@ -251,13 +251,13 @@
                         "to": "0.2 0.7 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.2 0.7 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.2 0.7 0.35 0.8"
@@ -298,13 +298,13 @@
                         "to": "0.15 0.15 0.15 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.15 0.15 0.15 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.15 0.15 0.15 0.8"
@@ -334,13 +334,13 @@
                         "to": "0.2 0.7 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.2 0.7 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.2 0.7 0.35 0.8"
@@ -381,13 +381,13 @@
                         "to": "0.15 0.15 0.15 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.15 0.15 0.15 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.15 0.15 0.15 0.8"
@@ -417,13 +417,13 @@
                         "to": "0.2 0.7 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.2 0.7 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.2 0.7 0.35 0.8"
@@ -461,14 +461,14 @@
                         "to": "0.4 0.4 0.4 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
                         "to": "0.25 0.8 0.35 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -481,14 +481,14 @@
                 "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
                         "to": "0.25 0.8 0.35 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -501,14 +501,14 @@
                 "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
                         "to": "0.25 0.8 0.35 1"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -542,7 +542,7 @@
                 "mouseTarget": "TabBar",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -574,7 +574,7 @@
                 "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -587,7 +587,7 @@
                 "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -600,7 +600,7 @@
                 "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -692,7 +692,7 @@
                 "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -705,7 +705,7 @@
                 "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -718,7 +718,7 @@
                 "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -774,13 +774,13 @@
                         "to": "0.3 0.65 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.8"
@@ -823,7 +823,7 @@
                 "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -836,7 +836,7 @@
                 "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -849,7 +849,7 @@
                 "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -901,13 +901,13 @@
                         "to": "0.3 0.65 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.8"
@@ -948,7 +948,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0,
                         "to": "0 0 1 1"
@@ -961,7 +961,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0.3,
                         "duration": 0,
@@ -1000,7 +1000,7 @@
                 "mouseTarget": "DropDown1_Button",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveToPX",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.3,
@@ -1013,7 +1013,7 @@
                 "mouseTarget": "DropDown1_Parent",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveToPX",
                         "easing": "0 0.85 0.6 1",
                         "duration": 0.3,
@@ -1049,13 +1049,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1102,13 +1102,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1155,13 +1155,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1208,13 +1208,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1261,13 +1261,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1333,13 +1333,13 @@
                         "to": "0.3 0.65 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.8"
@@ -1364,7 +1364,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
@@ -1378,7 +1378,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
@@ -1416,7 +1416,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
@@ -1430,7 +1430,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
@@ -1481,7 +1481,7 @@
                 "mouseTarget": "DropDown2_ButtonExpand",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveToPX",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.3,
@@ -1494,7 +1494,7 @@
                 "mouseTarget": "DropDown2_ButtonCollapse",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveToPX",
                         "easing": "0 0.85 0.6 1",
                         "duration": 0.3,
@@ -1524,7 +1524,7 @@
         [
             {
                 "type":"UnityEngine.UI.Text",
-                "text":"unlike the first dropdown, this dropdown can only be closed by clicking the Collapse button. the Expand/Collapse button illustrates that this also lets us somewhat track state right in the UI, which allows us to create simple conditionals like checkboxes without requiring any AddUI/Destroy calls from the server",
+                "text":"unlike the first dropdown, this dropdown can only be closed by clicking the Collapse button. the Expand/Collapse button illustrates that this also lets us somewhat track state right in the UI, which allows us to create simple triggerals like checkboxes without requiring any AddUI/Destroy calls from the server",
                 "fontSize":16,
                 "align": "MiddleCenter"
             }
@@ -1572,13 +1572,13 @@
                         "to": "0.3 0.65 0.35 0.8"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.8"
@@ -1619,7 +1619,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0,
                         "to": "0 0 1 1"
@@ -1632,7 +1632,7 @@
                 "properties": [
 
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "delay": 0.3,
                         "duration": 0,
@@ -1682,7 +1682,7 @@
                 "mouseTarget": "DropDown3_Button",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveToPX",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.3,
@@ -1695,7 +1695,7 @@
                 "mouseTarget": "DropDown3_Parent",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveToPX",
                         "easing": "0 0.85 0.6 1",
                         "duration": 0.3,
@@ -1731,13 +1731,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1779,7 +1779,7 @@
                 "mouseTarget": "DropDown3_Option1",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -1791,7 +1791,7 @@
                 "mouseTarget": "DropDown3_Option1Selected",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "1 1 2 1"
@@ -1826,13 +1826,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1874,7 +1874,7 @@
                 "mouseTarget": "DropDown3_Option2",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -1886,7 +1886,7 @@
                 "mouseTarget": "DropDown3_Option2Selected",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "1 1 2 1"
@@ -1921,13 +1921,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -1969,7 +1969,7 @@
                 "mouseTarget": "DropDown3_Option3",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -1981,7 +1981,7 @@
                 "mouseTarget": "DropDown3_Option3Selected",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "1 1 2 1"
@@ -2056,13 +2056,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -2104,7 +2104,7 @@
                 "mouseTarget": "DropDown3_Option5",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -2116,7 +2116,7 @@
                 "mouseTarget": "DropDown3_Option5Selected",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "1 1 2 1"
@@ -2151,13 +2151,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -2199,7 +2199,7 @@
                 "mouseTarget": "DropDown3_Option6",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -2211,7 +2211,7 @@
                 "mouseTarget": "DropDown3_Option6Selected",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "1 1 2 1"
@@ -2246,13 +2246,13 @@
                         "to": "0.3 0.65 0.35 0.1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.2"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.1"
@@ -2294,7 +2294,7 @@
                 "mouseTarget": "DropDown3_Option7",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -2306,7 +2306,7 @@
                 "mouseTarget": "DropDown3_Option7Selected",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "1 1 2 1"
@@ -2337,14 +2337,14 @@
                 "mouseTarget": "ModalButton",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0,
                         "to": "0.05 0.05 0.05 0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "delay": 0.5,
@@ -2353,7 +2353,7 @@
                         "to": "0.05 0.05 0.05 0.98"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -2366,14 +2366,14 @@
                 "mouseTarget": "ModalCloseButton",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.2,
                         "to": "0.05 0.05 0.05 0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "delay": 0.2,
@@ -2387,14 +2387,14 @@
                 "mouseTarget": "ModalBackdrop",
                 "properties": [
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.2,
                         "to": "0.05 0.05 0.05 0.0"
                     },
                     {
-                        "condition": "OnClick",
+                        "trigger": "OnClick",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "delay": 0.2,
@@ -2471,13 +2471,13 @@
                         "to": "0.3 0.65 0.35 0.4"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.6"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Color",
                         "duration": 0.1,
                         "to": "0.3 0.65 0.35 0.4"

@@ -373,10 +373,10 @@ public partial class CommunityEntity
 					foreach(var prop in obj.GetArray("properties"))
 					{
                         var propobj = prop.Obj;
-                        var condition = propobj.GetString("condition", "Generic");
-
-                        if(!anim.ValidCondition(condition)) condition = "Generic";
-                        anim.properties[condition].Add(new AnimationProperty{
+                        var trigger = propobj.GetString("trigger", "OnCreate");
+                        
+                        if(!anim.ValidTrigger(trigger)) trigger = "OnCreate";
+                        anim.properties[trigger].Add(new AnimationProperty{
 							duration = propobj.GetFloat("duration", 0f),
 							delay = propobj.GetFloat("delay", 0f),
 							repeat = propobj.GetInt("repeat", 0),
@@ -384,7 +384,8 @@ public partial class CommunityEntity
 							easing = propobj.GetString("easing", "Linear"),
 							type = propobj.GetString("type", null),
 							from = propobj.GetString("from", ""),
-							to = propobj.GetString("to", null)
+							to = propobj.GetString("to", null),
+        					trigger = trigger
 						});
 					}
 					break;
@@ -460,7 +461,7 @@ public partial class CommunityEntity
         if(animations.Length > 0)
         {
             for(var i = 0; i < animations.Length; i++){
-                if(animations[i].HasForCondition("OnDestroy")) animations[i].Kill();
+                if(animations[i].HasForTrigger("OnDestroy")) animations[i].Kill();
             }
         }
         else if ( fadeOut )

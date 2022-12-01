@@ -37,7 +37,7 @@
         [
             {
                 "type":"UnityEngine.UI.RawImage",
-                "url": "https://i.imgur.com/OyleW8R.png",
+                "url": "https://images.wallpapersden.com/image/download/futuristic-dark-hexagon-10k_bG5oa22UmZqaraWkpJRmZWdpZa1qbGtl.jpg",
             },
             {
                 "type":"RectTransform",
@@ -48,14 +48,14 @@
                 "type":"Animation",
                 "properties": [
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0",
                         "duration": 0,
                         "delay": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.7",
                         "duration": 2.5,
@@ -64,7 +64,7 @@
                         "repeatDelay": 5.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.0",
                         "duration": 2.5,
@@ -73,7 +73,7 @@
                         "repeatDelay": 5.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Scale",
                         "to": "1.45 1.45",
                         "duration": 0.05,
@@ -81,7 +81,7 @@
                         "repeat": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "-0.2 -0.1",
                         "duration": 0.0,
@@ -89,7 +89,7 @@
                         "repeat": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "-0.4 -0.2",
                         "duration": 0,
@@ -98,7 +98,7 @@
                         "repeatDelay": 7.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "0.4 0.2",
                         "duration": 7.0,
@@ -107,7 +107,7 @@
                         "repeatDelay": 0.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Rotate",
                         "to": "0 0 0",
                         "duration": 0,
@@ -116,7 +116,7 @@
                         "repeatDelay": 7.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Rotate",
                         "to": "0 0 30",
                         "duration": 7.0,
@@ -146,14 +146,14 @@
                 "type":"Animation",
                 "properties": [
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0",
                         "duration": 0,
                         "delay": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.7",
                         "duration": 2.5,
@@ -162,7 +162,7 @@
                         "repeatDelay": 12.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.0",
                         "duration": 2.5,
@@ -171,7 +171,7 @@
                         "repeatDelay": 12.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Scale",
                         "to": "1.25 1.25",
                         "duration": 0.05,
@@ -179,7 +179,7 @@
                         "repeat": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "-0.1 -0.1",
                         "duration": 0.0,
@@ -187,7 +187,7 @@
                         "repeat": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "-0.2 -0.2",
                         "duration": 0,
@@ -196,7 +196,7 @@
                         "repeatDelay": 14.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "0.2 0.2",
                         "duration": 14.0,
@@ -226,14 +226,14 @@
                 "type":"Animation",
                 "properties": [
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0",
                         "duration": 0,
                         "delay": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.7",
                         "duration": 2.5,
@@ -242,7 +242,7 @@
                         "repeatDelay": 9.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.0",
                         "duration": 2.5,
@@ -272,14 +272,14 @@
                 "type":"Animation",
                 "properties": [
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0",
                         "duration": 0,
                         "delay": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.7",
                         "duration": 2.5,
@@ -288,7 +288,7 @@
                         "repeatDelay": 5.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Opacity",
                         "to": "0.0",
                         "duration": 2.5,
@@ -297,7 +297,7 @@
                         "repeatDelay": 5.0,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Scale",
                         "to": "1.45 1.45",
                         "duration": 0.05,
@@ -305,7 +305,7 @@
                         "repeat": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "-0.2 -0.1",
                         "duration": 0.0,
@@ -313,7 +313,7 @@
                         "repeat": 0
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "-0.4 -0.2",
                         "duration": 0,
@@ -322,7 +322,7 @@
                         "repeatDelay": 7.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Translate",
                         "to": "0.4 0.2",
                         "duration": 7.0,
@@ -331,7 +331,7 @@
                         "repeatDelay": 0.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Rotate",
                         "to": "0 0 0",
                         "duration": 0,
@@ -340,7 +340,7 @@
                         "repeatDelay": 7.5,
                     },
                     {
-                        "condition" : "Generic",
+                        "trigger" : "OnCreate",
                         "type": "Rotate",
                         "to": "0 0 30",
                         "duration": 14.5,
@@ -453,7 +453,7 @@
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
@@ -461,7 +461,7 @@
                         "to": "1.06 1.06"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 0.2,
@@ -469,7 +469,7 @@
                         "to": "0 0 3"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Scale",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -477,7 +477,7 @@
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Rotate",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -558,7 +558,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.2,
@@ -566,7 +566,7 @@
                         "to": "2.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Opacity",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -635,7 +635,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.2,
@@ -643,7 +643,7 @@
                         "to": "1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Opacity",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -689,7 +689,7 @@
                 "mouseTarget": "CardBody1",
                 "properties": [
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.2,
@@ -698,7 +698,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
@@ -707,7 +707,7 @@
                         "to": "1.1 1.1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "MoveTo",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -770,7 +770,7 @@
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
@@ -778,7 +778,7 @@
                         "to": "1.06 1.06"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 0.2,
@@ -786,7 +786,7 @@
                         "to": "0 0 3"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Scale",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -794,7 +794,7 @@
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Rotate",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -875,7 +875,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.2,
@@ -883,7 +883,7 @@
                         "to": "2.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Opacity",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -952,7 +952,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.2,
@@ -960,7 +960,7 @@
                         "to": "1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Opacity",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -1006,7 +1006,7 @@
                 "mouseTarget": "CardBody2",
                 "properties": [
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.2,
@@ -1015,7 +1015,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
@@ -1024,7 +1024,7 @@
                         "to": "1.1 1.1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "MoveTo",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -1087,7 +1087,7 @@
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
@@ -1095,7 +1095,7 @@
                         "to": "1.06 1.06"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Rotate",
                         "delay": 0,
                         "duration": 0.2,
@@ -1103,7 +1103,7 @@
                         "to": "0 0 3"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Scale",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -1111,7 +1111,7 @@
                         "to": "1 1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Rotate",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -1192,7 +1192,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.2,
@@ -1200,7 +1200,7 @@
                         "to": "2.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Opacity",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -1269,7 +1269,7 @@
                         "to": "0.0"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Opacity",
                         "delay": 0,
                         "duration": 0.2,
@@ -1277,7 +1277,7 @@
                         "to": "1.0"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "Opacity",
                         "delay": 0.1,
                         "duration": 0.2,
@@ -1323,7 +1323,7 @@
                 "mouseTarget": "CardBody3",
                 "properties": [
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "MoveTo",
                         "delay": 0,
                         "duration": 0.2,
@@ -1332,7 +1332,7 @@
                         "to": "0 0 1 1"
                     },
                     {
-                        "condition": "OnHoverEnter",
+                        "trigger": "OnHoverEnter",
                         "type": "Scale",
                         "delay": 0,
                         "duration": 0.2,
@@ -1341,7 +1341,7 @@
                         "to": "1.1 1.1"
                     },
                     {
-                        "condition": "OnHoverExit",
+                        "trigger": "OnHoverExit",
                         "type": "MoveTo",
                         "delay": 0.1,
                         "duration": 0.2,
