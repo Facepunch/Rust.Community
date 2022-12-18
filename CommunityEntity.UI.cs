@@ -353,44 +353,11 @@ public partial class CommunityEntity
                 }
 			case "Animation":
                 {
-                    Animation anim = null;
-                    Animation[] animations = go.GetComponents<Animation>();
-                    string mouseTarget = obj.GetString("mouseTarget", "");
-                    if(animations.Length == 0){
-                        // do nothing
-                    } else if(!string.IsNullOrEmpty(mouseTarget)){
-                        // find an existing animation component with the same mouse target, if not create one
-        				anim = animations.FirstOrDefault((animation) => animation.mouseTarget == mouseTarget);
-                    }else{
-                        anim = animations[0];
-                    }
-                    
-                    if(anim == null){
-                        anim = go.AddComponent<Animation>();
-                        if(!string.IsNullOrEmpty(mouseTarget)) ScheduleMouseListener(mouseTarget, anim);
-                    }
-
-					foreach(var prop in obj.GetArray("properties"))
-					{
-                        var propobj = prop.Obj;
-                        var trigger = propobj.GetString("trigger", "OnCreate");
-                        
-                        if(!anim.ValidTrigger(trigger)) trigger = "OnCreate";
-                        anim.properties[trigger].Add(new AnimationProperty{
-							duration = propobj.GetFloat("duration", 0f),
-							delay = propobj.GetFloat("delay", 0f),
-							repeat = propobj.GetInt("repeat", 0),
-							repeatDelay = propobj.GetFloat("repeatDelay", 0f),
-							easing = propobj.GetString("easing", "Linear"),
-							type = propobj.GetString("type", null),
-							from = propobj.GetString("from", ""),
-							to = propobj.GetString("to", null),
-        					trigger = trigger
-						});
-					}
+                    // Moved Setup to its own function in CommunityEntity.UI.Animation.cs
+                    // now shares the code with the AddAnimation RPC function
+                    ParseAnimation(obj, go);
 					break;
-				}
-        }
+                }
     }
     
     private static T ParseEnum<T>(string value, T defaultValue)

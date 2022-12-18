@@ -338,7 +338,7 @@ public partial class CommunityEntity
         }
 
         // Changes the color of the current canvasRenderer, same Note Applies as with the ChangeAlpha Function, except each channel is multiplied seperately
-        // type: ABSOLUTE, meaning it cant be affected by other alpha or color changing animations and will get to its goal opacity
+        // type: ABSOLUTE, meaning it cant be affected by other alpha or color changing animations and will get to its goal opacity & color
         public IEnumerator ChangeColor(Color toColor, float duration, string easing){
             float time = 0f;
             Color old = anim.cachedGraphic.canvasRenderer.GetColor();
@@ -551,69 +551,78 @@ public partial class CommunityEntity
             }
         }
     }
+    
+    public Animation ParseAnimation(JSON.Object obj, GameObject go = null){
+        // if no gameobject is given attempt to find a name property and find it that way
+        if(go == null){
+            var panel = obj.GetString("name", null);
+            if (string.IsNullOrEmpty(panel) || !UiDict.TryGetValue(panel, out go))
+                return null;
+        }
+        
+        Animation anim = null;
+        Animation[] animations = go.GetComponents<Animation>();
+        
+        string mouseTarget = obj.GetString("mouseTarget", "");
+        if(animations.Length == 0){
+            // do nothing
+        } else if(!string.IsNullOrEmpty(mouseTarget)){
+            anim = animations.FirstOrDefault((animation) => animation.mouseTarget == mouseTarget);
+        }else{
+            anim = animations[0];
+        }
+        
+        // create a new animation component as no matching component existed
+        if(anim == null){
+            anim = go.AddComponent<Animation>();
+            if(!string.IsNullOrEmpty(mouseTarget)) ScheduleMouseListener(mouseTarget, anim);
+        }
+        
+        foreach(var prop in obj.GetArray("properties")){
+            ParseProperty(anim, prop.Obj);
+        }
+        return anim;
+    }
 
+	public AnimationProperty ParseProperty(Animation anim, JSON.Object propobj){
+        var trigger = propobj.GetString("trigger", "OnCreate");
+        
+        if(!anim.ValidTrigger(trigger)) trigger = "OnCreate";
+        var animprop = new AnimationProperty{
+            duration = propobj.GetFloat("duration", 0f),
+            delay = propobj.GetFloat("delay", 0f),
+            repeat = propobj.GetInt("repeat", 0),
+            repeatDelay = propobj.GetFloat("repeatDelay", 0f),
+            easing = propobj.GetString("easing", "Linear"),
+            type = propobj.GetString("type", null),
+            from = propobj.GetString("from", null),
+            to = propobj.GetString("to", null),
+            trigger = trigger
+        };
+        anim.properties[trigger].Add(animprop);
+        // if the animation has a cachedGraphic it means StartAnimation has allready been called on it
+        // manually start the OnCreate Properties in this case
+        if(anim.cachedGraphic != null && trigger == "OnCreate") anim.StartProperty(animprop);
+        return animprop;
+	}
+    
     // RPC function to Add Animations to existing objects
     // accepts the same json object that the CreateComponents function does
     [RPC_Client]
     public void AddAnimation( RPCMessage msg )
     {
         string str = msg.read.StringRaw();
-
         if (string.IsNullOrEmpty(str)) return;
-
+        
         var json = JSON.Array.Parse( str );
         if (json == null) return;
-
+        
         foreach (var value in json){
-            var obj = value.Obj;
-            var panel = obj.GetString("name", "Overlay");
-
-            GameObject go;
-            if (string.IsNullOrEmpty(panel) || !UiDict.TryGetValue(panel, out go))
-                return;
-
-            Animation anim = null;
-            Animation[] animations = go.GetComponents<Animation>();
-
-            string mouseTarget = obj.GetString("mouseTarget", "");
-            if(animations.Length == 0){
-                // do nothing
-            } else if(!string.IsNullOrEmpty(mouseTarget)){
-                // find an existing animation component with the same mouse target, if not create one
-                anim = animations.FirstOrDefault((animation) => animation.mouseTarget == mouseTarget);
-            }else{
-                anim = animations[0];
-            }
-
-            if(anim == null){
-                anim = go.AddComponent<Animation>();
-                anim.CacheGraphicComponent();
-                if(!string.IsNullOrEmpty(mouseTarget)) ScheduleMouseListener(mouseTarget, anim);
-            }
-
-
-            foreach(var prop in obj.GetArray("properties"))
-            {
-                var propobj = prop.Obj;
-                var trigger = propobj.GetString("trigger", "OnCreate");
-
-                if(!anim.ValidTrigger(trigger)) trigger = "OnCreate";
-                var animprop = new AnimationProperty{
-                    duration = propobj.GetFloat("duration", 0f),
-                    delay = propobj.GetFloat("delay", 0f),
-                    repeat = propobj.GetInt("repeat", 0),
-                    repeatDelay = propobj.GetFloat("repeatDelay", 0f),
-                    easing = propobj.GetString("easing", "Linear"),
-                    type = propobj.GetString("type", null),
-                    from = propobj.GetString("from", null),
-                    to = propobj.GetString("to", null),
-                    trigger = trigger
-                };
-                anim.properties[trigger].Add(animprop);
-
-                if(trigger == "OnCreate") anim.StartProperty(animprop);
-            }
-            break;
+            Animation anim = ParseAnimation(value.Obj);
+            // if it returns a valid animation that hasnt allready been started, start it
+            if(anim == null || anim.cachedGraphic != null)
+                continue;
+            anim.StartAnimation();
         }
         ApplyMouseListeners();
     }
