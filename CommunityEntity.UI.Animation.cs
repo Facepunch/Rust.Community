@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Facepunch.Extend;
 using System.IO;
 
@@ -146,35 +147,39 @@ public partial class CommunityEntity
         }
     }
     
-    public class AnimationProperty : UnityEngine.Object
+   public struct AnimationProperty
     {
-        public float duration = 0f;
-        public float delay = 0f;
-        public int repeat = 0;
-        public float repeatDelay = 0f;
-        public string easing = "linear";
+        public float duration;
+        public float delay;
+        public int repeat;
+        public float repeatDelay;
+        public string easing;
         public string type;
-		public AnimationProperty.AnimationValue animValue;
+        public AnimationProperty.AnimationValue animValue;
         public string trigger;
-        
+
+        public AnimationProperty(string easing = "linear") : this() {
+            easing = easing;
+        }
+
         public Animation anim;
-        
+
         public Coroutine routine;
-        
-        public int completedRounds = 0;
-        
+
+        public int completedRounds;
+
         // Launches the animation, keeping track of loops if its set to repeat
         public IEnumerator Animate()
         {
-            if(animValue == null || animValue.to == null){
-                Debug.LogWarning($"Animation of type {type} for {anim.gameObject.name} failed to execute - no to values provided");
+            if(animValue == null || animValue.to.Count == 0){
+                Debug.LogWarning($"Animation of type {type} for {anim.gameObject.name} failed to execute - no from/to values provided");
                 anim.RemoveProperty(this);
                 yield break;
-			}
-            
+            }
+
             // initial delay
             if(delay > 0f) yield return new WaitForSeconds(delay);
-            
+
             do
             {
                 yield return AnimateProperty();
@@ -183,36 +188,38 @@ public partial class CommunityEntity
                 else yield return null;
             }
             while(repeat < 0 || (repeat > 0 && completedRounds <= repeat));
-            
+
             // this animation wont get triggered again, so remove it
             if(trigger == "OnCreate")
                 anim.RemoveProperty(this);
         }
-        
+
         // Parses the from & to values and Launches the individual animation
         // Adding new animations can be achieved by Adding cases to the switch statement
         public IEnumerator AnimateProperty()
         {
+            // for use in lambdas, would otherwise trigger error CS1673
+            var prop = this;
             switch(type){
                 case "Opacity":
                     {
                         // needs a reference to the graphic & atleast 1 value in the to value
                         if(!anim.cachedGraphic || animValue.to.Count < 1) break;
-                        
+
                         // enables the graphic if:
-                        //	 - the from value is higher than 0 or
+                        //     - the from value is higher than 0 or
                         //   - the graphic is currently hidden but will go above 0 opacity during the animation
-                        if((animValue.from != null && animValue.from.TryGet(0) > 0f) || anim.isHidden && animValue.to.TryGet(0) > 0f)
+                        if((animValue.from.Count != 0 && animValue.from.TryGet(0) > 0f) || anim.isHidden && animValue.to.TryGet(0) > 0f)
                             anim.EnableGraphic(0f);
-                        
+
                         animValue.initial = new DynamicVector(anim.cachedGraphic.canvasRenderer.GetAlpha());
                         animValue.apply = (DynamicVector value) => {
-                            anim.cachedGraphic.canvasRenderer.SetAlpha(value.TryGet(0));
+                            prop.anim.cachedGraphic.canvasRenderer.SetAlpha(value.TryGet(0));
                         };
-                        
+
                         // calling this wont actually start a tween, but it will stop any running color or alpha tweens, this is vital for stopping any potential fadeIns & Outs (otherwise the the tween and our own Animation will intersect)
                         anim.cachedGraphic.CrossFadeAlpha(animValue.initial.TryGet(0), 0f, true);
-                        
+
                         if(animValue.to.TryGet(0) <= 0f) anim.DisableGraphic(duration);
                         return InterpolateValue(animValue, duration, easing);
                     }
@@ -220,21 +227,21 @@ public partial class CommunityEntity
                     {
                         // needs a reference to the graphic & atleast 4 values in the to value
                         if(!anim.cachedGraphic || animValue.to.Count < 4) break;
-                        
+
                         // enables the graphic if:
-                        //	 - the from color's alpha is higher than 0 or
+                        //     - the from color's alpha is higher than 0 or
                         //   - the graphic is currently hidden but will go above 0 opacity during the animation
-                        if((animValue.from != null && animValue.from.TryGet(3) > 0f) || anim.isHidden && animValue.to.TryGet(3) > 0f)
+                        if((animValue.from.Count != 0 && animValue.from.TryGet(3) > 0f) || anim.isHidden && animValue.to.TryGet(3) > 0f)
                             anim.EnableGraphic(0f);
-                        
+
                         animValue.initial = new DynamicVector(anim.cachedGraphic.canvasRenderer.GetColor());
                         animValue.apply = (DynamicVector value) => {
-                            anim.cachedGraphic.canvasRenderer.SetColor(value.ToColor());
+                            prop.anim.cachedGraphic.canvasRenderer.SetColor(value.ToColor());
                         };
-                        
+
                         // Same as with alpha, stopping any tweens
                         anim.cachedGraphic.CrossFadeColor(animValue.initial.ToColor(), 0f, true, true);
-                        
+
                         if(animValue.to.TryGet(3) <= 0f) anim.DisableGraphic(duration);
                         return InterpolateValue(animValue, duration, easing);
                     }
@@ -242,14 +249,14 @@ public partial class CommunityEntity
                     {
                         // needs a reference to the rectTransform & atleast 2 values in the to value
                         if(!anim.cachedRect || animValue.to.Count < 2) break;
-                        
+
                         if(!anim.cachedRect) break;
-                        
+
                         animValue.initial = new DynamicVector(anim.cachedRect.localScale);
                         animValue.apply = (DynamicVector value) => {
                             // we convert to a Vector3 even though the DynamicVector only holds 2 floats
                             // this is fine because the z value will be set to 0f, which isnt used for the scale of rectTransforms
-                            anim.cachedRect.localScale = value.ToVector3();
+                            prop.anim.cachedRect.localScale = value.ToVector3();
                         };
                         return InterpolateValue(animValue, duration, easing);
                     }
@@ -257,14 +264,14 @@ public partial class CommunityEntity
                     {
                         // needs a reference to the rectTransform & atleast 2 values in the to value
                         if(!anim.cachedRect || animValue.to.Count < 2) break;
-                        
+
                         animValue.initial = new DynamicVector();
                         animValue.last = new DynamicVector();
                         animValue.apply = (DynamicVector value) => {
-                            DynamicVector diff = value - animValue.last;
-                            anim.cachedRect.anchorMin += diff.ToVector2();
-                            anim.cachedRect.anchorMax += diff.ToVector2();
-                            animValue.last += diff;
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.cachedRect.anchorMin += diff.ToVector2();
+                            prop.anim.cachedRect.anchorMax += diff.ToVector2();
+                            prop.animValue.last += diff;
                         };
                         return InterpolateValue(animValue, duration, easing, false);
                     }
@@ -272,14 +279,14 @@ public partial class CommunityEntity
                     {
                         // needs a reference to the rectTransform & atleast 4 values in the to value
                         if(!anim.cachedRect || animValue.to.Count < 4) break;
-                        
+
                         animValue.initial = new DynamicVector();
                         animValue.last = new DynamicVector();
                         animValue.apply = (DynamicVector value) => {
-                            DynamicVector diff = value - animValue.last;
-                            anim.cachedRect.offsetMin += diff.ToVector2(0);
-                            anim.cachedRect.offsetMax += diff.ToVector2(0);
-                            animValue.last += diff;
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.cachedRect.offsetMin += diff.ToVector2(0);
+                            prop.anim.cachedRect.offsetMax += diff.ToVector2(0);
+                            prop.animValue.last += diff;
                         };
                         return InterpolateValue(animValue, duration, easing, false);
                     }
@@ -287,77 +294,54 @@ public partial class CommunityEntity
                     {
                         // needs a reference to the rectTransform & atleast 3 values in the to value
                         if(!anim.cachedRect || animValue.to.Count < 3) break;
-                        
+
                         animValue.initial = new DynamicVector(anim.cachedRect.rotation.eulerAngles);
                         animValue.apply = (DynamicVector value) => {
-                            anim.cachedRect.rotation = Quaternion.Euler(value.ToVector3());
+                            prop.anim.cachedRect.rotation = Quaternion.Euler(value.ToVector3());
                         };
-                        return InterpolateValue(animValue, duration, easing);
+                        return InterpolateValue(animValue, duration, easing, true);
                     }
                 case "MoveTo":
                     {
                         if(!anim.cachedRect) break;
-                        
-                        animValue.initial = new DynamicVector();
-                        animValue.initial.Add(anim.cachedRect.anchorMin);
+
+                        animValue.initial = new DynamicVector(anim.cachedRect.anchorMin);
                         animValue.initial.Add(anim.cachedRect.anchorMax);
+                        animValue.last = animValue.initial + new DynamicVector();
                         animValue.apply = (DynamicVector value) => {
-                            anim.cachedRect.anchorMin = value.ToVector2(0);
-                            anim.cachedRect.anchorMax = value.ToVector2(2); // skip the first 2 values
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.cachedRect.anchorMin += diff.ToVector2(0);
+                            prop.anim.cachedRect.anchorMax += diff.ToVector2(2); // skip the first 2 values
+                            prop.animValue.last += diff;
                         };
                         return InterpolateValue(animValue, duration, easing);
                     }
                 case "MoveToPX":
                     {
                         if(!anim.cachedRect) break;
-                        
-                        animValue.initial = new DynamicVector();
-                        animValue.initial.Add(anim.cachedRect.offsetMin);
+
+                        animValue.initial = new DynamicVector(anim.cachedRect.offsetMin);
                         animValue.initial.Add(anim.cachedRect.offsetMax);
+                        animValue.last = animValue.initial + new DynamicVector();
                         animValue.apply = (DynamicVector value) => {
-                            anim.cachedRect.offsetMin = value.ToVector2(0);
-                            anim.cachedRect.offsetMax = value.ToVector2(2); // skip the first 2 values
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.cachedRect.offsetMin += diff.ToVector2(0);
+                            prop.anim.cachedRect.offsetMax += diff.ToVector2(2); // skip the first 2 values
+                            prop.animValue.last += diff;
                         };
                         return InterpolateValue(animValue, duration, easing);
                     }
             }
-            
+
             // remove this animation property of there is no valid case or the selected case fails
             Debug.LogWarning($"Animation for {anim.gameObject.name} failed to execute - invalid to value [{animValue.to}] for animation of type {type}");
             anim.RemoveProperty(this);
             repeat = 0; // ensure the animation wont repeat
             // Return an empty enumerator so the coroutine finishes
             return new System.Object[0].GetEnumerator();
-		}
-        
-        // Interpolats an AnimationValue over the duration with the easing specified
-        // the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
-        // absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
-        // absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
-        public IEnumerator InterpolateValue(AnimationValue value, float duration, string easing, bool absolute = true){
-            float time = 0f;
-            DynamicVector current;
-            DynamicVector start = value.from == null ? value.initial : (absolute ? value.from : value.initial + value.from);
-            
-            // Immediately apply the start value if present
-            if(value.from != null){
-                value.apply(start);
-                value.initial = start;
-            }
-            DynamicVector end = (absolute ? value.to : value.initial + value.to);
-            
-            while(time < duration){
-                current = DynamicVector.LerpUnclamped(start, end, Ease(easing, time / duration));
-                value.apply(current);
-                time += Time.deltaTime;
-                yield return null;
-            }
-            value.apply(end);
         }
-        
-        
 
-        // manipulates a the input based on a preset easing function or a custom Bezier curve
+        // manipulates the input based on a preset easing function or a custom Bezier curve
         // accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
         // NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
         public float Ease(string type, float input){
@@ -380,7 +364,32 @@ public partial class CommunityEntity
                     }
             }
         }
-        
+
+        // Interpolats an AnimationValue over the duration with the easing specified
+        // the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
+        // absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
+        // absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
+        public IEnumerator InterpolateValue(AnimationValue value, float duration, string easing, bool absolute = true){
+            float time = 0f;
+            DynamicVector current;
+            DynamicVector start = value.from.Count == 0 ? value.initial : (absolute ? value.from : value.initial + value.from);
+
+            // Immediately apply the start value if present
+            if(value.from.Count != 0){
+                value.apply(start);
+                value.initial = start;
+            }
+            DynamicVector end = (absolute ? value.to : value.initial + value.to);
+
+            while(time < duration){
+                current = DynamicVector.LerpUnclamped(start, end, Ease(easing, time / duration));
+                value.apply(current);
+                time += Time.deltaTime;
+                yield return null;
+            }
+            value.apply(end);
+        }
+
         // Generalizes the values for an AnimationProperty
         public class AnimationValue {
             // gets set just before InterpolateValue is called
@@ -392,17 +401,16 @@ public partial class CommunityEntity
             public DynamicVector to;
             // gets called during interpolation with the arguement being the current value.
             public Action<DynamicVector> apply;
-            
+
             public AnimationValue(string sourceTo, string sourceFrom = null){
                 this.from = ParseFromString(sourceFrom);
                 this.to = ParseFromString(sourceTo);
             }
-            
             public DynamicVector ParseFromString(string source){
-                if(string.IsNullOrEmpty(source)) return null;
-                var split = source.Split(' ');
-                if(split.Length == 0) return null;
                 var values = new DynamicVector();
+                if(string.IsNullOrEmpty(source)) return values;
+                var split = source.Split(' ');
+                if(split.Length == 0) return values;
                 for(int i = 0; i < split.Length; i++){
                     float temp;
                     float.TryParse(split[i], out temp);
@@ -411,53 +419,79 @@ public partial class CommunityEntity
                 return values;
             }
         }
-        
-        // Wraps a List of floats, Adding overloads for easily Adding and extracting Vector 2/3/4s & Colors
-        public class DynamicVector : List<float> {
-            // using a single static instance because lerp results should get immediately applied to the property when ToVector/Color is called
-            private static DynamicVector lerpTemp = new DynamicVector();
-            
-            public DynamicVector(){}
-            
-            public DynamicVector(Vector4 vec){
-                this.Add(vec);
+
+        // a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
+        // turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
+        public struct DynamicVector {
+
+            // need it to hold more than 4? add a _valueN and adjust the indexer & Clear method
+            private float _value0;
+            private float _value1;
+            private float _value2;
+            private float _value3;
+
+            public int Count;
+
+            public float this[int i]{
+                get {
+                    switch(i){
+                        case 0: return _value0; break;
+                        case 1: return _value1; break;
+                        case 2: return _value2; break;
+                        case 3: return _value3; break;
+                        default: throw new IndexOutOfRangeException();
+                    }
+                }
+                set {
+                    switch(i){
+                        case 0:
+                            _value0 = value;
+                            break;
+                        case 1:
+                            _value1 = value;
+                            break;
+                        case 2:
+                            _value2 = value;
+                            break;
+                        case 3:
+                            _value3 = value;
+                            break;
+                        default: throw new IndexOutOfRangeException();
+                    }
+                }
             }
-            public DynamicVector(Color col){
-                this.Add(col);
-            }
-            public DynamicVector(Vector3 vec){
-                this.Add(vec);
-            }
-            public DynamicVector(Vector2 vec){
-                this.Add(vec);
-            }
-            public DynamicVector(float num){
-                this.Add(num);
-            }
-            
+
+            public DynamicVector(Vector4 vec) : this() => Add(vec);
+            public DynamicVector(Color col) : this() => Add(col);
+            public DynamicVector(Vector3 vec) : this() => Add(vec);
+            public DynamicVector(Vector2 vec) : this() => Add(vec);
+            public DynamicVector(float num) : this() => Add(num);
+
+            public void Add(float num) => this[Count++] = num;
+
             public void Add(Color col){
-                base.Add(col.r);
-                base.Add(col.g);
-                base.Add(col.b);
-                base.Add(col.a);
+                Add(col.r);
+                Add(col.g);
+                Add(col.b);
+                Add(col.a);
             }
-            
+
             public void Add(Vector4 vec){
-                base.Add(vec.x);
-                base.Add(vec.y);
-                base.Add(vec.z);
-                base.Add(vec.w);
+                Add(vec.x);
+                Add(vec.y);
+                Add(vec.z);
+                Add(vec.w);
             }
-            
+
             public void Add(Vector3 vec){
-                base.Add(vec.x);
-                base.Add(vec.y);
-                base.Add(vec.z);
+                Add(vec.x);
+                Add(vec.y);
+                Add(vec.z);
             }
-            
+
             public void Add(Vector2 vec){
-                base.Add(vec.x);
-                base.Add(vec.y);
+                Add(vec.x);
+                Add(vec.y);
             }
             // the ToVectorX & ToColor Functions have an optional offset arguement that shifts the starting point of the list when turning it into the vector
             public Vector4 ToVector4(int offset = 0){
@@ -494,21 +528,29 @@ public partial class CommunityEntity
                     return defaultValue;
                 return this[index];
             }
-            
+
+            public void Clear(){
+                _value0 = 0f;
+                _value1 = 0f;
+                _value2 = 0f;
+                _value3 = 0f;
+                Count = 0;
+            }
+
             public static DynamicVector Lerp(DynamicVector from, DynamicVector to, float t){
                 t = Mathf.Clamp01(t);
                 return LerpUnclamped(from, to, t);
             }
-            
+
             public static DynamicVector LerpUnclamped(DynamicVector from, DynamicVector to, float t){
-                lerpTemp.Clear();
+                DynamicVector result = new DynamicVector();
                 int HigherCount = (from.Count > to.Count ? from.Count : to.Count);
                 for(int i = 0; i < HigherCount; i++){
-                    lerpTemp.Add(from.TryGet(i) + (to.TryGet(i) - from.TryGet(i)) * t);
+                    result.Add(from.TryGet(i) + (to.TryGet(i) - from.TryGet(i)) * t);
                 }
-                return lerpTemp;
+                return result;
             }
-            
+
             public static DynamicVector operator +(DynamicVector lhs, DynamicVector rhs){
                 DynamicVector result = new DynamicVector();
                 int HigherCount = (lhs.Count > rhs.Count ? lhs.Count : rhs.Count);
@@ -517,7 +559,7 @@ public partial class CommunityEntity
                 }
                 return result;
             }
-            
+
             public static DynamicVector operator -(DynamicVector lhs, DynamicVector rhs){
                 DynamicVector result = new DynamicVector();
                 int HigherCount = (lhs.Count > rhs.Count ? lhs.Count : rhs.Count);
@@ -526,7 +568,7 @@ public partial class CommunityEntity
                 }
                 return result;
             }
-            
+
             public override string ToString(){
                 var sb = new StringBuilder(32);
                 for(int i = 0; i < this.Count; i++){
