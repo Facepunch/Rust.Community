@@ -333,7 +333,7 @@ public partial class CommunityEntity
                     }
             }
 
-            // remove this animation property of there is no valid case or the selected case fails
+            // remove this animation property if there is no valid case or the selected case fails
             Debug.LogWarning($"Animation for {anim.gameObject.name} failed to execute - invalid to value [{animValue.to}] for animation of type {type}");
             anim.RemoveProperty(this);
             repeat = 0; // ensure the animation wont repeat
@@ -415,13 +415,14 @@ public partial class CommunityEntity
                     float temp;
                     float.TryParse(split[i], out temp);
                     values.Add(temp);
+                    if(values.Count == values.Capacity) break;
                 }
                 return values;
             }
         }
 
         // a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
-        // turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
+        // turning this into a struct makes alot of sense, thanks for the insights @WheteThunger
         public struct DynamicVector {
 
             // need it to hold more than 4? add a _valueN and adjust the indexer & Clear method
@@ -431,6 +432,8 @@ public partial class CommunityEntity
             private float _value3;
 
             public int Count;
+
+			public int Capacity => 4;
 
             public float this[int i]{
                 get {
