@@ -99,27 +99,20 @@ public partial class CommunityEntity
             shouldRaycast = (cachedGraphic != null ? cachedGraphic.raycastTarget : false);
         }
         
-        // used with opacity & color animations, this hides the graphic and prevents it from blocking mouse interactions
-        public void DisableGraphic(float delay = 0f){
+        // used with opacity & color animations
+        // checks if the graphic's alpha is set to 0f & prevents it from intercepting mouse clicks & sets it to Hidden
+        public void TryToggleGraphic(float delay = 0f){
+            if(cachedGraphic == null) return;
+            
             var a = new Action(() => {
-                cachedGraphic.canvasRenderer.cullTransparentMesh = true;
-                isHidden = true;
-                cachedGraphic.raycastTarget = false;
+                bool hidden = cachedGraphic.canvasRenderer.GetAlpha() > 0f;
+                cachedGraphic.canvasRenderer.cullTransparentMesh = !hidden;
+                isHidden = !hidden;
+                cachedGraphic.raycastTarget = hidden;
             });
             if(delay <= 0f) a();
             else Invoke(a, delay);
-        }
-        
-        // does the oposite
-        public void EnableGraphic(float delay = 0f){
-            var a = new Action(() => {
-                cachedGraphic.canvasRenderer.cullTransparentMesh = false;
-                isHidden = false;
-                if(shouldRaycast) cachedGraphic.raycastTarget = true;
-            });
-            if(delay <= 0f) a();
-            else Invoke(a, delay);
-        }
+		}
         
         public void OnHoverEnter(){
             if(isKilled) return;
@@ -171,6 +164,7 @@ public partial class CommunityEntity
         // Launches the animation, keeping track of loops if its set to repeat
         public IEnumerator Animate()
         {
+            completedRounds = 0; // reset completedRounds on restart
             if(animValue == null || animValue.to.Count == 0){
                 Debug.LogWarning($"Animation of type {type} for {anim.gameObject.name} failed to execute - no from/to values provided");
                 anim.RemoveProperty(this);
@@ -205,14 +199,16 @@ public partial class CommunityEntity
                     {
                         // needs a reference to the graphic & atleast 1 value in the to value
                         if(!anim.cachedGraphic || animValue.to.Count < 1) break;
-
-                        // enables the graphic if:
-                        //     - the from value is higher than 0 or
+                        
+                        // try to enable the graphic after 0.1 seconds if:
+                        //	 - the from value is higher than 0 or
                         //   - the graphic is currently hidden but will go above 0 opacity during the animation
                         if((animValue.from.Count != 0 && animValue.from.TryGet(0) > 0f) || anim.isHidden && animValue.to.TryGet(0) > 0f)
-                            anim.EnableGraphic(0f);
+                            anim.TryToggleGraphic(0.1f);
 
                         animValue.initial = new DynamicVector(anim.cachedGraphic.canvasRenderer.GetAlpha());
+                        
+                        // force applies the value, meaning Opacity & Color animations may clash when multiple are setting the opacity
                         animValue.apply = (DynamicVector value) => {
                             prop.anim.cachedGraphic.canvasRenderer.SetAlpha(value.TryGet(0));
                         };
@@ -221,20 +217,23 @@ public partial class CommunityEntity
                         anim.cachedGraphic.CrossFadeAlpha(animValue.initial.TryGet(0), 0f, true);
 
                         if(animValue.to.TryGet(0) <= 0f) anim.DisableGraphic(duration);
+                        //Use Absolute mode for these Interpolations, as it wont need the initial opacity for any calculations
                         return InterpolateValue(animValue, duration, easing);
                     }
                 case "Color":
                     {
                         // needs a reference to the graphic & atleast 4 values in the to value
                         if(!anim.cachedGraphic || animValue.to.Count < 4) break;
-
+                        
                         // enables the graphic if:
-                        //     - the from color's alpha is higher than 0 or
+                        //	 - the from color's alpha is higher than 0 or
                         //   - the graphic is currently hidden but will go above 0 opacity during the animation
                         if((animValue.from.Count != 0 && animValue.from.TryGet(3) > 0f) || anim.isHidden && animValue.to.TryGet(3) > 0f)
-                            anim.EnableGraphic(0f);
+                            anim.TryToggleGraphic(0.1f);
 
                         animValue.initial = new DynamicVector(anim.cachedGraphic.canvasRenderer.GetColor());
+                        
+                        // force applies the value, meaning Opacity & Color animations may clash when multiple are setting the opacity
                         animValue.apply = (DynamicVector value) => {
                             prop.anim.cachedGraphic.canvasRenderer.SetColor(value.ToColor());
                         };
@@ -243,7 +242,8 @@ public partial class CommunityEntity
                         anim.cachedGraphic.CrossFadeColor(animValue.initial.ToColor(), 0f, true, true);
 
                         if(animValue.to.TryGet(3) <= 0f) anim.DisableGraphic(duration);
-                        return InterpolateValue(animValue, duration, easing);
+                        //Use Absolute mode for these Interpolations, as it wont need the initial color for any calculations
+                        return InterpolateValue(animValue, duration, easing, true);
                     }
                 case "Scale":
                     {
@@ -253,6 +253,8 @@ public partial class CommunityEntity
                         if(!anim.cachedRect) break;
 
                         animValue.initial = new DynamicVector(anim.cachedRect.localScale);
+                        
+                        // force applies the value, meaning multiple Scale animations running at the same time will clash
                         animValue.apply = (DynamicVector value) => {
                             // we convert to a Vector3 even though the DynamicVector only holds 2 floats
                             // this is fine because the z value will be set to 0f, which isnt used for the scale of rectTransforms
@@ -267,12 +269,16 @@ public partial class CommunityEntity
 
                         animValue.initial = new DynamicVector();
                         animValue.last = new DynamicVector();
+                        
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
                         animValue.apply = (DynamicVector value) => {
                             DynamicVector diff = value - prop.animValue.last;
                             prop.anim.cachedRect.anchorMin += diff.ToVector2();
                             prop.anim.cachedRect.anchorMax += diff.ToVector2();
                             prop.animValue.last += diff;
                         };
+                        
+                        // Use Relative mode for these Interpolations, as it will take the initial position into account for the translation
                         return InterpolateValue(animValue, duration, easing, false);
                     }
                 case "TranslatePX":
@@ -282,12 +288,16 @@ public partial class CommunityEntity
 
                         animValue.initial = new DynamicVector();
                         animValue.last = new DynamicVector();
+                        
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
                         animValue.apply = (DynamicVector value) => {
                             DynamicVector diff = value - prop.animValue.last;
                             prop.anim.cachedRect.offsetMin += diff.ToVector2(0);
                             prop.anim.cachedRect.offsetMax += diff.ToVector2(0);
                             prop.animValue.last += diff;
                         };
+                        
+                        // Use Relative mode for these Interpolations, as it will take the initial position into account for the translation
                         return InterpolateValue(animValue, duration, easing, false);
                     }
                 case "Rotate":
@@ -296,9 +306,13 @@ public partial class CommunityEntity
                         if(!anim.cachedRect || animValue.to.Count < 3) break;
 
                         animValue.initial = new DynamicVector(anim.cachedRect.rotation.eulerAngles);
+                        
+                        // force applies the value, meaning multiple Rotate animations running at the same time will clash
                         animValue.apply = (DynamicVector value) => {
                             prop.anim.cachedRect.rotation = Quaternion.Euler(value.ToVector3());
                         };
+                        
+                        //Use Absolute mode for these Interpolations, as it wont need the initial rotation for any calculations
                         return InterpolateValue(animValue, duration, easing, true);
                     }
                 case "MoveTo":
@@ -307,14 +321,18 @@ public partial class CommunityEntity
 
                         animValue.initial = new DynamicVector(anim.cachedRect.anchorMin);
                         animValue.initial.Add(anim.cachedRect.anchorMax);
-                        animValue.last = animValue.initial + new DynamicVector();
+                        animValue.last = animValue.initial;
+                        
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
                         animValue.apply = (DynamicVector value) => {
                             DynamicVector diff = value - prop.animValue.last;
                             prop.anim.cachedRect.anchorMin += diff.ToVector2(0);
                             prop.anim.cachedRect.anchorMax += diff.ToVector2(2); // skip the first 2 values
                             prop.animValue.last += diff;
                         };
-                        return InterpolateValue(animValue, duration, easing);
+                        
+                        //Use Absolute mode for these Interpolations, as the from & to values supplied are absolute values
+                        return InterpolateValue(animValue, duration, easing, true);
                     }
                 case "MoveToPX":
                     {
@@ -322,14 +340,18 @@ public partial class CommunityEntity
 
                         animValue.initial = new DynamicVector(anim.cachedRect.offsetMin);
                         animValue.initial.Add(anim.cachedRect.offsetMax);
-                        animValue.last = animValue.initial + new DynamicVector();
+                        animValue.last = animValue.initial;
+                        
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
                         animValue.apply = (DynamicVector value) => {
                             DynamicVector diff = value - prop.animValue.last;
                             prop.anim.cachedRect.offsetMin += diff.ToVector2(0);
                             prop.anim.cachedRect.offsetMax += diff.ToVector2(2); // skip the first 2 values
                             prop.animValue.last += diff;
                         };
-                        return InterpolateValue(animValue, duration, easing);
+                        
+                        //Use Absolute mode for these Interpolations, as the from & to values supplied are absolute values
+                        return InterpolateValue(animValue, duration, easing, true);
                     }
             }
 
@@ -338,6 +360,7 @@ public partial class CommunityEntity
             anim.RemoveProperty(this);
             repeat = 0; // ensure the animation wont repeat
             // Return an empty enumerator so the coroutine finishes
+            // unsure if this could be a cached enumerator instead
             return new System.Object[0].GetEnumerator();
         }
 
@@ -365,8 +388,8 @@ public partial class CommunityEntity
             }
         }
 
-        // Interpolats an AnimationValue over the duration with the easing specified
-        // the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
+        // Interpolates an AnimationValue over the duration with the easing specified
+        // the absolute arguement specifies if the animation value should be handled as a relative value or an absolute value
         // absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
         // absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
         public IEnumerator InterpolateValue(AnimationValue value, float duration, string easing, bool absolute = true){
@@ -406,6 +429,7 @@ public partial class CommunityEntity
                 this.from = ParseFromString(sourceFrom);
                 this.to = ParseFromString(sourceTo);
             }
+            // based on the VectorEx parse methods, but in a dynamic list style
             public DynamicVector ParseFromString(string source){
                 var values = new DynamicVector();
                 if(string.IsNullOrEmpty(source)) return values;
@@ -423,9 +447,10 @@ public partial class CommunityEntity
 
         // a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
         // turning this into a struct makes alot of sense, thanks for the insights @WheteThunger
+        // its still styled as a list with the Add Methods to simplify working with it in animation code
         public struct DynamicVector {
 
-            // need it to hold more than 4? add a _valueN and adjust the indexer & Clear method
+            // need it to hold more than 4? add a _valueN and adjust the Capacity, indexer & Clear method
             private float _value0;
             private float _value1;
             private float _value2;
@@ -447,23 +472,16 @@ public partial class CommunityEntity
                 }
                 set {
                     switch(i){
-                        case 0:
-                            _value0 = value;
-                            break;
-                        case 1:
-                            _value1 = value;
-                            break;
-                        case 2:
-                            _value2 = value;
-                            break;
-                        case 3:
-                            _value3 = value;
-                            break;
+                        case 0: _value0 = value; break;
+                        case 1: _value1 = value; break;
+                        case 2: _value2 = value; break;
+                        case 3: _value3 = value; break;
                         default: throw new IndexOutOfRangeException();
                     }
                 }
             }
 
+            // Constructors for common values that simply forward it to the respective Add function
             public DynamicVector(Vector4 vec) : this() => Add(vec);
             public DynamicVector(Color col) : this() => Add(col);
             public DynamicVector(Vector3 vec) : this() => Add(vec);
@@ -497,6 +515,7 @@ public partial class CommunityEntity
                 Add(vec.y);
             }
             // the ToVectorX & ToColor Functions have an optional offset arguement that shifts the starting point of the list when turning it into the vector
+            // this is useful for easily splitting a Vector4 into 2 Vector2s, like during the MoveTo/PX where the from/to values are Vector4s but the end result needs to be split into AnchorMin and AnchorMax Vector2s
             public Vector4 ToVector4(int offset = 0){
                 return new Vector4(
                     TryGet(offset),
@@ -526,6 +545,7 @@ public partial class CommunityEntity
                     TryGet(offset + 1)
                 );
             }
+            // gets the float at the index if it exists, otherwise returns 0
             public float TryGet(int index, float defaultValue = 0f){
                 if(index < 0 || index >= this.Count)
                     return defaultValue;
@@ -572,6 +592,7 @@ public partial class CommunityEntity
                 return result;
             }
 
+            // using a string builder here due to the itteration approach
             public override string ToString(){
                 var sb = new StringBuilder(32);
                 for(int i = 0; i < this.Count; i++){
