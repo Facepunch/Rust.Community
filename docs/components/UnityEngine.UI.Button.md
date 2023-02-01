@@ -14,9 +14,13 @@ The Button Component is an Interactive Component that lets you execute Commands 
 	"sprite": "Assets/Icons/rust.png",
 	"color": "1.0 1.0 1.0 1.0",
 	"material": "",
-	"imagetype": "Simple"
+	"imagetype": "Simple",
+    "fadeIn": 0.0
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
+
+
 Button-specific Fields:
 | Key         | Type   | Notes                |
 | :---------- | :----- | :------------------- |
@@ -26,6 +30,7 @@ Button-specific Fields:
 | `color`     | string | the normalized RGBA values of your color |
 | `material`  | string | the asset Path to the Material |
 | `imagetype` | string (enum `Image.Type`) | sets the display mode of the Image* |
+| `fadeIn`    | float  | the Duration the Panel should take to fade in |
 \*  Currently non-functioning for anything other than Rust's built-in Sprites
 
 ### Button as a Parent

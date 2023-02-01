@@ -14,6 +14,7 @@ The Outline Component is an Effect Component that puts a colored outline on any 
 	"useGraphicAlpha": null
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
 > `useGraphicAlpha` is a key presence Field, key presence Fields don't have a specific type and act as a Boolean.
 > if the key is present it equals true, if absent it equals false.
 

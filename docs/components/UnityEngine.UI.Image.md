@@ -15,9 +15,13 @@ The Image is a Visual Component that allows you to display Images from your Serv
 	"imagetype": "Simple",
 	"png": "",
 	"itemid": 0,
-	"skinid": 0
+	"skinid": 0,
+    "fadeIn": 0.0
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
+
+
 RawImage specific Fields:
 | Key         | Type   | Notes                |
 | :---------- | :----- | :------------------- |
@@ -28,7 +32,7 @@ RawImage specific Fields:
 | `png`       | string | the CRC Checksum of the Image hosted on the Server |
 | `itemid`    | int    | the Item ID of your item |
 | `skinid`    | ulong  | the Skin ID of your skin |
-
+| `fadeIn`    | float  | the Duration the Panel should take to fade in |
 \*  Currently non-functioning for anything other than Rust's built-in Sprites
 ## RawImages vs Images
 Like RawImages, Images share the ability to show Sprites, Colors, Materials & Images hosted on the Server, but they cannot directly load Images from the Web.
@@ -37,6 +41,7 @@ The Image Component has convenient Ways to display any Item or Skin and is recom
 
 ## Items and Skins
 using the `itemid` & `skinid` fields you can let the Client handle the displaying of related Images.
+NOTE: there is currently a bug when supplying a skinid of `0`, causing the player to crash, avoid including the field altogether if you don't intend to send a skinid
 
 Tip: use the ItemDefinition of your Item to easily find an Item's ID & other useful Information
 ```c#

@@ -13,9 +13,13 @@ The RawImage is a Visual Component that allows you to display Images from your S
 	"color": "1.0 1.0 1.0 1.0",
 	"material": "",
 	"url": "",
-	"png": ""
+	"png": "",
+    "fadeIn": 0.0
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
+
+
 RawImage specific Fields:
 | Key         | Type   | Notes                |
 | :---------- | :----- | :------------------- |
@@ -24,6 +28,7 @@ RawImage specific Fields:
 | `material`  | string | the asset Path to the Material |
 | `url`       | string | the URL of the Image you want to show |
 | `png`       | string | the CRC Checksum of the Image hosted on the Server |
+| `fadeIn`    | float  | the Duration the Panel should take to fade in |
 
 ## Images can be your Backgrounds
 the most common use for RawImage is its Ability to display any* Color you give it.  therefore it's often used to give Panels a Background Color. Colors are sent as a `string` of 4 normalized `floats`
@@ -73,7 +78,7 @@ private IEnumerator SaveImageFromURL(string URL){
 
 		var texture = DownloadHandlerTexture.GetContent(request);
 		byte[] data = texture.EncodeToPNG();
-		
+
 		// this CRC is what you send to the client. save it somewhere for later
 		uint crc = FileStorage.server.Store(data, FileStorage.Type.png, CommunityEntity.ServerInstance.net.ID);
 	}

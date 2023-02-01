@@ -16,6 +16,8 @@ it allows you to position a Panel via [Anchors & Offsets](#anchors-and-offsets).
 	"offsetmax": "1.0 1.0",
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
+
 RectTransform specific Fields:
 | Key         | Type   | Notes                |
 | :---------- | :----- | :------------------- |

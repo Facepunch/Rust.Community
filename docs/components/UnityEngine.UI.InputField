@@ -21,11 +21,8 @@ The InputField Component is an Interactive Component that allows Players to ente
 	"needsKeyboard": null,
 	"hudMenuInput": null,
 	"autofocus": null,
-    "fadeIn": 0.0
 }
 ```
-> the values in these JSON examples represent the default Values that are assigned if no property is specified.
-
 > `password`, `needsKeyboard`, `hudMenuInput`,  and `autofocus` are key presence Fields, key presence Fields don't have a specific type and act as a Boolean.
 > if the key is present it equals true, if absent it equals false.
 
@@ -40,13 +37,6 @@ InputField specific Fields:
 | `needsKeyboard`  | key presence Field | prevents default Keyboard behavior (movement, item switching etc) while the field is Focused |
 | `hudMenuInput`  | key presence Field | same as above but for Rust UI (Inventory, Crafting, etc.) |
 | `autofocus`  | key presence Field | selects the field upon creation |
-| `fadeIn`    | float  | the Duration the Panel should take to fade in |
-
-### Selecting Text
-an underutilized Power of the InputField is that you can select its contents. this is helpful when creating forms & editors, but can also be used for other features. you can use it for displaying links to your website or discord, allowing players to select and copy it instead of having to type it out
-
-it's recommended to wrap your InputField in another panel, ensuring its the only child of it's parent as it prevents the Selected text from being covered by other children.
-
 
 ### Receiving Input & the lineType Setting
 to receive the Player's input Text, listen for the Command you specify in the `command` field. the Input will get sent as soon as the Player unfocuses the InputField, for example by clicking out of it.

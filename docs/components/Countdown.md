@@ -15,6 +15,8 @@ The Countdown Component lets you turn an existing Text Component into a Timer, C
 	"command": ""
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
+
 
 Countdown-specific Fields:
 | Key         | Type   | Notes                |

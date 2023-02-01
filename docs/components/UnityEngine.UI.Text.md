@@ -14,9 +14,13 @@ The Text Component is a Visual Component that allows you to display any Text you
 	"font": "RobotoCondensed-Bold.ttf",
 	"align": "UpperLeft",
 	"color": "1.0 1.0 1.0 1.0",
-	"verticalOverflow": "Truncate"
+	"verticalOverflow": "Truncate",
+    "fadeIn": 0.0
 }
 ```
+> the values in these JSON examples represent the default Values that are assigned if no property is specified.
+
+
 Text-specific Fields:
 | Key         | Type   | Notes                |
 | :---------- | :----- | :------------------- |
@@ -26,6 +30,7 @@ Text-specific Fields:
 | `align`     | string (enum `TextAnchor`) | the way your Text should be aligned |
 | `color`     | string | the default Color of your Text |
 | `verticalOverflow` | string (enum `VerticalWrapMode`) | how Text Overflowing vertically should be handled |
+| `fadeIn`    | float  | the Duration the Panel should take to fade in |
 
 ### Available Fonts:
 -   `DroidSansMono.ttf`
