@@ -52,6 +52,7 @@ The Image Component has convenient Ways to display any Item or Skin and is recom
 
 ## Items and Skins
 using the  `itemid`  &  `skinid`  fields, you can let the Client handle the displaying of related Images.
+NOTE: there is currently a bug when supplying a skinid of `0`, causing the player to crash, avoid including the field altogether if you don't intend to send a skinid
 
 Tip: use the ItemDefinition of your Item to easily find an Item’s ID & other useful Information
 ```c#
