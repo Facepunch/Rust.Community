@@ -1,8 +1,8 @@
 # Rust Community Repository
-> This Repository is part of the game Rust. It has no relation to the Programming Language
+> This Repository is part of the game Rust. It has no relation to the Programming Language.
 
 Client Code for the `CommunityEntity` Class to fulfill Server-side Modder Requests.
-Holds the Custom User Interface System (CUI System), which lets developers create interactable UI through a simple JSON Schema
+Holds the Custom User Interface System (CUI System), which lets developers create interactive UI through a simple JSON Schema.
 
 ## Table of Contents
 > Click one of the Topics or dive directly into the Component Documentation
@@ -17,7 +17,7 @@ Holds the Custom User Interface System (CUI System), which lets developers creat
   - [InputField](/docs/components/UnityEngine.UI.InputField.md)
   - [NeedsCursor & NeedsKeyboard](/docs/components/NeedsX.md)
   - [Countdown](/docs/components/Countdown.md)
-- [Tips, Bugs & Edgecases](/docs/Bugs-Tips.md)
+- [Tips, Bugs & Edge cases](/docs/Bugs-Tips.md)
 - [Credits & Acknowledgements](#Credits)
 
 ## Credits
@@ -30,8 +30,8 @@ External Contributors & People who improved the CUI System
 - [@Alitop](https://github.com/Alitop) - PR [#32](https://github.com/Facepunch/Rust.Community/pull/32)
 - [@TactiTac0z](https://github.com/TactiTac0z) - PR [#40](https://github.com/Facepunch/Rust.Community/pull/40)
 - [@Kulltero](https://github.com/Kulltero) - PR [#43](https://github.com/Facepunch/Rust.Community/pull/43)
-> And of course, Facepunch, who has put a lot of ffort into giving Developers the CUI System & the ability to improve it
+> And of course, Facepunch, who has put a lot of effort into giving Developers the CUI System & the ability to improve it.
 
 ---
 ### Disclaimer
-the readme & Documentation is Community maintained. It aims to give Developers a starting Point and educate them on effectively using CUIs for their Projects
+The README & Documentation is Community maintained. It aims to give Developers a starting Point and educate them on effectively using CUIs for their Projects.

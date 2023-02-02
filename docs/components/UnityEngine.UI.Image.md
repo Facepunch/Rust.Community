@@ -5,7 +5,7 @@
 - Category: **Visual**
 - Unity Documentation: **[Image @ docs.unity3d.com](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/script-Image.html)**
 
-The Image is a Visual Component that allows you to display Images from your Server & the Web or Rust Sprites. it can also be used with a single color to act as a Background for your panel
+The Image is a Visual Component that allows you to display images from your Server & the Web or Rust Sprites. It can also be used with a single color to act as a Background for your panel.
 ```json
 {
 	"type": "UnityEngine.UI.Image",
@@ -19,31 +19,41 @@ The Image is a Visual Component that allows you to display Images from your Serv
     "fadeIn": 0.0
 }
 ```
-> the values in these JSON examples represent the default Values that are assigned if no property is specified.
-
-
 RawImage specific Fields:
 | Key         | Type   | Notes                |
 | :---------- | :----- | :------------------- |
-| `sprite`    | string | the asset Path to the sprite |
-| `color`     | string | the normalized RGBA values of your color |
-| `material`  | string | the asset Path to the Material |
-| `imagetype` | string (enum `Image.Type`) | sets the display mode of the Image* |
-| `png`       | string | the CRC Checksum of the Image hosted on the Server |
-| `itemid`    | int    | the Item ID of your item |
-| `skinid`    | ulong  | the Skin ID of your skin |
-| `fadeIn`    | float  | the Duration the Panel should take to fade in |
+| `sprite`    | string | The asset Path to the sprite |
+| `color`     | string | The normalized RGBA values of your color |
+| `material`  | string | The asset Path to the Material |
+| `imagetype` | string (enum `Image.Type`) | Sets the display mode of the Image* |
+| `png`       | string | The CRC Checksum of the Image hosted on the Server |
+| `itemid`    | int    | The Item ID of your item |
+| `skinid`    | ulong  | The Skin ID of your skin |
+| `fadeIn`    | float  | The Duration the Panel should take to fade in |
 \*  Currently non-functioning for anything other than Rust's built-in Sprites
+
+## imagetype and sprites
+the imagetype lets you provide a specific `Image.Type` option to change how the Component renders the image.
+
+An important thing to remember is that currently, Simple is the only option that works with images loaded from your server. This is because the Sliced, Tiled & Filled options require extra parameters to be set on the sprite. The image Component's JSON API currently doesn't wrap these parameters.
+
+Available options for `Image.Type`
+| Value | Description |
+| :---- | :---------- |
+| `Simple` | Displays the full Image |
+| `Sliced` | Displays the Image as a 9-sliced graphic. |
+| `Tiled` | Displays a sliced Sprite with its resizable sections tiled instead of stretched. |
+| `Filled` | Displays only a portion of the Image. |
+
 ## RawImages vs Images
-Like RawImages, Images share the ability to show Sprites, Colors, Materials & Images hosted on the Server, but they cannot directly load Images from the Web.
+Like RawImages, Images share the ability to show Sprites, Colors, Materials & Images hosted on the Server, but they cannot directly load images from the Web.
 
 The Image Component has convenient Ways to display any Item or Skin and is recommended when using Rust's Sprites.
 
 ## Items and Skins
-using the `itemid` & `skinid` fields you can let the Client handle the displaying of related Images.
-NOTE: there is currently a bug when supplying a skinid of `0`, causing the player to crash, avoid including the field altogether if you don't intend to send a skinid
+using the  `itemid`  &  `skinid`  fields, you can let the Client handle the displaying of related Images.
 
-Tip: use the ItemDefinition of your Item to easily find an Item's ID & other useful Information
+Tip: use the ItemDefinition of your Item to easily find an Item’s ID & other useful Information
 ```c#
 string shortname = "your.item.shortname";
 var itemDef = ItemManager.FindItemDefinition(shortname);
