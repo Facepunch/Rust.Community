@@ -32,10 +32,10 @@ the JSON Schema to send UI to the Player consists of a List of Elements, where e
 layers are used when creating your top most Panel. They differ from Panels because they are static GameObjects that cannot be destroyed via a DestroyUI call. Depending on the Layer you parent to, your UI will appear above or below Rust's own UI elements.
 
 #### Available Layer values
-- `Overall` the top most layer in front of all of Rust's UI
+- `Overall` the top most layer in front of all of Rust's UI 
 - `Overlay`
-- `Hud`
-- `Hud.Menu`
+- `Hud.Menu` the layer where rust positions menus like your inventory
+- `Hud` the layer where Rust stores most HUD elements like your status bar
 - `Under` the lowermost layer, your UI will appear behind all of Rust's UI
 
 
