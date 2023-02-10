@@ -21,7 +21,7 @@ The InputField Component is an Interactive Component that allows Players to ente
 	"needsKeyboard": null,
 	"hudMenuInput": null,
 	"autofocus": null,
-    "fadeIn": 0.0
+	"fadeIn": 0.0
 }
 ```
 > `password`, `needsKeyboard`, `hudMenuInput`,  and `autofocus` are key presence Fields, key presence Fields don't have a specific type and act as a Boolean.

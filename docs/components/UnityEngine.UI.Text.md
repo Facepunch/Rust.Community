@@ -15,7 +15,7 @@ The Text Component is a Visual Component that allows you to display any Text you
 	"align": "UpperLeft",
 	"color": "1.0 1.0 1.0 1.0",
 	"verticalOverflow": "Truncate",
-    "fadeIn": 0.0
+	"fadeIn": 0.0
 }
 ```
 Text-specific Fields:

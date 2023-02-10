@@ -16,7 +16,7 @@ Tip: if you’re used to using hexadecimal, you can use this function to convert
 	"material": "",
 	"url": "",
 	"png": "",
-    "fadeIn": 0.0
+	"fadeIn": 0.0
 }
 ```
 RawImage specific Fields:

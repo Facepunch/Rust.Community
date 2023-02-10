@@ -15,7 +15,7 @@ The Button Component is an Interactive Component that lets you execute Commands 
 	"color": "1.0 1.0 1.0 1.0",
 	"material": "",
 	"imagetype": "Simple",
-    "fadeIn": 0.0
+	"fadeIn": 0.0
 }
 ```
 Button-specific Fields:

@@ -16,7 +16,7 @@ The Image is a Visual Component that allows you to display images from your Serv
 	"png": "",
 	"itemid": 0,
 	"skinid": 0,
-    "fadeIn": 0.0
+	"fadeIn": 0.0
 }
 ```
 RawImage specific Fields:
