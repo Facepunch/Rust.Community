@@ -79,7 +79,7 @@ public partial class CommunityEntity
                 rt.anchorMin = new Vector2( 0, 0 );
                 rt.anchorMax = new Vector2( 1, 1 );
                 rt.offsetMin = new Vector2( 0, 0 );
-                rt.offsetMax = new Vector2( 1, 1 );
+                rt.offsetMax = new Vector2( 0, 0 );
             }
 
             foreach ( var component in json.GetArray( "components" ) )
@@ -303,7 +303,7 @@ public partial class CommunityEntity
                         rt.anchorMin = Vector2Ex.Parse( obj.GetString( "anchormin", "0.0 0.0" ) );
                         rt.anchorMax = Vector2Ex.Parse( obj.GetString( "anchormax", "1.0 1.0" ) );
                         rt.offsetMin = Vector2Ex.Parse( obj.GetString( "offsetmin", "0.0 0.0" ) );
-                        rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
+                        rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "0.0 0.0" ) );
                     }
                     break;
                 }
