@@ -25,6 +25,7 @@ public partial class CommunityEntity
         AllUi.Clear();
         UiDict.Clear();
         requestingTextureImages.Clear();
+        UnloadTextureCache();
     }
 
     public void SetVisible( bool b )
@@ -44,6 +45,8 @@ public partial class CommunityEntity
     [RPC_Client]
     public void AddUI( RPCMessage msg )
     {
+        if (Client.IsPlayingDemo && !ConVar.Demo.showCommunityUI)
+            return;
         var str = msg.read.StringRaw();
 
         if ( string.IsNullOrEmpty( str ) ) return;
@@ -55,7 +58,10 @@ public partial class CommunityEntity
         foreach ( var value in jsonArray )
         {
             var json = value.Obj;
-
+            if ( json.ContainsKey( "destroyUi" ) )
+            {
+                DestroyPanel( json.GetString( "destroyUi", "AddUI CreatedPanel" ) );
+            }
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
             if ( parentPanel == null )
             {
@@ -155,6 +161,9 @@ public partial class CommunityEntity
                         c.alignment = ParseEnum( obj.GetString( "align" ), TextAnchor.UpperLeft );
                     if(ShouldUpdateField("color"))
                         c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    if(ShouldUpdateField("verticalOverflow"))
+                        c.verticalOverflow = ParseEnum( obj.GetString( "verticalOverflow", "Truncate" ), VerticalWrapMode.Truncate );
+
                     GraphicComponentCreated( c, obj );
                     break;
                 }
@@ -173,7 +182,7 @@ public partial class CommunityEntity
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, id );
+                        ApplyTextureToImage( c, id );
                     }
 
                     if ( obj.ContainsKey( "itemid" ) )
@@ -186,15 +195,19 @@ public partial class CommunityEntity
 
                             if ( obj.ContainsKey( "skinid" ) )
                             {
-                                var requestedSkin = obj.GetInt( "skinid" );
-                                var skin = itemdef.skins.FirstOrDefault( x => x.id == requestedSkin );
-                                if ( skin.id == requestedSkin )
+                                var requestedSkin = (ulong)obj.GetNumber("skinid" );
+                                var skin = itemdef.skins.FirstOrDefault( x => x.id == (int)requestedSkin );
+                                if ( skin.id == (int)requestedSkin )
                                 {
                                     c.sprite = skin.invItem.icon;
                                 }
                                 else
                                 {
-                                    var workshopSprite = WorkshopIconLoader.Find( (ulong)requestedSkin );
+                                    var workshopSprite = WorkshopIconLoader.Find(requestedSkin, null, () =>
+                                    {
+                                        if (c != null)
+                                            c.sprite = WorkshopIconLoader.Find(requestedSkin);
+                                    });
                                     if ( workshopSprite != null )
                                     {
                                         c.sprite = workshopSprite;
@@ -229,7 +242,7 @@ public partial class CommunityEntity
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        SetImageFromServer( c, id );
+                        ApplyTextureToImage( c, id );
                     }
 
                     GraphicComponentCreated( c, obj );
@@ -310,12 +323,14 @@ public partial class CommunityEntity
                             c.onEndEdit.RemoveAllListeners();
                         c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
                     }
+
                     if(ShouldUpdateField("text"))
                         c.text = obj.GetString("text", "Text");
                     if(ShouldUpdateField("readOnly"))
 			            c.readOnly = obj.GetBoolean("readOnly", false);
                     if(ShouldUpdateField("lineType"))
                         c.lineType = ParseEnum(obj.GetString("lineType", "SingleLine"), InputField.LineType.SingleLine);
+
                     if ( obj.ContainsKey( "password" ) )
                     {
                         c.inputType = UnityEngine.UI.InputField.InputType.Password;
@@ -324,6 +339,17 @@ public partial class CommunityEntity
                     if (obj.ContainsKey("needsKeyboard"))
                     {
                         go.AddComponent<NeedsKeyboardInputField>();
+                    }
+
+                    //blocks keyboard input the same as NeedsKeyboard, but is used for UI in the inventory/crafting
+                    if (obj.ContainsKey("hudMenuInput"))
+                    {
+                        go.AddComponent<HudMenuInput>();
+                    }
+
+                    if (obj.ContainsKey("autofocus"))
+                    {
+                        c.Select();
                     }
 
                     GraphicComponentCreated( t, obj );
@@ -412,8 +438,9 @@ public partial class CommunityEntity
         }
 
 
-        var texture = www.texture;
-        if ( texture == null || c == null )
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        www.LoadImageIntoTexture(texture);
+        if ( c == null )
         {
             Debug.Log( "Error downloading image: " + p + " (not an image)" );
             www.Dispose();

@@ -203,6 +203,22 @@ public class cui
 		CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "AddUI", json );
 	}
 
+	#if UNITY_EDITOR && CLIENT && SERVER
+	[UnityEditor.MenuItem("Debug/CUI/Load custom UI")]
+	public static void loadcustomjson()
+	{
+		if(LocalPlayer.Entity == null || !Application.isPlaying)
+			return;
+		
+		var toLoad = UnityEditor.EditorUtility.OpenFilePanel("JSON to load", Application.dataPath, "txt");
+
+		if (!string.IsNullOrEmpty(toLoad))
+		{
+			CommunityEntity.ServerInstance.ClientRPC( null, "AddUI", System.IO.File.ReadAllText(toLoad));
+		}
+	}
+	#endif
+
     [ServerUserVar]
     public static void endtest( ConsoleSystem.Arg args )
     {
