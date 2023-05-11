@@ -489,7 +489,7 @@ public partial class CommunityEntity
                 }
             case "Slot":
                 {
-                    var slot = go.GetOrAddComponent<Slot>();
+                    var slot = GetOrAddComponent<Slot>();
                     
                     if(ShouldUpdateField("filter"))
                         slot.filter = obj.GetString("filter", null);
