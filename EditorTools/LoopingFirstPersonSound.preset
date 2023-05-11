@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LoopingFirstPersonSound
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: a2154450a9d85844681499db7c7de83b,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: definitionName
+    value: LoopingFirstPersonSound
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: soundUrl
+    value: https://20k.gg/audio/SoundTest/testLoopable1.wav
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: audioCategory
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: shouldLoop
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: ApplyingDefinition
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: instanceName
+    value: TestInstance2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: definition
+    value: LoopingFirstPersonSound
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: definitionType
+    value: Custom
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fadeIn
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: parentNetID
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: offset.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: offset.y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: offset.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: ApplyingSound
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: instanceToKill
+    value: TestInstance2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fadeOut
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: killSound
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: ApplyingEndSound
+    value: 0
+    objectReference: {fileID: 0}
