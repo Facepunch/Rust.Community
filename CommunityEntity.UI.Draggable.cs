@@ -101,7 +101,8 @@ public partial class CommunityEntity
             FindParentLimit();
 
             // anchor setup
-            CreateAnchor();
+            if(anchorObj == null)
+                CreateAnchor();
             lastDropPosition = anchor;
 
             _initialized = true;
