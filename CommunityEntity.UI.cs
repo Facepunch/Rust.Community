@@ -397,6 +397,23 @@ public partial class CommunityEntity
                             rt.offsetMin = Vector2Ex.Parse( obj.GetString( "offsetmin", "0.0 0.0" ) );
                         if ( ShouldUpdateField( "offsetmax" ) )
                             rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
+                            
+                        
+                        
+                        // some Update only fields to allow reparenting of draggables if needed
+                        if (allowUpdate && obj.ContainsKey( "setParent" ) ){
+                            var newParentName = obj.GetString( "setParent", null );
+                            if(!string.IsNullOrEmpty(newParentName)){
+                                var newParent = FindPanel(newParentName);
+                                if(newParent)
+                                    rt.SetParent(newParent.transform);
+                            }
+                        }
+                        if(allowUpdate && obj.ContainsKey( "setTransformIndex" ) ){
+                            var newIndex = obj.GetInt("setTransformIndex", -1);
+                            if(newIndex >= 0)
+                                rt.SetSiblingIndex(newIndex);
+                        }
                     }
                     break;
                 }
@@ -417,6 +434,69 @@ public partial class CommunityEntity
                         c.command = obj.GetString( "command" );
                     }
 
+                    break;
+                }
+            case "Draggable":
+                {
+                    var drag = go.GetComponent<Draggable>();
+                    if(!drag){
+                        drag = go.AddComponent<Draggable>();
+                        go.AddComponent<CanvasGroup>();
+                    }
+                    
+                    if( ShouldUpdateField("limitToParent"))
+                        drag.limitToParent = obj.GetBoolean("limitToParent", false);
+                    if( ShouldUpdateField("maxDistance"))
+                        drag.maxDistance = obj.GetFloat("maxDistance", -1f);
+                    if( ShouldUpdateField("allowSwapping"))
+                        drag.allowSwapping = obj.GetBoolean("allowSwapping", false);
+                    if( ShouldUpdateField("dropAnywhere"))
+                        drag.dropAnywhere = obj.GetBoolean("dropAnywhere", true);
+                    if( ShouldUpdateField("dragAlpha"))
+                        drag.dragAlpha = obj.GetFloat("dragAlpha", 1f);
+                    if( ShouldUpdateField("parentLimitIndex"))
+                        drag.parentLimitIndex = obj.GetInt("parentLimitIndex", 1);
+                    if( ShouldUpdateField("filter"))
+                        drag.filter = obj.GetString("filter", null);
+                    if( ShouldUpdateField("parentPadding"))
+                        drag.parentPadding = Vector2Ex.Parse(obj.GetString("parentPadding", "0 0"));
+                    if( ShouldUpdateField("anchorOffset"))
+                        drag.anchorOffset = Vector2Ex.Parse(obj.GetString("anchorOffset", "0 0"));
+                    if( ShouldUpdateField("keepOnTop"))
+                        drag.keepOnTop = obj.GetBoolean("keepOnTop", false);
+                    
+                    var preferredDefault = Draggable.PositionSendType.NormalizedScreen;
+                    // find a better default depending on specified settings
+                    if(drag.maxDistance > 0f){
+                        preferredDefault = Draggable.PositionSendType.RelativeAnchor;
+                    } else if(drag.limitToParent){
+                        preferredDefault = Draggable.PositionSendType.NormalizedParent;
+                    }
+                    
+                    if( ShouldUpdateField("positionRPC"))
+                        drag.positionRPC = ParseEnum<Draggable.PositionSendType>(obj.GetString("positionRPC", null), preferredDefault);
+                    
+                    // some Update only fields to trigger certain functions
+                    if(allowUpdate & obj.ContainsKey("moveToAnchor"))
+                        drag.MoveToAnchor();
+                    if(allowUpdate & obj.ContainsKey("rebuildAnchor"))
+                        drag.RebuildAnchor();
+                    
+                    drag.Init();
+                    
+                    HandleEnableState(obj, drag);
+                    break;
+                }
+            case "Slot":
+                {
+                    var slot = go.GetOrAddComponent<Slot>();
+                    
+                    if(ShouldUpdateField("filter"))
+                        slot.filter = obj.GetString("filter", null);
+                    
+                    slot.Init();
+                    
+                    HandleEnableState(obj, slot);
                     break;
                 }
             case "NeedsKeyboard":
