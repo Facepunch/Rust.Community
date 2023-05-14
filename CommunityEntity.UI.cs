@@ -470,7 +470,8 @@ public partial class CommunityEntity
                         scrollRect.content.anchorMin = Vector2Ex.Parse( contentObj.GetString( "anchormin", "0.0 0.0" ) );
                         scrollRect.content.anchorMax = Vector2Ex.Parse( contentObj.GetString( "anchormax", "1.0 1.0" ) );
                         scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
-                        scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) );
+			// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
+                        scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
                     }
                     if(ShouldUpdateField("horizontal"))
                         scrollRect.horizontal = obj.GetBoolean("horizontal", false);
@@ -588,7 +589,7 @@ public partial class CommunityEntity
         transform.anchorMin = Vector2.zero;
         transform.anchorMax = Vector2.one;
         transform.offsetMin = Vector2.zero;
-        transform.offsetMax = Vector2.zero;
+        transform.offsetMax = Vector2.one; // to preserve the shoddy offsetmax default that alot of existing UIs rely on
     }
 
     private static T ParseEnum<T>(string value, T defaultValue)
