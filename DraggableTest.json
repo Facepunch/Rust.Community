@@ -356,8 +356,7 @@
             },
             {
                 "type": "Draggable",
-                "limitToParent": true,
-                "parentPadding": "50 100"
+                "limitToParent": true
             },
             {
                 "type": "UnityEngine.UI.Outline",
@@ -1093,7 +1092,7 @@
                 "type":"UnityEngine.UI.RawImage",
                 "sprite": "assets/content/ui/ui.circlegradient.png",
                 "color": "0.1 0 0 0.4",
-            },
+            }
         ]
     },
     {
