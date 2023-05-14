@@ -140,6 +140,8 @@ public partial class CommunityEntity
             canvasGroup.alpha = dragAlpha;
             realParent = rt.parent;
             rt.SetParent(dragParent);
+            if(limitToParent)
+                rt.SetAsLastSibling(); // because chances are we're already parented to it
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -214,11 +216,22 @@ public partial class CommunityEntity
             }
 
             var draggedObj = eventData.pointerDrag.GetComponent<Draggable>();
-            if(draggedObj == null || !draggedObj.allowSwapping)
+            if(draggedObj == null)
+                return;
+
+            // prevent sending the DragRPC regardless. because the player intended to swap it, not drag it.
+            if(!draggedObj.dropAnywhere)
+                draggedObj.wasSnapped = true;
+
+            if(!draggedObj.allowSwapping)
                 return;
 
             // if the 2 objects are on seperate canvases, dont swap
             if(draggedObj.canvas != canvas)
+                return;
+
+            // if the draggable is in a slot i dont fit inside of
+            if(draggedObj.slot != null && !Slot.FitsIntoSlot(this, draggedObj.slot))
                 return;
 
             // cant swap because the draggable's position is too far away
