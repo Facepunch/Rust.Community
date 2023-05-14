@@ -59,6 +59,10 @@ public partial class CommunityEntity
             if(draggedObj == content)
                 return;
 
+            // prevent sending the DragRPC regardless. because the player intended to attach it, not drag it.
+            if(!draggedObj.dropAnywhere)
+                draggedObj.wasSnapped = true;
+
             // if the dragging object is on seperate canvases, dont parent
             if(draggedObj.canvas != canvas)
                 return;
@@ -99,6 +103,8 @@ public partial class CommunityEntity
             draggedObj.slot = this;
             draggedObj.realParent = this.transform;
             draggedObj.lastDropPosition = transform.position;
+            if(draggedObj.dropAnywhere)
+                draggedObj.rt.position = this.transform.position;
             draggedObj.offset = draggedObj.lastDropPosition - draggedObj.anchor;
             draggedObj.wasSnapped = true;
             Draggable.SendDropRPC(draggedObj.gameObject.name, draggedObj.slot?.gameObject.name, null, null);
