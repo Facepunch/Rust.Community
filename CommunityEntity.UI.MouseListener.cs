@@ -1,4 +1,4 @@
-
+using Object = UnityEngine.Object;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
@@ -16,71 +16,35 @@ public partial class CommunityEntity
 
     public class MouseListener : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
 
-        public static List<IMouseReceiver> pendingListeners = new List<IMouseReceiver>();
+        public string name;
+        public Action<string> onEnter;
+        public Action<string> onExit;
+        public Action<string> onClick;
 
-        public Action onEnter;
-        public Action onExit;
-        public Action onClick;
+        void Awake(){
+            name = gameObject.name;
+        }
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            if(onClick != null) onClick();
+            if(onClick != null) onClick(name);
             // Manually Bubble it up
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.pointerClickHandler);
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            if(onEnter != null) onEnter();
+            if(onEnter != null) onEnter(name);
             // Manually Bubble it up
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.pointerEnterHandler);
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
-            if(onExit != null) onExit();
+            if(onExit != null) onExit(name);
             // Manually Bubble it up
             ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.pointerExitHandler);
         }
-    }
-
-
-    public void ScheduleMouseListener(string name, IMouseReceiver receiver){
-        receiver.mouseTarget = name;
-        if(!MouseListener.pendingListeners.Contains(receiver)) MouseListener.pendingListeners.Add(receiver);
-    }
-
-    public void ApplyMouseListeners(){
-        foreach(var receiver in MouseListener.pendingListeners){
-            if(string.IsNullOrEmpty(receiver.mouseTarget)) continue;
-            ApplyMouseListener(receiver.mouseTarget, receiver);
-        }
-        MouseListener.pendingListeners.Clear();
-    }
-    public void ApplyMouseListener(string name, IMouseReceiver receiver){
-        GameObject hObj = FindPanel(name);
-        if(!hObj) return;
-
-        var c = hObj.GetComponent<MouseListener>();
-        if(!c) c = hObj.AddComponent<MouseListener>();
-
-        c.onEnter += receiver.OnHoverEnter;
-        c.onExit += receiver.OnHoverExit;
-        c.onClick += receiver.OnClick;
-
-    }
-    public void RemoveMouseListener(string name, IMouseReceiver receiver){
-        GameObject hObj = FindPanel(name);
-        if(!hObj) return;
-
-        var c = hObj.GetComponent<MouseListener>();
-        if(!c) return;
-
-        c.onEnter -= receiver.OnHoverEnter;
-        c.onExit -= receiver.OnHoverExit;
-        c.onClick -= receiver.OnClick;
-
-        receiver.mouseTarget = "";
     }
 }
 #endif
