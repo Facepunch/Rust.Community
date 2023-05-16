@@ -33,9 +33,6 @@
                 "anchormax": "1 1",
                 "offsetmin": "0 0",
                 "offsetmax": "0 -60"
-            },
-            {
-                "type":"NeedsCursor"
             }
         ]
     },
@@ -167,9 +164,6 @@
                 "offsetmax": "0 80"
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
                 "properties": [
                     {
@@ -203,11 +197,7 @@
                 "anchormax": "0.33 1",
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
                         "type": "Color",
@@ -243,7 +233,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
                         "type": "Color",
@@ -286,11 +275,7 @@
                 "anchormax": "0.66 1",
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
                         "type": "Color",
@@ -326,7 +311,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
                         "type": "Color",
@@ -369,11 +353,7 @@
                 "anchormax": "1 1",
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
                         "type": "Color",
@@ -409,7 +389,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
                         "type": "Color",
@@ -449,11 +428,7 @@
                 "offsetmax": "0 3"
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
                         "type": "Color",
@@ -462,6 +437,7 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button1",
                         "type": "Color",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -469,19 +445,15 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button1",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
                         "to": "0 0 0.33 0"
                     },
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button2",
-                "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button2",
                         "type": "Color",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -489,19 +461,15 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button2",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
                         "to": "0.33 0 0.66 0"
                     },
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button3",
-                "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button3",
                         "type": "Color",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -509,6 +477,7 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button3",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 1.15 0.6 1",
@@ -535,14 +504,11 @@
                 "offsetmax": "0 -60"
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "TabBar",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "TabBar",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -567,40 +533,27 @@
                 "anchormax": "1 1"
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button1",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button1",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button2",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button2",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "-1 0 0 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button3",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button3",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -685,40 +638,27 @@
                 "anchormax": "2 1",
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button2",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button2",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button1",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button1",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "1 0 2 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button3",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button3",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -766,7 +706,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "ModalButton",
                 "properties": [
                     {
                         "type": "Color",
@@ -816,40 +755,27 @@
                 "anchormax": "2 1",
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "Tab_Button3",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button3",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button1",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button2",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "1 0 2 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "Tab_Button2",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "Tab_Button1",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
@@ -893,7 +819,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Button",
                 "properties": [
                     {
                         "type": "Color",
@@ -944,24 +869,18 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Button",
                 "properties": [
 
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown1_Button",
                         "type": "MoveTo",
                         "duration": 0,
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown1_Parent",
-                "properties": [
-
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown1_Parent",
                         "type": "MoveTo",
                         "delay": 0.3,
                         "duration": 0,
@@ -997,23 +916,18 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Button",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown1_Button",
                         "type": "MoveToPX",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.3,
                         "to": "2 -220 -2 -20"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown1_Parent",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown1_Parent",
                         "type": "MoveToPX",
                         "easing": "0 0.85 0.6 1",
                         "duration": 0.3,
@@ -1041,7 +955,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Option1",
                 "properties": [
                     {
                         "type": "Color",
@@ -1094,7 +1007,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Option2",
                 "properties": [
                     {
                         "type": "Color",
@@ -1147,7 +1059,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Option3",
                 "properties": [
                     {
                         "type": "Color",
@@ -1200,7 +1111,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Option4",
                 "properties": [
                     {
                         "type": "Color",
@@ -1253,7 +1163,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown1_Option5",
                 "properties": [
                     {
                         "type": "Color",
@@ -1325,7 +1234,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown2_Button",
                 "properties": [
                     {
                         "type": "Color",
@@ -1360,25 +1268,17 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown2_ButtonExpand",
                 "properties": [
-
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
                         "to": "0 -1 1 0"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown2_ButtonCollapse",
-                "properties": [
-
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown2_ButtonCollapse",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
@@ -1412,23 +1312,15 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown2_ButtonExpand",
                 "properties": [
-
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown2_ButtonExpand",
                         "type": "MoveTo",
                         "duration": 0.3,
                         "easing": "0 0.75 0.6 1",
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown2_ButtonCollapse",
-                "properties": [
-
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -1478,23 +1370,18 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown2_ButtonExpand",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown2_ButtonExpand",
                         "type": "MoveToPX",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.3,
                         "to": "2 -320 -2 -20"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown2_ButtonCollapse",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown2_ButtonCollapse",
                         "type": "MoveToPX",
                         "easing": "0 0.85 0.6 1",
                         "duration": 0.3,
@@ -1564,7 +1451,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Button",
                 "properties": [
                     {
                         "type": "Color",
@@ -1615,22 +1501,14 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Button",
                 "properties": [
-
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Button",
                         "type": "MoveTo",
                         "duration": 0,
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Parent",
-                "properties": [
-
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -1663,6 +1541,10 @@
                     "offsetmin": "0 -280",
                     "offsetmax": "0 0"
                 },
+                "verticalScrollbar" : {
+                    "autoHide": true,
+                    "size": 10
+                },
                 "scrollSensitivity": 15.0
             },
             {
@@ -1679,23 +1561,18 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Button",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Button",
                         "type": "MoveToPX",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.3,
                         "to": "2 -220 -2 -20"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Parent",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Parent",
                         "type": "MoveToPX",
                         "easing": "0 0.85 0.6 1",
                         "duration": 0.3,
@@ -1723,7 +1600,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option1",
                 "properties": [
                     {
                         "type": "Color",
@@ -1776,20 +1652,14 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option1",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Option1",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Option1Selected",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -1818,7 +1688,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option2",
                 "properties": [
                     {
                         "type": "Color",
@@ -1871,20 +1740,14 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option2",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Option2",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Option2Selected",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -1913,7 +1776,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option3",
                 "properties": [
                     {
                         "type": "Color",
@@ -1966,20 +1828,14 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option3",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Option3",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Option3Selected",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -2048,7 +1904,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option5",
                 "properties": [
                     {
                         "type": "Color",
@@ -2101,20 +1956,14 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option5",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Option5",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Option5Selected",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -2143,7 +1992,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option6",
                 "properties": [
                     {
                         "type": "Color",
@@ -2196,20 +2044,14 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option6",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Option6",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "DropDown3_Option6Selected",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
                         "type": "MoveTo",
@@ -2238,7 +2080,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option7",
                 "properties": [
                     {
                         "type": "Color",
@@ -2291,10 +2132,10 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "DropDown3_Option7",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "DropDown3_Option7",
                         "type": "MoveTo",
                         "duration": 0.1,
                         "to": "0 1 1 1"
@@ -2330,14 +2171,11 @@
                 "anchormax": "1 0"
             },
             {
-                "type":"NeedsCursor"
-            },
-            {
                 "type": "Animation",
-                "mouseTarget": "ModalButton",
                 "properties": [
                     {
                         "trigger": "OnClick",
+                        "target": "ModalButton",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0,
@@ -2345,6 +2183,7 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "ModalButton",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "delay": 0.5,
@@ -2354,19 +2193,15 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "ModalButton",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.5,
                         "to": "0 0 1 1"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "ModalCloseButton",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "ModalCloseButton",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.2,
@@ -2374,20 +2209,16 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "ModalCloseButton",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "delay": 0.2,
                         "duration": 0.5,
                         "to": "0 -1 1 0"
-                    }
-                ]
-            },
-            {
-                "type": "Animation",
-                "mouseTarget": "ModalBackdrop",
-                "properties": [
+                    },
                     {
                         "trigger": "OnClick",
+                        "target": "ModalBackdrop",
                         "type": "Color",
                         "easing": "0 1.15 0.6 1",
                         "duration": 0.2,
@@ -2395,6 +2226,7 @@
                     },
                     {
                         "trigger": "OnClick",
+                        "target": "ModalBackdrop",
                         "type": "MoveTo",
                         "easing": "0 1.15 0.6 1",
                         "delay": 0.2,
@@ -2439,9 +2271,6 @@
                 "type":"RectTransform",
                 "anchormin": "0.2 0.2",
                 "anchormax": "0.8 0.8"
-            },
-            {
-                "type":"NeedsCursor"
             }
         ]
     },
@@ -2463,7 +2292,6 @@
             },
             {
                 "type": "Animation",
-                "mouseTarget": "ModalButton",
                 "properties": [
                     {
                         "type": "Color",
