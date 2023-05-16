@@ -106,24 +106,20 @@ public partial class CommunityEntity
                 CreateComponents( go, component.Obj, allowUpdate );
             }
 
-            Animation[] animations = go.GetComponents<Animation>();
-			if(animations.Length > 0){
-                for(var i = 0; i < animations.Length; i++){
-                    animations[i].StartAnimation();
-                }
-			}
+            if ( json.ContainsKey( "fadeOut" ) )
+                Animation.AddFadeIn(go, json.GetFloat( "fadeOut", 0 ), json.GetBoolean( "fadeAsGroup", false ));
+
+            var anim = go.GetComponent<Animation>();
+            if(anim != null)
+                Animation.AddPendingAnim(anim);
+
             if ( json.ContainsKey( "addCanvas" ) )
             {
                 go.AddComponent<Canvas>();
                 go.AddComponent<GraphicRaycaster>();
             }
-
-            if ( json.ContainsKey( "fadeOut" ) )
-            {
-                go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
-            }
         }
-        ApplyMouseListeners();
+        Animation.InitPendingAnims();
     }
 
     private GameObject FindPanel( string name )
@@ -468,10 +464,7 @@ public partial class CommunityEntity
     private void GraphicComponentCreated( UnityEngine.UI.Graphic c, JSON.Object obj )
     {
         if ( obj.ContainsKey( "fadeIn" ) )
-        {
-            c.canvasRenderer.SetAlpha( 0f );
-            c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
-        }
+            Animation.AddFadeIn(c.gameObject, obj.GetFloat( "fadeIn", 0 ), obj.GetBoolean( "fadeAsGroup", false ));
     }
 
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
@@ -521,22 +514,11 @@ public partial class CommunityEntity
         if ( !panel )
             return;
 
-        Animation[] animations = panel.GetComponents<Animation>();
-        var fadeOut = panel.GetComponent<FadeOut>();
-        if(animations.Length > 0)
-        {
-            for(var i = 0; i < animations.Length; i++){
-                if(animations[i].HasForTrigger("OnDestroy")) animations[i].Kill();
-            }
-        }
-        else if ( fadeOut )
-        {
-            fadeOut.FadeOutAndDestroy();
-        }
+        Animation animation = panel.GetComponent<Animation>();
+        if(animation != null && animation.HasForTrigger("OnDestroy"))
+            animation.Kill();
         else
-        {
-            Object.Destroy( panel );
-        }
+            GameObject.Destroy( panel );
     }
 }
 
