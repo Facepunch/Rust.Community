@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,51 +12,63 @@ public partial class CommunityEntity
     private class Countdown : MonoBehaviour
     {
         public string command = "";
-        public int endTime = 0;
-        public int startTime = 0;
-        public int step = 1;
-        private int sign = 1;
+        public float endTime = 0f;
+        public float startTime = 0f;
+        public float step = 1f;
+        public float interval = 1f;
+        public TimerFormat timerFormat = TimerFormat.None;
+        public string numberFormat = "0.####";
+        public bool destroyIfDone = true;
+
+        private string sign = "";
         private string tempText = "";
         private UnityEngine.UI.Text textComponent;
 
         void Start()
         {
+            // dont let the timer update more than 50 times per second, though even that is excessive
+            interval = Mathf.Min(interval, 0.02f);
+
             textComponent = GetComponent<UnityEngine.UI.Text>();
             if ( textComponent )
             {
 				tempText = textComponent.text;
-                textComponent.text = tempText.Replace( "%TIME_LEFT%", startTime.ToString() );
+                UpdateDisplay(startTime);
             }
             if ( startTime == endTime )
             {
                 End();
             }
-            if ( step == 0 )
+            if ( step == 0f )
             {
-                step = 1;
+                step = 1f;
             }
-            if ( startTime > endTime && step > 0 )
+            if ( startTime > endTime && step > 0f )
             {
-                sign = -1;
+                sign = "-";
+                step = 0 - step;
             }
 
-            InvokeRepeating( "UpdateCountdown", step, step );
+            InvokeRepeating( "UpdateCountdown", interval, interval );
         }
 
         void UpdateCountdown()
         {
-            startTime = startTime + step * sign;
+            startTime = startTime + step;
 
             if ( textComponent )
             {
-                textComponent.text = tempText.Replace( "%TIME_LEFT%", startTime.ToString() );
+                UpdateDisplay(startTime);
             }
 
-            if ( startTime == endTime )
+            if ( (sign == "-" && startTime <= endTime) || (sign == "" && startTime >= endTime) )
             {
+                if ( textComponent )
+                    UpdateDisplay(endTime);
+
                 if ( !string.IsNullOrEmpty( command ) )
                 {
-                    ConsoleNetwork.ClientRunOnServer( command );
+                    RustCompatEx.ClientRunOnServer( command );
                 }
 
                 End();
@@ -66,15 +79,30 @@ public partial class CommunityEntity
         {
             CancelInvoke( "UpdateCountdown" );
 
-            var fadeOut = GetComponent<FadeOut>();
-            if ( fadeOut )
-            {
-                fadeOut.FadeOutAndDestroy();
-            }
-            else
-            {
-                Object.Destroy( gameObject );
-            }
+            if(!destroyIfDone) return;
+
+            CommunityEntity.ClientInstance.DestroyPanel(gameObject.name);
+        }
+        void UpdateDisplay(float time){
+            TimeSpan t = TimeSpan.FromSeconds( time );
+            string formattedTime = timerFormat switch{
+                TimerFormat.SecondsHundreth => t.ToString("ss\\.ff"),
+                TimerFormat.MinutesSeconds => t.ToString("mm\\:ss"),
+                TimerFormat.MinutesSecondsHundreth => t.ToString("mm\\:ss\\.ff"),
+                TimerFormat.HoursMinutes => t.ToString("hh\\:mm"),
+                TimerFormat.HoursMinutesSeconds => t.ToString("hh\\:mm\\:ss"),
+                _ => time.ToString(numberFormat)
+            };
+            textComponent.text = tempText.Replace( "%TIME_LEFT%", formattedTime );
+        }
+
+        public enum TimerFormat {
+            None,
+            SecondsHundreth,
+            MinutesSeconds,
+            MinutesSecondsHundreth,
+            HoursMinutes,
+            HoursMinutesSeconds
         }
     }
 
