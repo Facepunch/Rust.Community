@@ -406,12 +406,20 @@ public partial class CommunityEntity
                     var c = GetOrAddComponent<Countdown>();
                     HandleEnableState( obj, c );
                     if ( ShouldUpdateField( "endTime" ) )
-                        c.endTime = obj.GetInt( "endTime", allowUpdate ? c.endTime : 0 );
+                        c.endTime = obj.GetFloat( "endTime", allowUpdate ? c.endTime : 0f );
                     if ( ShouldUpdateField( "startTime" ) )
-                        c.startTime = obj.GetInt( "startTime", allowUpdate ? c.startTime : 0 );
+                        c.startTime = obj.GetFloat( "startTime", allowUpdate ? c.startTime : 0f );
                     if ( ShouldUpdateField( "step" ) )
-                        c.step = obj.GetInt( "step", allowUpdate ? c.step : 1 );
-
+                        c.step = obj.GetFloat( "step", allowUpdate ? c.step : 1f );
+                    if ( ShouldUpdateField( "interval" ) )
+                        c.interval = obj.GetFloat( "interval", allowUpdate ? c.interval : c.step );
+                    if ( ShouldUpdateField( "timerFormat" ) )
+                        c.timerFormat = ParseEnum<Countdown.TimerFormat>(obj.GetString("timerFormat", "None"), allowUpdate ? c.timerFormat : Countdown.TimerFormat.None);
+                    if ( ShouldUpdateField( "numberFormat" ) )
+                        c.numberFormat = obj.GetString( "numberFormat", allowUpdate ? c.numberFormat : "0.####" );
+                    if ( ShouldUpdateField( "destroyIfDone" ) )
+                        c.destroyIfDone = obj.GetBoolean( "destroyIfDone", allowUpdate ? c.destroyIfDone : true);
+        
                     if ( obj.ContainsKey( "command" ) )
                     {
                         c.command = obj.GetString( "command" );
