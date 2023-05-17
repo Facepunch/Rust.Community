@@ -436,7 +436,11 @@ public partial class CommunityEntity
                 }
             case "UnityEngine.UI.RectMask2D":
                 {
-                    go.AddComponent<RectMask2D>();
+                    var c = GetOrAddComponent<NeedsKeyboard>();
+		    if( ShouldUpdateField("maskSoftness") )
+		    	c.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+			
+                    HandleEnableState( obj, c );
                     break;
                 }
             case "UnityEngine.UI.Mask":
