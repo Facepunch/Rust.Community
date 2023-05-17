@@ -27,7 +27,7 @@ public partial class CommunityEntity
         void Start()
         {
             // dont let the timer update more than 50 times per second, though even that is excessive
-            interval = Mathf.Min(interval, 0.02f);
+            interval = Mathf.Max(interval, 0.02f);
 
             textComponent = GetComponent<UnityEngine.UI.Text>();
             if ( textComponent )
