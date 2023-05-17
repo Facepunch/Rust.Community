@@ -8,8 +8,6 @@ using System.Text;
 using Facepunch.Extend;
 using System.IO;
 
-
-
 #if CLIENT
 
 public partial class CommunityEntity
@@ -23,28 +21,28 @@ public partial class CommunityEntity
 
         public static IEnumerator emptyEnumerator = new System.Object[0].GetEnumerator();
 
-		// properties by trigger
-		public Dictionary<string, List<AnimationProperty>> properties = new Dictionary<string, List<AnimationProperty>>(){
-			["OnCreate"] = new List<AnimationProperty>(),
-			["OnDestroy"] = new List<AnimationProperty>(),
-			["OnHoverEnter"] = new List<AnimationProperty>(),
-			["OnHoverExit"] = new List<AnimationProperty>(),
-			["OnDrag"] = new List<AnimationProperty>(),
-			["OnDrop"] = new List<AnimationProperty>(),
-			["OnClick"] = new List<AnimationProperty>(),
-		};
+        // properties by trigger
+        public Dictionary<string, List<AnimationProperty>> properties = new Dictionary<string, List<AnimationProperty>>(){
+            ["OnCreate"] = new List<AnimationProperty>(),
+            ["OnDestroy"] = new List<AnimationProperty>(),
+            ["OnHoverEnter"] = new List<AnimationProperty>(),
+            ["OnHoverExit"] = new List<AnimationProperty>(),
+            ["OnDrag"] = new List<AnimationProperty>(),
+            ["OnDrop"] = new List<AnimationProperty>(),
+            ["OnClick"] = new List<AnimationProperty>(),
+        };
 
         // a record of all Triggers handled
         public List<string> targets = new List<string>();
 
         // cached relevant components
-		public UnityEngine.UI.Graphic graphic;
-		public RectTransform rt;
+        public UnityEngine.UI.Graphic graphic;
+        public RectTransform rt;
         public CanvasGroup group;
 
         // flags
-		public bool isHidden = false;
-		public bool isKilled = false;
+        public bool isHidden = false;
+        public bool isKilled = false;
         public bool initialized = false;
 
         #endregion
@@ -52,92 +50,92 @@ public partial class CommunityEntity
         #region Core
 
         // sets up the Animation component, Attaching Triggers & starting Animations
-		public void Init(){
-			CacheComponents();
+        public void Init(){
+            CacheComponents();
             AttachTriggers(properties["OnHoverEnter"]);
             AttachTriggers(properties["OnHoverExit"]);
             AttachTriggers(properties["OnClick"]);
             AttachTriggers(properties["OnDrag"]);
             AttachTriggers(properties["OnDrop"]);
 
-			StartByTrigger("OnCreate");
+            StartByTrigger("OnCreate");
             initialized = true;
-		}
+        }
 
-		public void StartProperty(AnimationProperty prop){
-			prop.anim = this;
+        public void StartProperty(AnimationProperty prop){
+            prop.anim = this;
             if(prop.routine == null)
                 prop.routine = StartCoroutine(prop.Animate());
-		}
+        }
 
-		public void RemoveProperty(AnimationProperty property){
-			if(string.IsNullOrEmpty(property.trigger) || !ValidTrigger(property.trigger))
-				return;
+        public void RemoveProperty(AnimationProperty property){
+            if(string.IsNullOrEmpty(property.trigger) || !ValidTrigger(property.trigger))
+                return;
 
-			properties[property.trigger].Remove(property);
-		}
+            properties[property.trigger].Remove(property);
+        }
 
-		private void OnDestroy(){
-			if(!isKilled)
+        private void OnDestroy(){
+            if(!isKilled)
                 Kill(true);
-		}
+        }
 
-		public void Kill(bool destroyed = false)
-		{
+        public void Kill(bool destroyed = false)
+        {
             // mark as killed & clean up
-			isKilled = true;
-			StopByTrigger("OnCreate");
-			StopByTrigger("OnHoverEnter");
-			StopByTrigger("OnHoverExit");
-			StopByTrigger("OnDrag");
-			StopByTrigger("OnDrop");
+            isKilled = true;
+            StopByTrigger("OnCreate");
+            StopByTrigger("OnHoverEnter");
+            StopByTrigger("OnHoverExit");
+            StopByTrigger("OnDrag");
+            StopByTrigger("OnDrop");
 
-			if(destroyed)
+            if(destroyed)
                 return;
 
             // determine duration of all OnDestroy durations to delay the actual destroying
             float killDelay = 0f;
-			foreach(var prop in properties["OnDestroy"])
-			{
-				float totalDelay = prop.duration + prop.delay;
-				if(killDelay < totalDelay) killDelay = totalDelay;
-				StartProperty(prop);
-			}
-			Invoke(new Action(() => Object.Destroy(gameObject)), killDelay + 0.05f);
-		}
+            foreach(var prop in properties["OnDestroy"])
+            {
+                float totalDelay = prop.duration + prop.delay;
+                if(killDelay < totalDelay) killDelay = totalDelay;
+                StartProperty(prop);
+            }
+            Invoke(new Action(() => Object.Destroy(gameObject)), killDelay + 0.05f);
+        }
 
         #endregion
 
         #region Trigger
 
-		public bool ValidTrigger(string trigger) => properties.ContainsKey(trigger);
+        public bool ValidTrigger(string trigger) => properties.ContainsKey(trigger);
 
-		public bool HasForTrigger(string trigger) => ValidTrigger(trigger) && properties[trigger].Count > 0;
+        public bool HasForTrigger(string trigger) => ValidTrigger(trigger) && properties[trigger].Count > 0;
 
-		public void StartByTrigger(string trigger, string panel = null){
-			if(!ValidTrigger(trigger))
+        public void StartByTrigger(string trigger, string panel = null){
+            if(!ValidTrigger(trigger))
                 return;
-			for(int i = 0; i < properties[trigger].Count; i++){
+            for(int i = 0; i < properties[trigger].Count; i++){
                 if(panel == null || properties[trigger][i].target == panel)
                     StartProperty(properties[trigger][i]);
-			}
-		}
+            }
+        }
 
-		public void StopByTrigger(string trigger, string panel = null){
-			if(!ValidTrigger(trigger))
+        public void StopByTrigger(string trigger, string panel = null){
+            if(!ValidTrigger(trigger))
                 return;
 
             for(int i = 0; i < properties[trigger].Count; i++){
                 if(panel != null && properties[trigger][i].target != panel)
                     return;
 
-				if(properties[trigger][i].routine == null)
+                if(properties[trigger][i].routine == null)
                     continue;
 
                 StopCoroutine(properties[trigger][i].routine);
                 properties[trigger][i].routine = null;
-			}
-		}
+            }
+        }
 
         // returns true if the trigger relies on a MouseListener component
         public bool TriggerNeedsListener(string trigger){
@@ -197,68 +195,68 @@ public partial class CommunityEntity
         }
 
         // Events
-		public void OnDrag(string panel){
-			if(isKilled)
+        public void OnDrag(string panel){
+            if(isKilled)
                 return;
-			StopByTrigger("OnDrop", panel);
-			StartByTrigger("OnDrag");
-		}
+            StopByTrigger("OnDrop", panel);
+            StartByTrigger("OnDrag");
+        }
 
-		public void OnDrop(string panel){
-			if(isKilled)
-                return;
-
-			StopByTrigger("OnDrag", panel);
-			StartByTrigger("OnDrop", panel);
-		}
-
-		public void OnHoverEnter(string panel){
-			if(isKilled)
-                return;
-			StopByTrigger("OnHoverExit", panel);
-			StartByTrigger("OnHoverEnter", panel);
-		}
-
-		public void OnHoverExit(string panel){
-			if(isKilled)
+        public void OnDrop(string panel){
+            if(isKilled)
                 return;
 
-			StopByTrigger("OnHoverEnter", panel);
-			StartByTrigger("OnHoverExit", panel);
-		}
+            StopByTrigger("OnDrag", panel);
+            StartByTrigger("OnDrop", panel);
+        }
 
-		public void OnClick(string panel){
-			if(isKilled)
+        public void OnHoverEnter(string panel){
+            if(isKilled)
+                return;
+            StopByTrigger("OnHoverExit", panel);
+            StartByTrigger("OnHoverEnter", panel);
+        }
+
+        public void OnHoverExit(string panel){
+            if(isKilled)
                 return;
 
-			StopByTrigger("OnClick", panel);
-			StartByTrigger("OnClick", panel);
-		}
+            StopByTrigger("OnHoverEnter", panel);
+            StartByTrigger("OnHoverExit", panel);
+        }
+
+        public void OnClick(string panel){
+            if(isKilled)
+                return;
+
+            StopByTrigger("OnClick", panel);
+            StartByTrigger("OnClick", panel);
+        }
 
         #endregion
 
         #region Helpers
 
-		public void CacheComponents(){
-			graphic = gameObject.GetComponent<UnityEngine.UI.Graphic>();
-			rt = gameObject.GetComponent<RectTransform>();
+        public void CacheComponents(){
+            graphic = gameObject.GetComponent<UnityEngine.UI.Graphic>();
+            rt = gameObject.GetComponent<RectTransform>();
             if(!group)
                 group = gameObject.GetComponent<CanvasGroup>();
-		}
+        }
 
-		public void TryToggleGraphic(float delay = 0f){
-			if(graphic == null) return;
+        public void TryToggleGraphic(float delay = 0f){
+            if(graphic == null) return;
 
-			var a = new Action(() => {
-				bool visible = GetAlpha() > 0f;
+            var a = new Action(() => {
+                bool visible = GetAlpha() > 0f;
                 if(group == null)
                     graphic.canvasRenderer.cullTransparentMesh = visible;
-				isHidden = !visible;
-				SetRaycasting(visible);
-			});
-			if(delay <= 0f) a();
-			else Invoke(a, delay);
-		}
+                isHidden = !visible;
+                SetRaycasting(visible);
+            });
+            if(delay <= 0f) a();
+            else Invoke(a, delay);
+        }
 
         public float GetAlpha(){
             if(group != null)
@@ -349,475 +347,475 @@ public partial class CommunityEntity
         }
 
         #endregion
-	}
+    }
 
     // this could be a class if the allocation is insignificant
-	public class AnimationProperty
-	{
-		public float duration;
-		public float delay;
-		public int repeat;
-		public float repeatDelay;
-		public string easing;
-		public string type;
-		public AnimationProperty.AnimationValue animValue;
+    public class AnimationProperty
+    {
+        public float duration;
+        public float delay;
+        public int repeat;
+        public float repeatDelay;
+        public string easing;
+        public string type;
+        public AnimationProperty.AnimationValue animValue;
         public string target;
-		public string trigger;
+        public string trigger;
 
-		public Animation anim;
+        public Animation anim;
 
-		public Coroutine routine;
+        public Coroutine routine;
 
-		public int completedRounds;
+        public int completedRounds;
 
-		// Launches the animation, keeping track of loops if its set to repeat
-		public IEnumerator Animate()
-		{
+        // Launches the animation, keeping track of loops if its set to repeat
+        public IEnumerator Animate()
+        {
             completedRounds = 0; // reset completedRounds on restart
-			if(animValue == null || animValue.to.Count == 0){
-				Debug.LogWarning($"Animation of type {type} for {anim.gameObject.name} failed to execute - no from/to values provided");
-				anim.RemoveProperty(this);
-				yield break;
-			}
+            if(animValue == null || animValue.to.Count == 0){
+                Debug.LogWarning($"Animation of type {type} for {anim.gameObject.name} failed to execute - no from/to values provided");
+                anim.RemoveProperty(this);
+                yield break;
+            }
 
-			// initial delay
-			if(delay > 0f) yield return new WaitForSeconds(delay);
+            // initial delay
+            if(delay > 0f) yield return new WaitForSeconds(delay);
 
-			do
-			{
-				yield return AnimateProperty();
-				completedRounds++;
-				if(repeatDelay > 0f) yield return new WaitForSeconds(repeatDelay);
-				else yield return null;
-			}
-			while(repeat < 0 || (repeat > 0 && completedRounds <= repeat));
+            do
+            {
+                yield return AnimateProperty();
+                completedRounds++;
+                if(repeatDelay > 0f) yield return new WaitForSeconds(repeatDelay);
+                else yield return null;
+            }
+            while(repeat < 0 || (repeat > 0 && completedRounds <= repeat));
 
-			// this animation wont get triggered again, so remove it
-			if(trigger == "OnCreate")
-				anim.RemoveProperty(this);
-		}
+            // this animation wont get triggered again, so remove it
+            if(trigger == "OnCreate")
+                anim.RemoveProperty(this);
+        }
 
-		// Parses the from & to values and Launches the individual animation
-		// Adding new animations can be achieved by Adding cases to the switch statement
-		public IEnumerator AnimateProperty()
-		{
-			// for use in lambdas, would otherwise trigger error CS1673
-			var prop = this;
-			switch(type){
-				case "Opacity":
-					{
-						// needs a reference to the graphic & atleast 1 value in the to value
-						if((!anim.graphic && !anim.group) || animValue.to.Count < 1) break;
+        // Parses the from & to values and Launches the individual animation
+        // Adding new animations can be achieved by Adding cases to the switch statement
+        public IEnumerator AnimateProperty()
+        {
+            // for use in lambdas, would otherwise trigger error CS1673
+            var prop = this;
+            switch(type){
+                case "Opacity":
+                    {
+                        // needs a reference to the graphic & atleast 1 value in the to value
+                        if((!anim.graphic && !anim.group) || animValue.to.Count < 1) break;
 
-						// try to enable the graphic after 0.1 seconds if:
-						//	 - the from value is higher than 0 or
-						//   - the graphic is currently hidden but will go above 0 opacity during the animation
-						if((animValue.from.Count != 0 && animValue.from.TryGet(0) > 0f) || anim.isHidden && animValue.to.TryGet(0) > 0f)
-							anim.TryToggleGraphic(0.1f);
+                        // try to enable the graphic after 0.1 seconds if:
+                        //     - the from value is higher than 0 or
+                        //   - the graphic is currently hidden but will go above 0 opacity during the animation
+                        if((animValue.from.Count != 0 && animValue.from.TryGet(0) > 0f) || anim.isHidden && animValue.to.TryGet(0) > 0f)
+                            anim.TryToggleGraphic(0.1f);
 
-						animValue.initial = new DynamicVector(anim.graphic.canvasRenderer.GetAlpha());
+                        animValue.initial = new DynamicVector(anim.graphic.canvasRenderer.GetAlpha());
 
-						// force applies the value, meaning Opacity & Color animations may clash when multiple are setting the opacity
-						animValue.apply = (DynamicVector value) => {
-							prop.anim.SetAlpha(value.TryGet(0));
-						};
+                        // force applies the value, meaning Opacity & Color animations may clash when multiple are setting the opacity
+                        animValue.apply = (DynamicVector value) => {
+                            prop.anim.SetAlpha(value.TryGet(0));
+                        };
 
-						// disables the graphic at the end of the animation if the end opacity is 0
-						if(animValue.to.TryGet(0) <= 0f) anim.TryToggleGraphic(duration);
+                        // disables the graphic at the end of the animation if the end opacity is 0
+                        if(animValue.to.TryGet(0) <= 0f) anim.TryToggleGraphic(duration);
 
-						//Use Absolute mode for these Interpolations, as it wont need the initial color for any calculations
-						return InterpolateValue(animValue, duration, easing, true);
-					}
-				case "Color":
-					{
-						// needs a reference to the graphic & atleast 4 values in the to value
-						if(!anim.graphic || animValue.to.Count < 4) break;
+                        //Use Absolute mode for these Interpolations, as it wont need the initial color for any calculations
+                        return InterpolateValue(animValue, duration, easing, true);
+                    }
+                case "Color":
+                    {
+                        // needs a reference to the graphic & atleast 4 values in the to value
+                        if(!anim.graphic || animValue.to.Count < 4) break;
 
-						// enables the graphic if:
-						//	 - the from color's alpha is higher than 0 or
-						//   - the graphic is currently hidden but will go above 0 opacity during the animation
-						if((animValue.from.Count != 0 && animValue.from.TryGet(3) > 0f) || anim.isHidden && animValue.to.TryGet(3) > 0f)
-							anim.TryToggleGraphic(0.1f);
+                        // enables the graphic if:
+                        //     - the from color's alpha is higher than 0 or
+                        //   - the graphic is currently hidden but will go above 0 opacity during the animation
+                        if((animValue.from.Count != 0 && animValue.from.TryGet(3) > 0f) || anim.isHidden && animValue.to.TryGet(3) > 0f)
+                            anim.TryToggleGraphic(0.1f);
 
-						animValue.initial = new DynamicVector(anim.graphic.canvasRenderer.GetColor());
+                        animValue.initial = new DynamicVector(anim.graphic.canvasRenderer.GetColor());
 
-						// force applies the value, meaning Opacity & Color animations may clash when multiple are setting the opacity
-						animValue.apply = (DynamicVector value) => {
-							prop.anim.graphic.canvasRenderer.SetColor(value.ToColor());
-						};
+                        // force applies the value, meaning Opacity & Color animations may clash when multiple are setting the opacity
+                        animValue.apply = (DynamicVector value) => {
+                            prop.anim.graphic.canvasRenderer.SetColor(value.ToColor());
+                        };
 
-						if(animValue.to.TryGet(3) <= 0f) anim.TryToggleGraphic(duration);
+                        if(animValue.to.TryGet(3) <= 0f) anim.TryToggleGraphic(duration);
 
 
-						//Use Absolute mode for these Interpolations, as it wont need the initial color for any calculations
-						return InterpolateValue(animValue, duration, easing);
-					}
-				case "Scale":
-					{
-						// needs a reference to the rectTransform & atleast 2 values in the to value
-						if(!anim.rt || animValue.to.Count < 2) break;
+                        //Use Absolute mode for these Interpolations, as it wont need the initial color for any calculations
+                        return InterpolateValue(animValue, duration, easing);
+                    }
+                case "Scale":
+                    {
+                        // needs a reference to the rectTransform & atleast 2 values in the to value
+                        if(!anim.rt || animValue.to.Count < 2) break;
 
-						if(!anim.rt) break;
+                        if(!anim.rt) break;
 
-						animValue.initial = new DynamicVector(anim.rt.localScale);
+                        animValue.initial = new DynamicVector(anim.rt.localScale);
 
-						// force applies the value, meaning multiple Scale animations running at the same time will clash
-						animValue.apply = (DynamicVector value) => {
-							// we convert to a Vector3 even though the DynamicVector only holds 2 floats
-							// this is fine because the z value will be set to 0f, which isnt used for the scale of rectTransforms
-							prop.anim.rt.localScale = value.ToVector3();
-						};
+                        // force applies the value, meaning multiple Scale animations running at the same time will clash
+                        animValue.apply = (DynamicVector value) => {
+                            // we convert to a Vector3 even though the DynamicVector only holds 2 floats
+                            // this is fine because the z value will be set to 0f, which isnt used for the scale of rectTransforms
+                            prop.anim.rt.localScale = value.ToVector3();
+                        };
 
-						//Use Absolute mode for these Interpolations, as it wont need the initial scale for any calculations
-						return InterpolateValue(animValue, duration, easing);
-					}
-				case "Translate":
-					{
-						// needs a reference to the rectTransform & atleast 2 values in the to value
-						if(!anim.rt || animValue.to.Count < 2) break;
+                        //Use Absolute mode for these Interpolations, as it wont need the initial scale for any calculations
+                        return InterpolateValue(animValue, duration, easing);
+                    }
+                case "Translate":
+                    {
+                        // needs a reference to the rectTransform & atleast 2 values in the to value
+                        if(!anim.rt || animValue.to.Count < 2) break;
 
-						animValue.initial = new DynamicVector();
-						animValue.last = new DynamicVector();
-						// incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
-						animValue.apply = (DynamicVector value) => {
-							DynamicVector diff = value - prop.animValue.last;
-							prop.anim.rt.anchorMin += diff.ToVector2();
-							prop.anim.rt.anchorMax += diff.ToVector2();
-							prop.animValue.last += diff;
-						};
-						// Use Relative mode for these Interpolations, as it will take the initial position into account for the translation
-						return InterpolateValue(animValue, duration, easing, false);
-					}
-				case "TranslatePX":
-					{
-						// needs a reference to the rectTransform & atleast 4 values in the to value
-						if(!anim.rt || animValue.to.Count < 4) break;
+                        animValue.initial = new DynamicVector();
+                        animValue.last = new DynamicVector();
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
+                        animValue.apply = (DynamicVector value) => {
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.rt.anchorMin += diff.ToVector2();
+                            prop.anim.rt.anchorMax += diff.ToVector2();
+                            prop.animValue.last += diff;
+                        };
+                        // Use Relative mode for these Interpolations, as it will take the initial position into account for the translation
+                        return InterpolateValue(animValue, duration, easing, false);
+                    }
+                case "TranslatePX":
+                    {
+                        // needs a reference to the rectTransform & atleast 4 values in the to value
+                        if(!anim.rt || animValue.to.Count < 4) break;
 
-						animValue.initial = new DynamicVector();
-						animValue.last = new DynamicVector();
-						// incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
-						animValue.apply = (DynamicVector value) => {
-							DynamicVector diff = value - prop.animValue.last;
-							prop.anim.rt.offsetMin += diff.ToVector2(0);
-							prop.anim.rt.offsetMax += diff.ToVector2(0);
-							prop.animValue.last += diff;
-						};
-						// Use Relative mode for these Interpolations, as it will take the initial position into account for the translation
-						return InterpolateValue(animValue, duration, easing, false);
-					}
-				case "Rotate":
-					{
-						// needs a reference to the rectTransform & atleast 3 values in the to value
-						if(!anim.rt || animValue.to.Count < 3) break;
+                        animValue.initial = new DynamicVector();
+                        animValue.last = new DynamicVector();
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
+                        animValue.apply = (DynamicVector value) => {
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.rt.offsetMin += diff.ToVector2(0);
+                            prop.anim.rt.offsetMax += diff.ToVector2(0);
+                            prop.animValue.last += diff;
+                        };
+                        // Use Relative mode for these Interpolations, as it will take the initial position into account for the translation
+                        return InterpolateValue(animValue, duration, easing, false);
+                    }
+                case "Rotate":
+                    {
+                        // needs a reference to the rectTransform & atleast 3 values in the to value
+                        if(!anim.rt || animValue.to.Count < 3) break;
 
-						animValue.initial = new DynamicVector(anim.rt.rotation.eulerAngles);
-						// force applies the value, meaning multiple Rotate animations running at the same time will clash
-						animValue.apply = (DynamicVector value) => {
-							prop.anim.rt.rotation = Quaternion.Euler(value.ToVector3());
-						};
+                        animValue.initial = new DynamicVector(anim.rt.rotation.eulerAngles);
+                        // force applies the value, meaning multiple Rotate animations running at the same time will clash
+                        animValue.apply = (DynamicVector value) => {
+                            prop.anim.rt.rotation = Quaternion.Euler(value.ToVector3());
+                        };
 
-						//Use Absolute mode for these Interpolations, as it wont need the initial rotation for any calculations
-						return InterpolateValue(animValue, duration, easing, true);
-					}
-				case "MoveTo":
-					{
-						if(!anim.rt) break;
+                        //Use Absolute mode for these Interpolations, as it wont need the initial rotation for any calculations
+                        return InterpolateValue(animValue, duration, easing, true);
+                    }
+                case "MoveTo":
+                    {
+                        if(!anim.rt) break;
 
-						animValue.initial = new DynamicVector(anim.rt.anchorMin);
-						animValue.initial.Add(anim.rt.anchorMax);
-						animValue.last = animValue.initial;
-						// incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
-						animValue.apply = (DynamicVector value) => {
-							DynamicVector diff = value - prop.animValue.last;
-							prop.anim.rt.anchorMin += diff.ToVector2(0);
-							prop.anim.rt.anchorMax += diff.ToVector2(2); // skip the first 2 values
-							prop.animValue.last += diff;
-						};
-						//Use Absolute mode for these Interpolations, as the from & to values supplied are absolute values
-						return InterpolateValue(animValue, duration, easing, true);
-					}
-				case "MoveToPX":
-					{
-						if(!anim.rt) break;
+                        animValue.initial = new DynamicVector(anim.rt.anchorMin);
+                        animValue.initial.Add(anim.rt.anchorMax);
+                        animValue.last = animValue.initial;
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
+                        animValue.apply = (DynamicVector value) => {
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.rt.anchorMin += diff.ToVector2(0);
+                            prop.anim.rt.anchorMax += diff.ToVector2(2); // skip the first 2 values
+                            prop.animValue.last += diff;
+                        };
+                        //Use Absolute mode for these Interpolations, as the from & to values supplied are absolute values
+                        return InterpolateValue(animValue, duration, easing, true);
+                    }
+                case "MoveToPX":
+                    {
+                        if(!anim.rt) break;
 
-						animValue.initial = new DynamicVector(anim.rt.offsetMin);
-						animValue.initial.Add(anim.rt.offsetMax);
-						animValue.last = animValue.initial;
-						// incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
-						animValue.apply = (DynamicVector value) => {
-							DynamicVector diff = value - prop.animValue.last;
-							prop.anim.rt.offsetMin += diff.ToVector2(0);
-							prop.anim.rt.offsetMax += diff.ToVector2(2); // skip the first 2 values
-							prop.animValue.last += diff;
-						};
-						//Use Absolute mode for these Interpolations, as the from & to values supplied are absolute values
-						return InterpolateValue(animValue, duration, easing, true);
-					}
-			}
+                        animValue.initial = new DynamicVector(anim.rt.offsetMin);
+                        animValue.initial.Add(anim.rt.offsetMax);
+                        animValue.last = animValue.initial;
+                        // incrementally applies the value, allowing multiple MoveTo/PX & Translate/PX values to affect the position
+                        animValue.apply = (DynamicVector value) => {
+                            DynamicVector diff = value - prop.animValue.last;
+                            prop.anim.rt.offsetMin += diff.ToVector2(0);
+                            prop.anim.rt.offsetMax += diff.ToVector2(2); // skip the first 2 values
+                            prop.animValue.last += diff;
+                        };
+                        //Use Absolute mode for these Interpolations, as the from & to values supplied are absolute values
+                        return InterpolateValue(animValue, duration, easing, true);
+                    }
+            }
 
-			// remove this animation property of there is no valid case or the selected case fails
-			Debug.LogWarning($"Animation has invalid values\ngameObject: {anim.gameObject.name}\nparent: {anim.transform.parent.gameObject.name}\ntype: {type}\nfrom value: \"{animValue.from}\"\nto value: \"{animValue.to}\"\ngraphic: {anim.graphic?.ToString() ?? "null"}\ncanvasGroup: {anim.group?.ToString() ?? "null"}");
-			anim.RemoveProperty(this);
-			repeat = 0; // ensure the animation wont repeat
-			// Return an empty enumerator so the coroutine finishes
-			return Animation.emptyEnumerator;
-		}
+            // remove this animation property of there is no valid case or the selected case fails
+            Debug.LogWarning($"Animation has invalid values\ngameObject: {anim.gameObject.name}\nparent: {anim.transform.parent.gameObject.name}\ntype: {type}\nfrom value: \"{animValue.from}\"\nto value: \"{animValue.to}\"\ngraphic: {anim.graphic?.ToString() ?? "null"}\ncanvasGroup: {anim.group?.ToString() ?? "null"}");
+            anim.RemoveProperty(this);
+            repeat = 0; // ensure the animation wont repeat
+            // Return an empty enumerator so the coroutine finishes
+            return Animation.emptyEnumerator;
+        }
 
-		// manipulates the input based on a preset easing function or a custom Bezier curve
-		// accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
-		// NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
-		public float Ease(string type, float input){
-			switch(type){
-				case "Linear": return input;
-				case "EaseIn": return input * input;
-				case "EaseOut": return 1f - ((1f - input) * (1f - input));
-				case "EaseInOut": return Mathf.Lerp(input * input, 1f - ((1f - input) * (1f - input)), input);
-				default: // Custom Easing
-					{
-						var split = type.Split(' ');
-						float X1, Y1, X2, Y2;
-						if(split.Length < 4) return input;
-						if(
-							!float.TryParse(split[0], out X1) || !float.TryParse(split[1], out Y1) ||
-							!float.TryParse(split[2], out X2) || !float.TryParse(split[3], out Y2)
-						) return input;
+        // manipulates the input based on a preset easing function or a custom Bezier curve
+        // accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
+        // NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
+        public float Ease(string type, float input){
+            switch(type){
+                case "Linear": return input;
+                case "EaseIn": return input * input;
+                case "EaseOut": return 1f - ((1f - input) * (1f - input));
+                case "EaseInOut": return Mathf.Lerp(input * input, 1f - ((1f - input) * (1f - input)), input);
+                default: // Custom Easing
+                    {
+                        var split = type.Split(' ');
+                        float X1, Y1, X2, Y2;
+                        if(split.Length < 4) return input;
+                        if(
+                            !float.TryParse(split[0], out X1) || !float.TryParse(split[1], out Y1) ||
+                            !float.TryParse(split[2], out X2) || !float.TryParse(split[3], out Y2)
+                        ) return input;
 
-						return BezierEasing.Ease(X1, Y1, X2, Y2, input);
-					}
-			}
-		}
+                        return BezierEasing.Ease(X1, Y1, X2, Y2, input);
+                    }
+            }
+        }
 
-		// Interpolats an AnimationValue over the duration with the easing specified
-		// the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
-		// absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
-		// absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
-		public IEnumerator InterpolateValue(AnimationValue value, float duration, string easing, bool absolute = true){
-			float time = 0f;
-			DynamicVector current;
-			DynamicVector start = value.from.Count == 0 ? value.initial : (absolute ? value.from : value.initial + value.from);
+        // Interpolats an AnimationValue over the duration with the easing specified
+        // the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
+        // absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
+        // absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
+        public IEnumerator InterpolateValue(AnimationValue value, float duration, string easing, bool absolute = true){
+            float time = 0f;
+            DynamicVector current;
+            DynamicVector start = value.from.Count == 0 ? value.initial : (absolute ? value.from : value.initial + value.from);
 
-			// Immediately apply the start value if present
-			if(value.from.Count != 0){
-				value.apply(start);
-				value.initial = start;
-			}
-			DynamicVector end = (absolute ? value.to : value.initial + value.to);
+            // Immediately apply the start value if present
+            if(value.from.Count != 0){
+                value.apply(start);
+                value.initial = start;
+            }
+            DynamicVector end = (absolute ? value.to : value.initial + value.to);
 
-			while(time < duration){
-				current = DynamicVector.LerpUnclamped(start, end, Ease(easing, time / duration));
-				value.apply(current);
-				time += Time.deltaTime;
-				yield return null;
-			}
-			value.apply(end);
-		}
+            while(time < duration){
+                current = DynamicVector.LerpUnclamped(start, end, Ease(easing, time / duration));
+                value.apply(current);
+                time += Time.deltaTime;
+                yield return null;
+            }
+            value.apply(end);
+        }
 
-		// Generalizes the values for an AnimationProperty
-		public class AnimationValue {
-			// gets set just before InterpolateValue is called
-			public DynamicVector initial;
-			// used for relative animations
-			public DynamicVector last;
-			// the from value can be optional
-			public DynamicVector from;
-			public DynamicVector to;
-			// gets called during interpolation with the arguement being the current value.
-			public Action<DynamicVector> apply;
+        // Generalizes the values for an AnimationProperty
+        public class AnimationValue {
+            // gets set just before InterpolateValue is called
+            public DynamicVector initial;
+            // used for relative animations
+            public DynamicVector last;
+            // the from value can be optional
+            public DynamicVector from;
+            public DynamicVector to;
+            // gets called during interpolation with the arguement being the current value.
+            public Action<DynamicVector> apply;
 
-			public AnimationValue(){
+            public AnimationValue(){
 
-			}
+            }
 
-			public AnimationValue(string sourceTo, string sourceFrom = null){
-				this.from = ParseFromString(sourceFrom);
-				this.to = ParseFromString(sourceTo);
-			}
-			public DynamicVector ParseFromString(string source){
-				var values = new DynamicVector();
-				if(string.IsNullOrEmpty(source)) return values;
-				var split = source.Split(' ');
-				if(split.Length == 0) return values;
-				for(int i = 0; i < split.Length; i++){
-					float temp;
-					if(float.TryParse(split[i], out temp))
+            public AnimationValue(string sourceTo, string sourceFrom = null){
+                this.from = ParseFromString(sourceFrom);
+                this.to = ParseFromString(sourceTo);
+            }
+            public DynamicVector ParseFromString(string source){
+                var values = new DynamicVector();
+                if(string.IsNullOrEmpty(source)) return values;
+                var split = source.Split(' ');
+                if(split.Length == 0) return values;
+                for(int i = 0; i < split.Length; i++){
+                    float temp;
+                    if(float.TryParse(split[i], out temp))
                         values.Add(temp);
-					if(values.Count == values.Capacity) break;
-				}
-				return values;
-			}
-		}
+                    if(values.Count == values.Capacity) break;
+                }
+                return values;
+            }
+        }
 
-		// a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
-		// turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
-		public struct DynamicVector {
+        // a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
+        // turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
+        public struct DynamicVector {
 
-			// need it to hold more than 4? add a _valueN and adjust the Capacity, indexer & Clear method
-			private float _value0;
-			private float _value1;
-			private float _value2;
-			private float _value3;
+            // need it to hold more than 4? add a _valueN and adjust the Capacity, indexer & Clear method
+            private float _value0;
+            private float _value1;
+            private float _value2;
+            private float _value3;
 
-			public int Count;
+            public int Count;
 
-			public int Capacity => 4;
+            public int Capacity => 4;
 
-			public float this[int i]{
-				get {
-					switch(i){
-						case 0: return _value0; break;
-						case 1: return _value1; break;
-						case 2: return _value2; break;
-						case 3: return _value3; break;
-						default: throw new IndexOutOfRangeException();
-					}
-				}
-				set {
-					switch(i){
-						case 0: _value0 = value; break;
-						case 1: _value1 = value; break;
-						case 2: _value2 = value; break;
-						case 3: _value3 = value; break;
-						default: throw new IndexOutOfRangeException();
-					}
-				}
-			}
-			public DynamicVector(Vector4 vec) : this() => Add(vec);
-			public DynamicVector(Color col) : this() => Add(col);
-			public DynamicVector(Vector3 vec) : this() => Add(vec);
-			public DynamicVector(Vector2 vec) : this() => Add(vec);
-			public DynamicVector(float num) : this() => Add(num);
+            public float this[int i]{
+                get {
+                    switch(i){
+                        case 0: return _value0; break;
+                        case 1: return _value1; break;
+                        case 2: return _value2; break;
+                        case 3: return _value3; break;
+                        default: throw new IndexOutOfRangeException();
+                    }
+                }
+                set {
+                    switch(i){
+                        case 0: _value0 = value; break;
+                        case 1: _value1 = value; break;
+                        case 2: _value2 = value; break;
+                        case 3: _value3 = value; break;
+                        default: throw new IndexOutOfRangeException();
+                    }
+                }
+            }
+            public DynamicVector(Vector4 vec) : this() => Add(vec);
+            public DynamicVector(Color col) : this() => Add(col);
+            public DynamicVector(Vector3 vec) : this() => Add(vec);
+            public DynamicVector(Vector2 vec) : this() => Add(vec);
+            public DynamicVector(float num) : this() => Add(num);
 
-			public void Add(float num) => this[Count++] = num;
+            public void Add(float num) => this[Count++] = num;
 
-			public void Add(Color col){
-				Add(col.r);
-				Add(col.g);
-				Add(col.b);
-				Add(col.a);
-			}
+            public void Add(Color col){
+                Add(col.r);
+                Add(col.g);
+                Add(col.b);
+                Add(col.a);
+            }
 
-			public void Add(Vector4 vec){
-				Add(vec.x);
-				Add(vec.y);
-				Add(vec.z);
-				Add(vec.w);
-			}
+            public void Add(Vector4 vec){
+                Add(vec.x);
+                Add(vec.y);
+                Add(vec.z);
+                Add(vec.w);
+            }
 
-			public void Add(Vector3 vec){
-				Add(vec.x);
-				Add(vec.y);
-				Add(vec.z);
-			}
+            public void Add(Vector3 vec){
+                Add(vec.x);
+                Add(vec.y);
+                Add(vec.z);
+            }
 
-			public void Add(Vector2 vec){
-				Add(vec.x);
-				Add(vec.y);
-			}
-			// the ToVectorX & ToColor Functions have an optional offset arguement that shifts the starting point of the list when turning it into the vector
-			public Vector4 ToVector4(int offset = 0){
-				return new Vector4(
-					TryGet(offset),
-					TryGet(offset + 1),
-					TryGet(offset + 2),
-					TryGet(offset + 3)
-				);
-			}
-			public Color ToColor(int offset = 0){
-				return new Color(
-					TryGet(offset),
-					TryGet(offset + 1),
-					TryGet(offset + 2),
-					TryGet(offset + 3)
-				);
-			}
-			public Vector3 ToVector3(int offset = 0){
-				return new Vector3(
-					TryGet(offset),
-					TryGet(offset + 1),
-					TryGet(offset + 2)
-				);
-			}
-			public Vector2 ToVector2(int offset = 0){
-				return new Vector2(
-					TryGet(offset),
-					TryGet(offset + 1)
-				);
-			}
-			public float TryGet(int index, float defaultValue = 0f){
-				if(index < 0 || index >= this.Count)
-					return defaultValue;
-				return this[index];
-			}
+            public void Add(Vector2 vec){
+                Add(vec.x);
+                Add(vec.y);
+            }
+            // the ToVectorX & ToColor Functions have an optional offset arguement that shifts the starting point of the list when turning it into the vector
+            public Vector4 ToVector4(int offset = 0){
+                return new Vector4(
+                    TryGet(offset),
+                    TryGet(offset + 1),
+                    TryGet(offset + 2),
+                    TryGet(offset + 3)
+                );
+            }
+            public Color ToColor(int offset = 0){
+                return new Color(
+                    TryGet(offset),
+                    TryGet(offset + 1),
+                    TryGet(offset + 2),
+                    TryGet(offset + 3)
+                );
+            }
+            public Vector3 ToVector3(int offset = 0){
+                return new Vector3(
+                    TryGet(offset),
+                    TryGet(offset + 1),
+                    TryGet(offset + 2)
+                );
+            }
+            public Vector2 ToVector2(int offset = 0){
+                return new Vector2(
+                    TryGet(offset),
+                    TryGet(offset + 1)
+                );
+            }
+            public float TryGet(int index, float defaultValue = 0f){
+                if(index < 0 || index >= this.Count)
+                    return defaultValue;
+                return this[index];
+            }
 
-			public void Clear(){
-				_value0 = 0f;
-				_value1 = 0f;
-				_value2 = 0f;
-				_value3 = 0f;
-				Count = 0;
-			}
+            public void Clear(){
+                _value0 = 0f;
+                _value1 = 0f;
+                _value2 = 0f;
+                _value3 = 0f;
+                Count = 0;
+            }
 
-			public static DynamicVector Lerp(DynamicVector from, DynamicVector to, float t){
-				t = Mathf.Clamp01(t);
-				return LerpUnclamped(from, to, t);
-			}
+            public static DynamicVector Lerp(DynamicVector from, DynamicVector to, float t){
+                t = Mathf.Clamp01(t);
+                return LerpUnclamped(from, to, t);
+            }
 
-			public static DynamicVector LerpUnclamped(DynamicVector from, DynamicVector to, float t){
-				DynamicVector result = new DynamicVector();
-				int HigherCount = (from.Count > to.Count ? from.Count : to.Count);
-				for(int i = 0; i < HigherCount; i++){
-					result.Add(from.TryGet(i) + (to.TryGet(i) - from.TryGet(i)) * t);
-				}
-				return result;
-			}
+            public static DynamicVector LerpUnclamped(DynamicVector from, DynamicVector to, float t){
+                DynamicVector result = new DynamicVector();
+                int HigherCount = (from.Count > to.Count ? from.Count : to.Count);
+                for(int i = 0; i < HigherCount; i++){
+                    result.Add(from.TryGet(i) + (to.TryGet(i) - from.TryGet(i)) * t);
+                }
+                return result;
+            }
 
-			public static DynamicVector operator +(DynamicVector lhs, DynamicVector rhs){
-				DynamicVector result = new DynamicVector();
-				int HigherCount = (lhs.Count > rhs.Count ? lhs.Count : rhs.Count);
-				for(int i = 0; i < HigherCount; i++){
-					result.Add(lhs.TryGet(i) + rhs.TryGet(i));
-				}
-				return result;
-			}
+            public static DynamicVector operator +(DynamicVector lhs, DynamicVector rhs){
+                DynamicVector result = new DynamicVector();
+                int HigherCount = (lhs.Count > rhs.Count ? lhs.Count : rhs.Count);
+                for(int i = 0; i < HigherCount; i++){
+                    result.Add(lhs.TryGet(i) + rhs.TryGet(i));
+                }
+                return result;
+            }
 
-			public static DynamicVector operator -(DynamicVector lhs, DynamicVector rhs){
-				DynamicVector result = new DynamicVector();
-				int HigherCount = (lhs.Count > rhs.Count ? lhs.Count : rhs.Count);
-				for(int i = 0; i < HigherCount; i++){
-					result.Add(lhs.TryGet(i) - rhs.TryGet(i));
-				}
-				return result;
-			}
+            public static DynamicVector operator -(DynamicVector lhs, DynamicVector rhs){
+                DynamicVector result = new DynamicVector();
+                int HigherCount = (lhs.Count > rhs.Count ? lhs.Count : rhs.Count);
+                for(int i = 0; i < HigherCount; i++){
+                    result.Add(lhs.TryGet(i) - rhs.TryGet(i));
+                }
+                return result;
+            }
 
-			public override string ToString(){
-				var sb = new StringBuilder(32);
-				for(int i = 0; i < this.Count; i++){
-					sb.Append(this.TryGet(i));
-					sb.Append(' ');
-				}
-				return sb.ToString();
-			}
-		}
-	}
+            public override string ToString(){
+                var sb = new StringBuilder(32);
+                for(int i = 0; i < this.Count; i++){
+                    sb.Append(this.TryGet(i));
+                    sb.Append(' ');
+                }
+                return sb.ToString();
+            }
+        }
+    }
 
     public List<AnimationProperty> reusablePropertyList = new List<AnimationProperty>();
 
-	public Animation ParseAnimation(JSON.Object obj, GameObject go = null){
-		// if no gameobject is given, attempt to find a name property and find it that way
-		if(go == null){
-			var panel = obj.GetString("name", null);
-			if (string.IsNullOrEmpty(panel) || !UiDict.TryGetValue(panel, out go))
-				return null;
-		}
+    public Animation ParseAnimation(JSON.Object obj, GameObject go = null){
+        // if no gameobject is given, attempt to find a name property and find it that way
+        if(go == null){
+            var panel = obj.GetString("name", null);
+            if (string.IsNullOrEmpty(panel) || !UiDict.TryGetValue(panel, out go))
+                return null;
+        }
 
-		Animation anim = go.GetComponent<Animation>();
-		// create a new animation component if no Animation existed
-		if(anim == null)
-			anim = go.AddComponent<Animation>();
+        Animation anim = go.GetComponent<Animation>();
+        // create a new animation component if no Animation existed
+        if(anim == null)
+            anim = go.AddComponent<Animation>();
 
-		foreach(var prop in obj.GetArray("properties")){
-			reusablePropertyList.Add(ParseProperty(anim, prop.Obj));
-		}
+        foreach(var prop in obj.GetArray("properties")){
+            reusablePropertyList.Add(ParseProperty(anim, prop.Obj));
+        }
 
         anim.AttachTriggers(reusablePropertyList);
         reusablePropertyList.Clear();
@@ -832,39 +830,39 @@ public partial class CommunityEntity
 
         }
 
-		return anim;
-	}
+        return anim;
+    }
 
-	public AnimationProperty ParseProperty(Animation anim, JSON.Object obj){
-		var trigger = obj.GetString("trigger", "OnCreate");
+    public AnimationProperty ParseProperty(Animation anim, JSON.Object obj){
+        var trigger = obj.GetString("trigger", "OnCreate");
 
-		if(!anim.ValidTrigger(trigger))
+        if(!anim.ValidTrigger(trigger))
             trigger = "OnCreate";
-		string from = obj.GetString("from", null);
-		string to = obj.GetString("to", null);
-		var animprop = new AnimationProperty{
-			duration = obj.GetFloat("duration", 0f),
-			delay = obj.GetFloat("delay", 0f),
-			repeat = obj.GetInt("repeat", 0),
-			repeatDelay = obj.GetFloat("repeatDelay", 0f),
-			easing = obj.GetString("easing", "Linear"),
+        string from = obj.GetString("from", null);
+        string to = obj.GetString("to", null);
+        var animprop = new AnimationProperty{
+            duration = obj.GetFloat("duration", 0f),
+            delay = obj.GetFloat("delay", 0f),
+            repeat = obj.GetInt("repeat", 0),
+            repeatDelay = obj.GetFloat("repeatDelay", 0f),
+            easing = obj.GetString("easing", "Linear"),
             target = obj.GetString("target", anim.gameObject.name),
-			type = obj.GetString("type", null),
-			animValue = new AnimationProperty.AnimationValue(to, from),
-			trigger = trigger
-		};
-		anim.properties[trigger].Add(animprop);
+            type = obj.GetString("type", null),
+            animValue = new AnimationProperty.AnimationValue(to, from),
+            trigger = trigger
+        };
+        anim.properties[trigger].Add(animprop);
 
-		// if the animation has a graphic it means Start has allready been called on it
-		// manually start the OnCreate Properties in this case
-		if(anim.initialized && trigger == "OnCreate")
+        // if the animation has a graphic it means Start has allready been called on it
+        // manually start the OnCreate Properties in this case
+        if(anim.initialized && trigger == "OnCreate")
             anim.StartProperty(animprop);
-		return animprop;
-	}
+        return animprop;
+    }
 
-	// RPC function to Add Animations to existing objects
-	// accepts the same json object that the CreateComponents function does
-	[RPC_Client]
+    // RPC function to Add Animations to existing objects
+    // accepts the same json object that the CreateComponents function does
+    [RPC_Client]
     public void AddAnimation( RPCMessage msg )
     {
         string str = msg.read.StringRaw();
@@ -878,10 +876,10 @@ public partial class CommunityEntity
 
         foreach (var value in json){
             Animation anim = ParseAnimation(value.Obj);
-			// if it returns a valid animation that hasnt allready been started, start it
-			if(anim == null || anim.initialized)
-				continue;
-			anim.Init();
+            // if it returns a valid animation that hasnt allready been started, start it
+            if(anim == null || anim.initialized)
+                continue;
+            anim.Init();
         }
     }
 }
