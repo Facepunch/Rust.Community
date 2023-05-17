@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,14 +64,15 @@ public partial class CommunityEntity
                 DestroyPanel( json.GetString( "destroyUi", "AddUI CreatedPanel" ) );
             }
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
+            // ensuring that unnamed panels are given a unique name
+            var gameObjectName = json.GetString( "name", Guid.NewGuid().ToString() );
             if ( parentPanel == null )
             {
-                Debug.LogWarning( "[AddUI] Unknown Parent for \"" + json.GetString( "name", "AddUI CreatedPanel" ) + "\": " + json.GetString( "parent", "Overlay" ) );
+                Debug.LogWarning( "AddUI: Unknown Parent for \"" + gameObjectName + "\": " + json.GetString( "parent", "Overlay" ) );
                 return;
             }
 
             var allowUpdate = json.GetBoolean( "update", false );
-            var gameObjectName = json.GetString( "name", "AddUI CreatedPanel" );
             GameObject go = null;
 
             if ( allowUpdate && json.ContainsKey( "name" ) )
