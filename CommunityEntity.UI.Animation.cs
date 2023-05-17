@@ -8,6 +8,8 @@ using System.Text;
 using Facepunch.Extend;
 using System.IO;
 
+
+
 #if CLIENT
 
 public partial class CommunityEntity
@@ -129,8 +131,11 @@ public partial class CommunityEntity
                 if(panel != null && properties[trigger][i].target != panel)
                     return;
 
-				if(properties[trigger][i].routine != null)
-                    StopCoroutine(properties[trigger][i].routine);
+				if(properties[trigger][i].routine == null)
+                    continue;
+
+                StopCoroutine(properties[trigger][i].routine);
+                properties[trigger][i].routine = null;
 			}
 		}
 
@@ -347,7 +352,7 @@ public partial class CommunityEntity
 	}
 
     // this could be a class if the allocation is insignificant
-	public struct AnimationProperty
+	public class AnimationProperty
 	{
 		public float duration;
 		public float delay;
@@ -358,10 +363,6 @@ public partial class CommunityEntity
 		public AnimationProperty.AnimationValue animValue;
         public string target;
 		public string trigger;
-
-		public AnimationProperty(string easing = "linear") : this() {
-			easing = easing;
-		}
 
 		public Animation anim;
 
