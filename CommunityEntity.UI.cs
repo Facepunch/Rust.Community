@@ -107,7 +107,7 @@ public partial class CommunityEntity
             }
 
             if ( json.ContainsKey( "fadeOut" ) )
-                Animation.AddFadeIn(go, json.GetFloat( "fadeOut", 0 ), json.GetBoolean( "fadeAsGroup", false ));
+                Animation.AddFadeOut(go, json.GetFloat( "fadeOut", 0 ), json.GetBoolean( "fadeAsGroup", false ));
 
             var anim = go.GetComponent<Animation>();
             if(anim != null)
