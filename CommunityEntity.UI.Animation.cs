@@ -352,11 +352,14 @@ public partial class CommunityEntity
     // this could be a class if the allocation is insignificant
     public class AnimationProperty
     {
+
+        #region Fields
+
         public float duration;
         public float delay;
         public int repeat;
         public float repeatDelay;
-        public string easing;
+        public string easing = "Linear";
         public string type;
         public AnimationProperty.AnimationValue animValue;
         public string target;
@@ -367,6 +370,10 @@ public partial class CommunityEntity
         public Coroutine routine;
 
         public int completedRounds;
+
+        #endregion
+
+        #region Core
 
         // Launches the animation, keeping track of loops if its set to repeat
         public IEnumerator Animate()
@@ -561,6 +568,10 @@ public partial class CommunityEntity
             return Animation.emptyEnumerator;
         }
 
+        #endregion
+
+        #region Helpers
+
         // manipulates the input based on a preset easing function or a custom Bezier curve
         // accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
         // NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
@@ -610,6 +621,8 @@ public partial class CommunityEntity
             value.apply(end);
         }
 
+        #endregion
+
         // Generalizes the values for an AnimationProperty
         public class AnimationValue {
             // gets set just before InterpolateValue is called
@@ -649,6 +662,8 @@ public partial class CommunityEntity
         // turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
         public struct DynamicVector {
 
+            #region Fields
+
             // need it to hold more than 4? add a _valueN and adjust the Capacity, indexer & Clear method
             private float _value0;
             private float _value1;
@@ -679,6 +694,11 @@ public partial class CommunityEntity
                     }
                 }
             }
+
+            #endregion
+
+            #region Adding & Constructing
+
             public DynamicVector(Vector4 vec) : this() => Add(vec);
             public DynamicVector(Color col) : this() => Add(col);
             public DynamicVector(Vector3 vec) : this() => Add(vec);
@@ -711,6 +731,11 @@ public partial class CommunityEntity
                 Add(vec.x);
                 Add(vec.y);
             }
+
+            #endregion
+
+            #region Casting
+
             // the ToVectorX & ToColor Functions have an optional offset arguement that shifts the starting point of the list when turning it into the vector
             public Vector4 ToVector4(int offset = 0){
                 return new Vector4(
@@ -741,6 +766,11 @@ public partial class CommunityEntity
                     TryGet(offset + 1)
                 );
             }
+
+            #endregion
+
+            #region Helpers
+
             public float TryGet(int index, float defaultValue = 0f){
                 if(index < 0 || index >= this.Count)
                     return defaultValue;
@@ -754,6 +784,10 @@ public partial class CommunityEntity
                 _value3 = 0f;
                 Count = 0;
             }
+
+            #endregion
+
+            #region Operations
 
             public static DynamicVector Lerp(DynamicVector from, DynamicVector to, float t){
                 t = Mathf.Clamp01(t);
@@ -795,6 +829,8 @@ public partial class CommunityEntity
                 }
                 return sb.ToString();
             }
+
+            #endregion
         }
     }
 
