@@ -298,13 +298,11 @@ public partial class CommunityEntity
             };
 
             anim.properties["OnCreate"].Add(prop);
-
-            if(anim.initialized){
-                if(anim.group == null && addCanvasGroup)
+            
+            if(addCanvasGroup && anim.group == null) {
+                anim.group = go.GetComponent<CanvasGroup>();
+                if(anim.group == null)
                     anim.group = go.AddComponent<CanvasGroup>();
-                anim.StartProperty(prop);
-            } else if(addCanvasGroup) {
-                anim.group = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
             }
         }
 
@@ -326,12 +324,11 @@ public partial class CommunityEntity
             };
 
             anim.properties["OnDestroy"].Add(prop);
-
-            if(anim.initialized){
-                if(anim.group == null && addCanvasGroup)
+            
+            if(addCanvasGroup && anim.group == null) {
+                anim.group = go.GetComponent<CanvasGroup>();
+                if(anim.group == null)
                     anim.group = go.AddComponent<CanvasGroup>();
-            } else if(addCanvasGroup) {
-                anim.group = go.AddComponent<CanvasGroup>();
             }
         }
 
@@ -857,13 +854,10 @@ public partial class CommunityEntity
         reusablePropertyList.Clear();
 
         // ensures a canvasGroup is added if needed, regardless of if its a new animation or an existing one
-        if(obj.GetBoolean("addCanvasGroup", false)){
-            if(anim.initialized && anim.group == null){
+        if(obj.GetBoolean("addCanvasGroup", false) && anim.group == null){
+            anim.group = go.GetComponent<CanvasGroup>();
+            if(anim.group == null)
                 anim.group = go.AddComponent<CanvasGroup>();
-            } else {
-                anim.group = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
-            }
-
         }
 
         return anim;
