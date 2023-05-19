@@ -84,6 +84,11 @@ public partial class CommunityEntity
 
         private bool _initialized;
 
+        // callbacks
+        string name;
+        public Action<string> onDragCallback;
+        public Action<string> onDropCallback;
+
         #endregion
 
         #region Core
@@ -96,6 +101,8 @@ public partial class CommunityEntity
             canvas = GetComponentInParent<Canvas>().transform;
             realParent = rt.parent;
             index = rt.GetSiblingIndex();
+
+            name = gameObject.name;
 
             // bounds setup
             FindParentLimit();
@@ -142,6 +149,8 @@ public partial class CommunityEntity
             rt.SetParent(dragParent);
             if(limitToParent)
                 rt.SetAsLastSibling(); // because chances are we're already parented to it
+
+            onDragCallback?.Invoke(name);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -186,6 +195,7 @@ public partial class CommunityEntity
                 rt.SetParent(realParent);
                 rt.SetSiblingIndex(index);
             }
+            onDropCallback?.Invoke(name);
 
             if(!dropAnywhere){
                 rt.position = lastDropPosition;
