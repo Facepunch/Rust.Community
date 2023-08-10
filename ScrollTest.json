@@ -2,11 +2,13 @@
     {
         "name": "UI",
         "parent":"Overlay",
+        "destroyUi": "UI",
         "components":
         [
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.03 0.03 0.03 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -26,6 +28,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.1 0.1 0.1 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -109,6 +112,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -150,6 +154,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -191,6 +196,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -232,6 +238,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -273,6 +280,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -314,6 +322,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -355,6 +364,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -396,6 +406,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -437,6 +448,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -478,6 +490,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -519,6 +532,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -560,6 +574,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -601,6 +616,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
@@ -642,6 +658,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.2 0.2 0.2 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
             },
             {
                 "type":"RectTransform",
