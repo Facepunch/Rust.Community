@@ -449,14 +449,11 @@ public partial class CommunityEntity
                         viewportRT.pivot = new Vector2(0f, 1f);
                         viewportRT.SetParent(go.transform, false);
                         var mask = viewportGO.AddComponent<RectMask2D>();
-                    }
-                    // dont use ShouldUpdateField here because we dont want to set it on creation
-                    if(obj.ContainsKey("maskSoftness"))
-                        mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
-                    scrollRect.viewport = viewportRT;
-
-                    // already present if its being updated
-                    if(!allowUpdate){
+                    	scrollRect.viewport = viewportRT;
+			    
+                        if(obj.ContainsKey("maskSoftness"))
+                            mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+			    
                         // create & register content panel
                         var childGO = new GameObject(go.name + "___Content");
                         childGO.transform.SetParent(viewportGO.transform, false);
@@ -560,11 +557,11 @@ public partial class CommunityEntity
         // style the background track
         var image = scrollbar.gameObject.AddComponent<Image>();
         image.sprite = FileSystem.Load<Sprite>( obj.GetString( "trackSprite", "assets/content/ui/ui.background.tile.psd" ) );
-        image.type.type = Image.Type.Sliced;
+        image.type = Image.Type.Sliced;
         image.color = ColorEx.Parse( obj.GetString( "trackColor", "0.09 0.09 0.09 1" ) ); // background
 
         // position the scrollbar
-        var rt = scrollbar.transform as RectTransform;
+        var rt = scrollbar.GetComponent<RectTransform>();
         if(rt == null)
             return;
         if(vertical){
