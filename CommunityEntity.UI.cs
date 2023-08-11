@@ -113,7 +113,8 @@ public partial class CommunityEntity
     private GameObject FindPanel( string name )
     {
         // if its a scrollview we're looking for, return the child instead
-        if(ScrollViews.Contains(name)) return FindPanel(name + "___Content");
+        if(ScrollViews.Contains(name))
+            name += "___Content";
 
         GameObject panel;
         if ( UiDict.TryGetValue( name, out panel ) )
