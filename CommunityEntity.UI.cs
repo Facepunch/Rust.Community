@@ -436,20 +436,23 @@ public partial class CommunityEntity
                 }
             case "UnityEngine.UI.RectMask2D":
                 {
-                    var c = GetOrAddComponent<NeedsKeyboard>();
-		    if( ShouldUpdateField("maskSoftness") )
-		    	c.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+                    var c = GetOrAddComponent<RectMask2D>();
+                    if( ShouldUpdateField("maskSoftness") )
+                        c.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
 			
                     HandleEnableState( obj, c );
                     break;
                 }
             case "UnityEngine.UI.Mask":
                 {
-                    var c = go.AddComponent<Mask>();
-                    c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
+                    var c = GetOrAddComponent<Mask>();
+                    if( ShouldUpdateField("showMaskGraphic") )
+                        c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
+			
+                    HandleEnableState( obj, c );
                     break;
                 }
-			case "Animation":
+            case "Animation":
                 {
                     // Moved Setup to its own function in CommunityEntity.UI.Animation.cs
                     // now shares the code with the AddAnimation RPC function
