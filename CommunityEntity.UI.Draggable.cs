@@ -276,46 +276,43 @@ public partial class CommunityEntity
             else
                 rt.position = anchor + (offset.normalized * scaledMaxDistance);
         }
+
         // compares world rects to ensure the object stays within the parent
-        private void LimitToParent(Vector2 delta){
-            if(!limitToParent)
+        private void LimitToParent(Vector2 delta)
+        {
+            if (!limitToParent)
                 return;
 
             var p = parentWorldRect;
             var c = GetWorldRect(rt);
-            // check if applying the vector would put it out of pounds on any side
-            bool inLeft = p.xMin <= c.xMin + delta.x - parentPadding.x;
-            bool inTop = p.yMax >= c.yMax + delta.y + parentPadding.y;
-            bool inRight = p.xMax >= c.xMax + delta.x + parentPadding.x;
-            bool inBottom = p.yMin <= c.yMin + delta.y - parentPadding.y;
 
-            Vector2 pos = rt.position;
             var mousePos = anchor + offset;
-            float paddingX = (c.size.x/2);
-            float paddingY = (c.size.y/2);
+            float paddingX = (c.size.x / 2);
+            float paddingY = (c.size.y / 2);
+            rt.position = ConfineToRect(p, mousePos, new Vector2(parentPadding.x + (c.size.x / 2), parentPadding.y + (c.size.y / 2)));
+        }
 
-            if(inLeft && delta.x < 0f && (mousePos.x + paddingX) + parentPadding.x <= p.xMax)
-                pos.x += delta.x; // if mouse isnt past the right edge
-            else if(inRight && delta.x > 0f && (mousePos.x - paddingX) - parentPadding.x >= p.xMin)
-                pos.x += delta.x; // if mouse isnt past the left edge
-            if(inTop && delta.y > 0f && (mousePos.y - paddingY) - parentPadding.y >= p.yMin)
-                pos.y += delta.y; // if mouse isnt past the bottom edge
-            else if(inBottom && delta.y < 0f && (mousePos.y + paddingY) + parentPadding.y <= p.yMax)
-                pos.y += delta.y; // if mouse isnt past the top edge
-
-            rt.position = pos;
-
-            /* for debugging
-            c = GetWorldRect(rt);
-            inLeft = p.xMin <= c.xMin;
-            inTop = p.yMax >= c.yMax;
-            inRight = p.xMax >= c.xMax;
-            inBottom = p.yMin <= c.yMin;
-            if(!inLeft || !inTop || !inRight || !inBottom){
-                //rt.position = last;
-                Debug.Log($"supposedly safe position is out of bounds! \n {inLeft} {inTop} {inRight} {inBottom} - {delta}");
+        // returns the position after confining it to the rect's bounds with the provided padding respected
+        public static Vector2 ConfineToRect(Rect rect, Vector2 position, Vector2 padding)
+        {
+            Vector2 size = rect.size;
+            Vector2 center = rect.center;
+            // if x is outside of the rect's x, set x to the edge of the rect & apply padding
+            if ((position.x - padding.x) < rect.xMin)
+                position.x = center.x - ((size.x / 2) - padding.x);
+            else if ((position.x + padding.x) >= rect.xMax)
+            {
+                position.x = center.x + ((size.x / 2) - padding.x);
             }
-            */
+            // same with y
+            if ((position.y - padding.y) < rect.yMin)
+                position.y = center.y - ((size.y / 2) - padding.y);
+            else if ((position.y + padding.y) >= rect.yMax)
+            {
+                position.y = center.y + ((size.y / 2) - padding.y);
+            }
+
+            return position;
         }
 
         // add a gameobject to reference as the anchor position, this makes the anchor position resizing proof
