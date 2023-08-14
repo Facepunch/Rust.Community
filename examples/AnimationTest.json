@@ -7,6 +7,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.1 0.1 0.1 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -26,6 +27,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.05 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -180,6 +182,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.15 0.05 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -363,6 +366,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -423,6 +427,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -483,6 +488,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -554,6 +560,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.15 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -620,6 +627,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -680,6 +688,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -805,6 +814,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -910,6 +920,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -971,6 +982,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1050,6 +1062,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1171,6 +1184,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.05 0.15 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1237,6 +1251,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1291,6 +1306,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1346,6 +1362,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1401,6 +1418,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1456,6 +1474,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1511,6 +1530,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1566,6 +1586,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1621,6 +1642,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1705,6 +1727,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.01 0.01 0.01 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1771,6 +1794,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1822,6 +1846,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.15 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1854,6 +1879,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.05 0.05 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1912,6 +1938,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1963,6 +1990,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.15 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
@@ -1995,6 +2023,7 @@
             {
                 "type":"UnityEngine.UI.RawImage",
                 "color": "0.05 0.05 0.05 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
             },
             {
                 "type":"RectTransform",
