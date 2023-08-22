@@ -128,7 +128,7 @@ public partial class CommunityEntity
 
             for(int i = 0; i < properties[trigger].Count; i++){
                 if(panel != null && properties[trigger][i].target != panel)
-                    return;
+                    continue;
 
                 if(properties[trigger][i].routine == null)
                     continue;
