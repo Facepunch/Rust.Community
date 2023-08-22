@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Facepunch.Extend;
 using System.IO;
+using System.Globalization;
 
 #if CLIENT
 
@@ -584,8 +585,8 @@ public partial class CommunityEntity
                         float X1, Y1, X2, Y2;
                         if(split.Length < 4) return input;
                         if(
-                            !float.TryParse(split[0], out X1) || !float.TryParse(split[1], out Y1) ||
-                            !float.TryParse(split[2], out X2) || !float.TryParse(split[3], out Y2)
+                            !float.TryParse(split[0], NumberStyles.Any, CultureInfo.InvariantCulture, out X1) || !float.TryParse(split[1], NumberStyles.Any, CultureInfo.InvariantCulture, out Y1) ||
+                            !float.TryParse(split[2], NumberStyles.Any, CultureInfo.InvariantCulture, out X2) || !float.TryParse(split[3], NumberStyles.Any, CultureInfo.InvariantCulture, out Y2)
                         ) return input;
 
                         return BezierEasing.Ease(X1, Y1, X2, Y2, input);
@@ -647,7 +648,7 @@ public partial class CommunityEntity
                 if(split.Length == 0) return values;
                 for(int i = 0; i < split.Length; i++){
                     float temp;
-                    if(float.TryParse(split[i], out temp))
+                    if(float.TryParse(split[i], NumberStyles.Any, CultureInfo.InvariantCulture, out temp))
                         values.Add(temp);
                     if(values.Count == values.Capacity) break;
                 }
