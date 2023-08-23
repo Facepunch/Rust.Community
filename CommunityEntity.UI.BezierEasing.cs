@@ -75,7 +75,7 @@ public partial class CommunityEntity
 
 
 
-        // returns the value on the curve for X
+        // returns the value on the curve for the unscaled time
         public float GetPosition(float unscaledTime)
         {
             if (!_precomputed) PreCompute();
@@ -89,8 +89,6 @@ public partial class CommunityEntity
         float StepA(float aA1, float aA2) { return 1.0f - 3.0f * aA2 + 3.0f * aA1; }
         float StepB(float aA1, float aA2) { return 3.0f * aA2 - 6.0f * aA1; }
 
-        // Returns calculates the value between 2 points based on call
-        // points may be x or y depending on call
         float CalcBezier(float time, float point1, float point2)
         {
             return ((StepA(point1, point2) * time + StepB(point1, point2)) * time + (3f * point1)) * time;
