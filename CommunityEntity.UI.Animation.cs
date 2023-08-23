@@ -357,7 +357,7 @@ public partial class CommunityEntity
         public float delay;
         public int repeat;
         public float repeatDelay;
-        public string easing = "Linear";
+        public BezierEasing.BezierPoints easing;
         public string type;
         public AnimationProperty.AnimationValue animValue;
         public string target;
@@ -573,32 +573,23 @@ public partial class CommunityEntity
         // manipulates the input based on a preset easing function or a custom Bezier curve
         // accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
         // NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
-        public float Ease(string type, float input){
-            switch(type){
-                case "Linear": return input;
-                case "EaseIn": return input * input;
-                case "EaseOut": return 1f - ((1f - input) * (1f - input));
-                case "EaseInOut": return Mathf.Lerp(input * input, 1f - ((1f - input) * (1f - input)), input);
-                default: // Custom Easing
-                    {
-                        var split = type.Split(' ');
-                        float X1, Y1, X2, Y2;
-                        if(split.Length < 4) return input;
-                        if(
-                            !float.TryParse(split[0], NumberStyles.Any, CultureInfo.InvariantCulture, out X1) || !float.TryParse(split[1], NumberStyles.Any, CultureInfo.InvariantCulture, out Y1) ||
-                            !float.TryParse(split[2], NumberStyles.Any, CultureInfo.InvariantCulture, out X2) || !float.TryParse(split[3], NumberStyles.Any, CultureInfo.InvariantCulture, out Y2)
-                        ) return input;
-
-                        return BezierEasing.Ease(X1, Y1, X2, Y2, input);
-                    }
-            }
+        public float Ease(BezierEasing.BezierPoints easing, float input)
+        {
+            return easing switch
+            {
+                _ when easing == BezierEasing.BezierPoints.LINEAR => input,
+                _ when easing == BezierEasing.BezierPoints.EASE_IN => input * input,
+                _ when easing == BezierEasing.BezierPoints.EASE_OUT => 1f - ((1f - input) * (1f - input)),
+                _ when easing == BezierEasing.BezierPoints.EASE_IN_OUT => Mathf.Lerp(input * input, 1f - ((1f - input) * (1f - input)), input),
+                _ => BezierEasing.Ease(easing, input)
+            };
         }
 
         // Interpolats an AnimationValue over the duration with the easing specified
         // the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
         // absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
         // absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
-        public IEnumerator InterpolateValue(AnimationValue value, float duration, string easing, bool absolute = true){
+        public IEnumerator InterpolateValue(AnimationValue value, float duration, BezierEasing.BezierPoints easing, bool absolute = true){
             float time = 0f;
             DynamicVector current;
             DynamicVector start = value.from.Count == 0 ? value.initial : (absolute ? value.from : value.initial + value.from);
@@ -638,21 +629,8 @@ public partial class CommunityEntity
             }
 
             public AnimationValue(string sourceTo, string sourceFrom = null){
-                this.from = ParseFromString(sourceFrom);
-                this.to = ParseFromString(sourceTo);
-            }
-            public DynamicVector ParseFromString(string source){
-                var values = new DynamicVector();
-                if(string.IsNullOrEmpty(source)) return values;
-                var split = source.Split(' ');
-                if(split.Length == 0) return values;
-                for(int i = 0; i < split.Length; i++){
-                    float temp;
-                    if(float.TryParse(split[i], NumberStyles.Any, CultureInfo.InvariantCulture, out temp))
-                        values.Add(temp);
-                    if(values.Count == values.Capacity) break;
-                }
-                return values;
+                this.from = DynamicVector.FromString(sourceFrom);
+                this.to = DynamicVector.FromString(sourceTo);
             }
         }
 
@@ -769,6 +747,23 @@ public partial class CommunityEntity
 
             #region Helpers
 
+            public static DynamicVector FromString(string source)
+            {
+                var values = new DynamicVector();
+                if (string.IsNullOrEmpty(source)) return values;
+                var split = source.Split(' ');
+                if (split.Length == 0) return values;
+                for (int i = 0; i < split.Length; i++)
+                {
+                    float temp;
+                    if (!float.TryParse(split[i], NumberStyles.Any, CultureInfo.InvariantCulture, out temp))
+                        continue;
+                    values.Add(temp);
+                    if (values.Count == values.Capacity) break;
+                }
+                return values;
+            }
+
             public float TryGet(int index, float defaultValue = 0f){
                 if(index < 0 || index >= this.Count)
                     return defaultValue;
@@ -867,16 +862,36 @@ public partial class CommunityEntity
     public AnimationProperty ParseProperty(Animation anim, JSON.Object obj){
         var trigger = obj.GetString("trigger", "OnCreate");
 
-        if(!anim.ValidTrigger(trigger))
+        BezierEasing.BezierPoints easing = BezierEasing.BezierPoints.LINEAR;
+        var easingString = obj.GetString("easing", "Linear");
+        switch (easingString)
+        {
+            case "Linear": break;
+            case "EaseIn": easing = BezierEasing.BezierPoints.EASE_IN; break;
+            case "EaseOut": easing = BezierEasing.BezierPoints.EASE_OUT; break;
+            case "EaseInOut": easing = BezierEasing.BezierPoints.EASE_IN_OUT; break;
+            default:
+                {
+                    var parsed = AnimationProperty.DynamicVector.FromString(easingString);
+                    if (parsed.Count != 4)
+                        break;
+                    easing = new BezierEasing.BezierPoints(parsed.TryGet(0), parsed.TryGet(1), parsed.TryGet(2), parsed.TryGet(3));
+                    break;
+                }
+        }
+
+        if (!anim.ValidTrigger(trigger))
             trigger = "OnCreate";
+
         string from = obj.GetString("from", null);
         string to = obj.GetString("to", null);
-        var animprop = new AnimationProperty{
+        var animprop = new AnimationProperty
+        {
             duration = obj.GetFloat("duration", 0f),
             delay = obj.GetFloat("delay", 0f),
             repeat = obj.GetInt("repeat", 0),
             repeatDelay = obj.GetFloat("repeatDelay", 0f),
-            easing = obj.GetString("easing", "Linear"),
+            easing = easing,
             target = obj.GetString("target", anim.gameObject.name),
             type = obj.GetString("type", null),
             animValue = new AnimationProperty.AnimationValue(to, from),
@@ -886,8 +901,9 @@ public partial class CommunityEntity
 
         // if the animation has a graphic it means Start has allready been called on it
         // manually start the OnCreate Properties in this case
-        if(anim.initialized && trigger == "OnCreate")
+        if (anim.initialized && trigger == "OnCreate")
             anim.StartProperty(animprop);
+
         return animprop;
     }
 
