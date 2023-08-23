@@ -192,6 +192,16 @@ public partial class CommunityEntity
             {
                 return HashCode.Combine(P1, P2, P3, P4);
             }
+
+            public static bool operator == (BezierPoints p1, BezierPoints p2)
+            {
+                return p1.Equals(p2);
+            }
+
+            public static bool operator != (BezierPoints p1, BezierPoints p2)
+            {
+                return !p1.Equals(p2);
+            }
         }
     }
 
