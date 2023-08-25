@@ -456,8 +456,8 @@ public partial class CommunityEntity
                 {
                     // Moved Setup to its own function in CommunityEntity.UI.Animation.cs
                     // now shares the code with the AddAnimation RPC function
-                    ParseAnimation(obj, go);
-					break;
+                    Animation.ParseAnimation(obj, go, allowUpdate);
+                    break;
                 }
     }
 
