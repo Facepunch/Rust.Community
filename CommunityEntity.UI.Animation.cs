@@ -21,6 +21,8 @@ public partial class CommunityEntity
         public static List<Animation> reusableList = new List<Animation>();
 
         public static IEnumerator emptyEnumerator = new System.Object[0].GetEnumerator();
+        
+        public static List<AnimationProperty> reusablePropertyList = new List<AnimationProperty>();
 
         // properties by trigger
         public Dictionary<string, List<AnimationProperty>> properties = new Dictionary<string, List<AnimationProperty>>(){
@@ -50,8 +52,11 @@ public partial class CommunityEntity
 
         #region Core
 
-        // sets up the Animation component, Attaching Triggers & starting Animations
+        // sets up the Animation component & start Animations
         public void Init(){
+            if (initialized)
+                return;
+            
             CacheComponents();
             AttachTriggers(properties["OnHoverEnter"]);
             AttachTriggers(properties["OnHoverExit"]);
@@ -74,6 +79,16 @@ public partial class CommunityEntity
                 return;
 
             properties[property.trigger].Remove(property);
+        }
+
+        public void Reset()
+        {
+            foreach(var proplists in properties)
+            {
+                StopByTrigger(proplists.Key);
+                proplists.Value.Clear();
+            }
+            initialized = false;
         }
 
         private void OnDestroy(){
@@ -344,6 +359,36 @@ public partial class CommunityEntity
             reusableList.Clear();
         }
 
+    public static Animation ParseAnimation(JSON.Object obj, GameObject go = null, bool allowUpdate = false){
+
+        Animation anim = go.GetComponent<Animation>();
+        // create a new animation component if no Animation existed
+        if(anim == null)
+            anim = go.AddComponent<Animation>();
+
+        if (allowUpdate && obj.ContainsKey("Reset"))
+            anim.Reset();
+
+        var arr = obj.GetArray("properties");
+        for (int i = 0; i < arr.Length; i++)
+        {
+            var prop = AnimationProperty.ParseProperty(anim, arr[i].Obj);
+            Animation.reusablePropertyList.Add(prop);
+        }
+        if (anim.initialized)
+            anim.AttachTriggers(Animation.reusablePropertyList);
+        Animation.reusablePropertyList.Clear();
+
+        // ensures a canvasGroup is added if needed, regardless of if its a new animation or an existing one
+        if(obj.GetBoolean("addCanvasGroup", false) && anim.group == null){
+            anim.group = go.GetComponent<CanvasGroup>();
+            if(anim.group == null)
+                anim.group = go.AddComponent<CanvasGroup>();
+        }
+
+        return anim;
+    }
+
         #endregion
     }
 
@@ -390,7 +435,7 @@ public partial class CommunityEntity
             {
                 yield return AnimateProperty();
                 completedRounds++;
-                if(repeatDelay > 0f) yield return new WaitForSeconds(repeatDelay);
+                if(repeatDelay > 0f) yield return CoroutineEx.waitForSeconds(repeatDelay);
                 else yield return null;
             }
             while(repeat < 0 || (repeat > 0 && completedRounds <= repeat));
@@ -573,7 +618,7 @@ public partial class CommunityEntity
         // manipulates the input based on a preset easing function or a custom Bezier curve
         // accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
         // NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
-        public float Ease(BezierEasing.BezierPoints easing, float input)
+        public static float Ease(BezierEasing.BezierPoints easing, float input)
         {
             return easing switch
             {
@@ -589,7 +634,7 @@ public partial class CommunityEntity
         // the absolute arguement specifies if the animation should be handled as a relative animation or an absolute animation
         // absolute = false: the objects initial value gets used as a 0 point, with the from and to values being relative to the initial value
         // absolute = true: the object's initial value does not get factored in and the from and to values are seen as absolute
-        public IEnumerator InterpolateValue(AnimationValue value, float duration, BezierEasing.BezierPoints easing, bool absolute = true){
+        public static IEnumerator InterpolateValue(AnimationValue value, float duration, BezierEasing.BezierPoints easing, bool absolute = true){
             float time = 0f;
             DynamicVector current;
             DynamicVector start = value.from.Count == 0 ? value.initial : (absolute ? value.from : value.initial + value.from);
@@ -600,6 +645,11 @@ public partial class CommunityEntity
                 value.initial = start;
             }
             DynamicVector end = (absolute ? value.to : value.initial + value.to);
+            
+            if(start == end){
+                yield return CoroutineEx.waitForSeconds(duration);
+                yield break;
+            }
 
             while(time < duration){
                 current = DynamicVector.LerpUnclamped(start, end, Ease(easing, time / duration));
@@ -608,6 +658,54 @@ public partial class CommunityEntity
                 yield return null;
             }
             value.apply(end);
+        }
+
+        public static AnimationProperty ParseProperty(Animation anim, JSON.Object obj){
+            var trigger = obj.GetString("trigger", "OnCreate");
+    
+            BezierEasing.BezierPoints easing = BezierEasing.BezierPoints.LINEAR;
+            var easingString = obj.GetString("easing", "Linear");
+            switch (easingString)
+            {
+                case "Linear": break;
+                case "EaseIn": easing = BezierEasing.BezierPoints.EASE_IN; break;
+                case "EaseOut": easing = BezierEasing.BezierPoints.EASE_OUT; break;
+                case "EaseInOut": easing = BezierEasing.BezierPoints.EASE_IN_OUT; break;
+                default:
+                    {
+                        var parsed = AnimationProperty.DynamicVector.FromString(easingString);
+                        if (parsed.Count != 4)
+                            break;
+                        easing = new BezierEasing.BezierPoints(parsed.TryGet(0), parsed.TryGet(1), parsed.TryGet(2), parsed.TryGet(3));
+                        break;
+                    }
+            }
+    
+            if (!anim.ValidTrigger(trigger))
+                trigger = "OnCreate";
+    
+            string from = obj.GetString("from", null);
+            string to = obj.GetString("to", null);
+            var animprop = new AnimationProperty
+            {
+                duration = obj.GetFloat("duration", 0f),
+                delay = obj.GetFloat("delay", 0f),
+                repeat = obj.GetInt("repeat", 0),
+                repeatDelay = obj.GetFloat("repeatDelay", 0f),
+                easing = easing,
+                target = obj.GetString("target", anim.gameObject.name),
+                type = obj.GetString("type", null),
+                animValue = new AnimationProperty.AnimationValue(to, from),
+                trigger = trigger
+            };
+            anim.properties[trigger].Add(animprop);
+    
+            // if the animation has a graphic it means Start has allready been called on it
+            // manually start the OnCreate Properties in this case
+            if (anim.initialized && trigger == "OnCreate")
+                anim.StartProperty(animprop);
+    
+            return animprop;
         }
 
         #endregion
@@ -636,7 +734,7 @@ public partial class CommunityEntity
 
         // a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
         // turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
-        public struct DynamicVector {
+        public struct DynamicVector : IEquatable<DynamicVector> {
 
             #region Fields
 
@@ -679,6 +777,11 @@ public partial class CommunityEntity
             public DynamicVector(Color col) : this() => Add(col);
             public DynamicVector(Vector3 vec) : this() => Add(vec);
             public DynamicVector(Vector2 vec) : this() => Add(vec);
+            public DynamicVector(Vector2 vec1, Vector2 vec2) : this()
+            {
+                Add(vec1);
+                Add(vec2);
+            }
             public DynamicVector(float num) : this() => Add(num);
 
             public void Add(float num) => this[Count++] = num;
@@ -814,119 +917,41 @@ public partial class CommunityEntity
                 return result;
             }
 
-            public override string ToString(){
+            public bool Equals(DynamicVector other)
+            {
+                if (Count != other.Count)
+                    return false;
+
+                for (int i = 0; i < Count; i++)
+                {
+                    if (TryGet(i) != other.TryGet(i))
+                        return false;
+                }
+
+                return true;
+            }
+
+            public static bool operator == (DynamicVector lhs, DynamicVector rhs){
+                return lhs.Equals(rhs);
+            }
+
+            public static bool operator != (DynamicVector lhs, DynamicVector rhs)
+            {
+                return !lhs.Equals(rhs);
+            }
+
+            public override string ToString()
+            {
                 var sb = new StringBuilder(32);
-                for(int i = 0; i < this.Count; i++){
-                    sb.Append(this.TryGet(i));
+                for (int i = 0; i < Count; i++)
+                {
+                    sb.Append(TryGet(i));
                     sb.Append(' ');
                 }
                 return sb.ToString();
             }
 
             #endregion
-        }
-    }
-
-    public List<AnimationProperty> reusablePropertyList = new List<AnimationProperty>();
-
-    public Animation ParseAnimation(JSON.Object obj, GameObject go = null){
-        // if no gameobject is given, attempt to find a name property and find it that way
-        if(go == null){
-            var panel = obj.GetString("name", null);
-            if (string.IsNullOrEmpty(panel) || !UiDict.TryGetValue(panel, out go))
-                return null;
-        }
-
-        Animation anim = go.GetComponent<Animation>();
-        // create a new animation component if no Animation existed
-        if(anim == null)
-            anim = go.AddComponent<Animation>();
-
-        foreach(var prop in obj.GetArray("properties")){
-            reusablePropertyList.Add(ParseProperty(anim, prop.Obj));
-        }
-
-        anim.AttachTriggers(reusablePropertyList);
-        reusablePropertyList.Clear();
-
-        // ensures a canvasGroup is added if needed, regardless of if its a new animation or an existing one
-        if(obj.GetBoolean("addCanvasGroup", false) && anim.group == null){
-            anim.group = go.GetComponent<CanvasGroup>();
-            if(anim.group == null)
-                anim.group = go.AddComponent<CanvasGroup>();
-        }
-
-        return anim;
-    }
-
-    public AnimationProperty ParseProperty(Animation anim, JSON.Object obj){
-        var trigger = obj.GetString("trigger", "OnCreate");
-
-        BezierEasing.BezierPoints easing = BezierEasing.BezierPoints.LINEAR;
-        var easingString = obj.GetString("easing", "Linear");
-        switch (easingString)
-        {
-            case "Linear": break;
-            case "EaseIn": easing = BezierEasing.BezierPoints.EASE_IN; break;
-            case "EaseOut": easing = BezierEasing.BezierPoints.EASE_OUT; break;
-            case "EaseInOut": easing = BezierEasing.BezierPoints.EASE_IN_OUT; break;
-            default:
-                {
-                    var parsed = AnimationProperty.DynamicVector.FromString(easingString);
-                    if (parsed.Count != 4)
-                        break;
-                    easing = new BezierEasing.BezierPoints(parsed.TryGet(0), parsed.TryGet(1), parsed.TryGet(2), parsed.TryGet(3));
-                    break;
-                }
-        }
-
-        if (!anim.ValidTrigger(trigger))
-            trigger = "OnCreate";
-
-        string from = obj.GetString("from", null);
-        string to = obj.GetString("to", null);
-        var animprop = new AnimationProperty
-        {
-            duration = obj.GetFloat("duration", 0f),
-            delay = obj.GetFloat("delay", 0f),
-            repeat = obj.GetInt("repeat", 0),
-            repeatDelay = obj.GetFloat("repeatDelay", 0f),
-            easing = easing,
-            target = obj.GetString("target", anim.gameObject.name),
-            type = obj.GetString("type", null),
-            animValue = new AnimationProperty.AnimationValue(to, from),
-            trigger = trigger
-        };
-        anim.properties[trigger].Add(animprop);
-
-        // if the animation has a graphic it means Start has allready been called on it
-        // manually start the OnCreate Properties in this case
-        if (anim.initialized && trigger == "OnCreate")
-            anim.StartProperty(animprop);
-
-        return animprop;
-    }
-
-    // RPC function to Add Animations to existing objects
-    // accepts the same json object that the CreateComponents function does
-    [RPC_Client]
-    public void AddAnimation( RPCMessage msg )
-    {
-        string str = msg.read.StringRaw();
-
-        if (string.IsNullOrEmpty(str))
-            return;
-
-        var json = JSON.Array.Parse( str );
-        if (json == null)
-            return;
-
-        foreach (var value in json){
-            Animation anim = ParseAnimation(value.Obj);
-            // if it returns a valid animation that hasnt allready been started, start it
-            if(anim == null || anim.initialized)
-                continue;
-            anim.Init();
         }
     }
 }
