@@ -413,8 +413,11 @@ public partial class CommunityEntity
                         c.startTime = obj.GetFloat( "startTime", allowUpdate ? c.startTime : 0f );
                     if ( ShouldUpdateField( "step" ) )
                         c.step = obj.GetFloat( "step", allowUpdate ? c.step : 1f );
-                    if ( ShouldUpdateField( "interval" ) )
+                    if ( ShouldUpdateField( "interval" ) ) {
                         c.interval = obj.GetFloat( "interval", allowUpdate ? c.interval : c.step );
+                        if(allowUpdate)
+                            c.Reset();
+                    }
                     if ( ShouldUpdateField( "timerFormat" ) )
                         c.timerFormat = ParseEnum<Countdown.TimerFormat>(obj.GetString("timerFormat", "None"), allowUpdate ? c.timerFormat : Countdown.TimerFormat.None);
                     if ( ShouldUpdateField( "numberFormat" ) )
