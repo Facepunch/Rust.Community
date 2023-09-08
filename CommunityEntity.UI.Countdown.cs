@@ -68,7 +68,7 @@ public partial class CommunityEntity
 
                 if ( !string.IsNullOrEmpty( command ) )
                 {
-                    RustCompatEx.ClientRunOnServer( command );
+                    ConsoleNetwork.ClientRunOnServer( command );
                 }
 
                 End();
@@ -83,6 +83,12 @@ public partial class CommunityEntity
 
             CommunityEntity.ClientInstance.DestroyPanel(gameObject.name);
         }
+
+		public void Reset(){
+            CancelInvoke( "UpdateCountdown" );
+            InvokeRepeating( "UpdateCountdown", interval, interval );
+		}
+		
         void UpdateDisplay(float time){
             TimeSpan t = TimeSpan.FromSeconds( time );
             string formattedTime = timerFormat switch{
