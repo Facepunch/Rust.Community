@@ -65,7 +65,7 @@ public partial class CommunityEntity
 
         // the world rect of the limitParent
         public Rect parentWorldRect;
-        private Vector3 _scaleAtLastCache; // the scale when this was last cached, to check if it needs to be re-cached
+        private (Vector3, Vector3) _scalePosAtLastCache; // the scale & position when this was last cached, to check if it needs to be re-cached
 
         // a shadow object used to hold the draggable's initial position, this object's RectTransform matches the anchormin/max & offsetmin/max of the draggable
         // this keeps the initial position aligned to the parent after resizing occurs, regardless of if offsets or anchors are used
@@ -319,12 +319,12 @@ public partial class CommunityEntity
         private void CreateAnchor(){
             anchorObj = new GameObject("Shadow Anchor", typeof(RectTransform));
             var anchorRT = (anchorObj.transform as RectTransform);
-            anchorRT.SetParent(rt.parent);
+            anchorRT.SetParent(limitParent);
             anchorRT.anchorMin = rt.anchorMin;
             anchorRT.anchorMax = rt.offsetMax;
             anchorRT.offsetMin = rt.offsetMin;
             anchorRT.offsetMax = rt.offsetMax;
-            anchorRT.localPosition = rt.localPosition;
+            anchorRT.localPosition = limitParent.InverseTransformPoint(rt.position);
             if(anchorOffset != Vector2.zero){
                 anchorRT.offsetMin = new Vector2(anchorRT.offsetMin.x + anchorOffset.x, anchorRT.offsetMin.y + anchorOffset.y);
                 anchorRT.offsetMax = new Vector2(anchorRT.offsetMax.x + anchorOffset.x, anchorRT.offsetMax.y + anchorOffset.y);
@@ -334,8 +334,11 @@ public partial class CommunityEntity
         // finds the parent to use as a limit based on the parentLimitIndex setting
         private void FindParentLimit(){
             limitParent = rt;
+            if(parentLimitIndex < 1){
+                parentLimitIndex = 1;
+            }
             for(int i = 0; i < parentLimitIndex; i++){
-                limitParent = (limitParent.parent as RectTransform);
+                limitParent = TryGetRectParent(limitParent);
                 Slot potentialSlot = limitParent.GetComponent<Slot>();
                 if(potentialSlot){
                     // only set our parent as the slot if its actually the first one we encounter
@@ -344,13 +347,21 @@ public partial class CommunityEntity
                         slot.content = this;
                     }
                     // always skip slots when looking for the limitParent
-                    limitParent = (limitParent.parent as RectTransform);
+                    limitParent = TryGetRectParent(limitParent);
                 }
-
             }
             // force a refresh
-            _scaleAtLastCache = Vector3.zero;
+            _scalePosAtLastCache = (Vector3.zero, Vector3.zero);
             TryRefreshParentBounds();
+
+            // returns parent if its a rectTransform. this may not be the case if the parent is a root layer
+            static RectTransform TryGetRectParent(RectTransform current){
+                var potentialParent = (current.parent as RectTransform);
+                if(potentialParent != null)
+                    return potentialParent;
+
+                return current;
+            }
         }
 
         // check if this draggable should die, this covers if the real parent gets destroyed while this object is detached from it
@@ -370,13 +381,14 @@ public partial class CommunityEntity
         }
         // re-caches the parent's world rect
         public void TryRefreshParentBounds(){
-            if(rt.lossyScale == _scaleAtLastCache)
+            var current = (limitParent.lossyScale, limitParent.position);
+            if(current == _scalePosAtLastCache)
                 return;
 
             if(limitToParent)
                 parentWorldRect = GetWorldRect(limitParent);
 
-            _scaleAtLastCache = rt.lossyScale;
+            _scalePosAtLastCache = current;
         }
 
         // used via the json API
