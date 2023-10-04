@@ -215,7 +215,7 @@ public partial class CommunityEntity
             if(isKilled)
                 return;
             StopByTrigger("OnDrop", panel);
-            StartByTrigger("OnDrag");
+            StartByTrigger("OnDrag", panel);
         }
 
         public void OnDrop(string panel){
