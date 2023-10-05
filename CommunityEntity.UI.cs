@@ -27,6 +27,7 @@ public partial class CommunityEntity
         AllUi.Clear();
         UiDict.Clear();
         requestingTextureImages.Clear();
+		ScrollViews.Clear();
         UnloadTextureCache();
     }
 
@@ -77,7 +78,7 @@ public partial class CommunityEntity
 
             if ( allowUpdate && json.ContainsKey( "name" ) )
             {
-                go = FindPanel( gameObjectName );
+                go = FindPanel( gameObjectName, false );
             }
 
             if ( allowUpdate && go == null )
@@ -110,11 +111,14 @@ public partial class CommunityEntity
         }
     }
 
-    private GameObject FindPanel( string name )
+    private GameObject FindPanel( string name, bool allowScrollviews = true )
     {
-        // if its a scrollview we're looking for, return the child instead
-        if(ScrollViews.Contains(name))
-            name += "___Content";
+        // if its a scrollview we're looking for, return the child if it exists
+        if(allowScrollviews && ScrollViews.Contains(name)){
+			var scrollContent = FindPanel(name + "___Content");
+			if(scrollContent != null)
+				return scrollContent;
+		}
 
         GameObject panel;
         if ( UiDict.TryGetValue( name, out panel ) )
