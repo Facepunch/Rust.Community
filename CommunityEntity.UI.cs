@@ -472,6 +472,9 @@ public partial class CommunityEntity
     {
         if ( obj.ContainsKey( "fadeIn" ) )
             Animation.AddFadeIn(c.gameObject, obj.GetFloat( "fadeIn", 0 ), obj.GetBoolean( "fadeAsGroup", false ));
+        
+        if ( obj.ContainsKey( "shouldRaycast" ) )
+            c.raycastTarget = obj.GetBoolean("shouldRaycast", true);
     }
 
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
