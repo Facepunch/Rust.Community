@@ -42,6 +42,7 @@ public partial class CommunityEntity
         public UnityEngine.UI.Graphic graphic;
         public RectTransform rt;
         public CanvasGroup group;
+		public bool shouldRaycast = true;
 
         // flags
         public bool isHidden = false;
@@ -258,6 +259,8 @@ public partial class CommunityEntity
             rt = gameObject.GetComponent<RectTransform>();
             if(!group)
                 group = gameObject.GetComponent<CanvasGroup>();
+
+            shouldRaycast = graphic?.raycastTarget ?? false;
         }
 
         public void TryToggleGraphic(float delay = 0f){
@@ -268,7 +271,7 @@ public partial class CommunityEntity
                 if(group == null)
                     graphic.canvasRenderer.cullTransparentMesh = visible;
                 isHidden = !visible;
-                SetRaycasting(visible);
+                SetRaycasting(visible && shouldRaycast);
             });
             if(delay <= 0f) a();
             else Invoke(a, delay);
