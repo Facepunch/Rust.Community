@@ -107,10 +107,19 @@ public partial class CommunityEntity
             }
 
             if ( json.ContainsKey( "fadeOut" ) )
+                Animation.AddFadeOut(go, json.GetFloat( "fadeOut", 0 ), json.GetBoolean( "fadeAsGroup", false ));
+
+            var anim = go.GetComponent<Animation>();
+            if(anim != null)
+                Animation.AddPendingAnim(anim);
+
+            if ( json.ContainsKey( "addCanvas" ) )
             {
-                go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
+                go.AddComponent<Canvas>();
+                go.AddComponent<GraphicRaycaster>();
             }
         }
+        Animation.InitPendingAnims();
     }
 
     private GameObject FindPanel( string name )
@@ -425,7 +434,31 @@ public partial class CommunityEntity
                     HandleEnableState( obj, c );
                     break;
                 }
-        }
+            case "UnityEngine.UI.RectMask2D":
+                {
+                    var c = GetOrAddComponent<RectMask2D>();
+                    if( ShouldUpdateField("maskSoftness") )
+                        c.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+			
+                    HandleEnableState( obj, c );
+                    break;
+                }
+            case "UnityEngine.UI.Mask":
+                {
+                    var c = GetOrAddComponent<Mask>();
+                    if( ShouldUpdateField("showMaskGraphic") )
+                        c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
+			
+                    HandleEnableState( obj, c );
+                    break;
+                }
+            case "Animation":
+                {
+                    // Moved Setup to its own function in CommunityEntity.UI.Animation.cs
+                    // now shares the code with the AddAnimation RPC function
+                    Animation.ParseAnimation(obj, go, allowUpdate);
+                    break;
+                }
     }
 
     private static T ParseEnum<T>( string value, T defaultValue )
@@ -438,10 +471,10 @@ public partial class CommunityEntity
     private void GraphicComponentCreated( UnityEngine.UI.Graphic c, JSON.Object obj )
     {
         if ( obj.ContainsKey( "fadeIn" ) )
-        {
-            c.canvasRenderer.SetAlpha( 0f );
-            c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
-        }
+            Animation.AddFadeIn(c.gameObject, obj.GetFloat( "fadeIn", 0 ), obj.GetBoolean( "fadeAsGroup", false ));
+        
+        if ( obj.ContainsKey( "shouldRaycast" ) )
+            c.raycastTarget = obj.GetBoolean("shouldRaycast", true);
     }
 
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
@@ -491,15 +524,11 @@ public partial class CommunityEntity
         if ( !panel )
             return;
 
-        var fadeOut = panel.GetComponent<FadeOut>();
-        if ( fadeOut )
-        {
-            fadeOut.FadeOutAndDestroy();
-        }
+        Animation animation = panel.GetComponent<Animation>();
+        if(animation != null && animation.HasForTrigger("OnDestroy"))
+            animation.Kill();
         else
-        {
-            Object.Destroy( panel );
-        }
+            GameObject.Destroy( panel );
     }
 }
 

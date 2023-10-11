@@ -1,0 +1,2129 @@
+[
+    {
+        "name": "UI",
+        "parent":"Overlay",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.1 0.1 0.1 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            },
+            {
+                "type":"NeedsCursor"
+            }
+        ]
+    },
+    {
+        "name": "Slide0",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.05 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "parent": "Slide0",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"A Feature Test Case",
+                "color": "1 1 1 0.6",
+                "fontSize":28,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.65",
+                "anchormax": "0.93 0.92"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "parent": "Slide0",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Animation Changes Values",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.8",
+                "anchormax": "0.93 0.8",
+                "offsetmin": "0 -30",
+                "offsetmax": "0 0"
+            }
+        ]
+    },
+    {
+        "parent": "Slide0",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Over Time...",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.8",
+                "anchormax": "0.93 0.8",
+                "offsetmin": "0 -60",
+                "offsetmax": "0 -30"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "type": "Opacity",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "0",
+                        "to": "1"
+                    },
+                    {
+                        "type": "Opacity",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide0",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"But there's More this Component can do",
+                "color": "1 1 1 0.8",
+                "fontSize":40,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.8",
+                "anchormax": "0.93 0.8",
+                "offsetmin": "0 -150",
+                "offsetmax": "0 -90"
+            }
+        ]
+    },
+    {
+        "name": "Slide0_Kill",
+        "parent": "Slide0",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"Slide0",
+                "color": "0.9 0.8 0.3 0.12"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.9 0.0",
+                "anchormax": "1 0.07"
+            }
+        ]
+    },
+    {
+        "parent": "Slide0_Kill",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Begin",
+                "fontSize":16,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Slide1",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.15 0.05 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 -1",
+                "anchormax": "1 0"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "MoveTo",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "0 0 1 1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Opacity",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Slide1_Kill",
+        "parent": "Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"Slide1",
+                "color": "0.9 0.8 0.3 0.12"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.9 0.0",
+                "anchormax": "1 0.07"
+            }
+        ]
+    },
+    {
+        "parent": "Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Can Change Different Values",
+                "color": "1 1 1 0.6",
+                "fontSize":28,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.65",
+                "anchormax": "0.93 0.92"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "parent": "Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Like Opacity",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.8",
+                "anchormax": "0.93 0.8",
+                "offsetmin": "0 -30",
+                "offsetmax": "0 0"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Opacity",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "0",
+                        "to": "1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Opacity",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"And Color",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.8",
+                "anchormax": "0.93 0.8",
+                "offsetmin": "0 -60",
+                "offsetmax": "0 -30"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Color",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "1 0.2 0.2 1",
+                        "to": "0.2 1 0.2 1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Color",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0.2 0.2 1 1"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Slide1_Block1",
+        "parent":"Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.4",
+                "anchormax": "0.25 0.6",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Scale",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "1 1",
+                        "to": "1.5 1.5"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Scale",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "1 1"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide1_Block1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Or Scale",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide1_Block2",
+        "parent":"Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.4 0.4",
+                "anchormax": "0.55 0.6",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Rotate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "0 0 45",
+                        "to": "0 0 -45"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Rotate",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0 0 45"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide1_Block2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Or Rotation",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide1_Block3",
+        "parent":"Slide1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.7 0.4",
+                "anchormax": "0.85 0.6",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0 -0.3"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide0_Kill",
+                        "type": "Translate",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0 0.3"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide1_Block3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"And Movement",
+                "color": "1 1 1 0.8",
+                "fontSize":22,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "parent": "Slide1_Kill",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Next Page",
+                "fontSize":16,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Slide2",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.15 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 -1",
+                "anchormax": "1 0"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "MoveTo",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "0 0 1 1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Opacity",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Can Happen..",
+                "color": "1 1 1 0.6",
+                "fontSize":28,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.65",
+                "anchormax": "0.93 0.92"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block1",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.5",
+                "anchormax": "0.25 0.7",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Opacity",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "0.5",
+                        "to": "1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Opacity",
+                        "delay": 1.5,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "to": "0.5"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"By Themselves",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block2",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.3 0.5",
+                "anchormax": "0.45 0.7",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnHoverEnter",
+                        "type": "Scale",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "1.2 1.2"
+                    },
+                    {
+                        "trigger": "OnHoverExit",
+                        "target": "Slide2_Block2",
+                        "type": "Rotate",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "0 0 180"
+                    },
+                    {
+                        "trigger": "OnHoverExit",
+                        "target": "Slide2_Block2",
+                        "type": "Scale",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "1 1"
+                    },
+                    {
+                        "trigger": "OnHoverExit",
+                        "target": "Slide2_Block2",
+                        "type": "Rotate",
+                        "delay": 0.51,
+                        "duration": 0,
+                        "to": "0 0 0"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"On Hover",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block3",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "color": "0.35 0.65 0.45 1.0",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.65 0.7",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Block3",
+                        "type": "Scale",
+                        "delay": 0,
+                        "duration": 0.2,
+                        "to": "1.2 1.2"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Block3",
+                        "type": "Scale",
+                        "delay": 0.5,
+                        "duration": 0.2,
+                        "to": "1 1"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"On Click",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block4",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.7 0.5",
+                "anchormax": "0.85 0.7",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnDestroy",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "1 0"
+                    },
+                    {
+                        "trigger": "OnDestroy",
+                        "type": "Opacity",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "0"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"OnDestroy",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block4Kill",
+        "parent": "Slide2_Block4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"Slide2_Block4",
+                "color": "0.9 0.3 0.3 0.42"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.0",
+                "anchormax": "1 0.3"
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block4Kill",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Kill me",
+                "fontSize":12,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "parent": "Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"They Can be Combined",
+                "color": "1 1 1 0.6",
+                "fontSize":28,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.25",
+                "anchormax": "0.93 0.45"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block5",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.2",
+                "anchormax": "0.25 0.4",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Color",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "0.35 0.65 0.45 1.0",
+                        "to": "0.45 0.35 0.65 1.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 1.5,
+                        "from": "-0.15 0",
+                        "to": "0.15 0"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"At The Same Time",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block6",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.3 0.2",
+                "anchormax": "0.45 0.4",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 0.4,
+                        "repeat": -1,
+                        "repeatDelay": 1.6,
+                        "to": "0.15 0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0.4,
+                        "duration": 0.4,
+                        "repeat": -1,
+                        "repeatDelay": 1.6,
+                        "to": "0 -0.15"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0.8,
+                        "duration": 0.4,
+                        "repeat": -1,
+                        "repeatDelay": 1.6,
+                        "to": "-0.15 0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 1.2,
+                        "duration": 0.4,
+                        "repeat": -1,
+                        "repeatDelay": 1.6,
+                        "to": "0 0.15"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block6",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Or Staggered With Delays",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Block7",
+        "parent":"Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.6 0.2",
+                "anchormax": "0.75 0.4",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Color",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0,
+                        "from": "0.35 0.65 0.45 1.0",
+                        "to": "0.45 0.35 0.65 1.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 0.75,
+                        "repeat": -1,
+                        "repeatDelay": 0.75,
+                        "to": "0.15 0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 0.75,
+                        "repeat": -1,
+                        "repeatDelay": 0.75,
+                        "easing": "EaseIn",
+                        "to": "0 -0.15"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0.75,
+                        "duration": 0.75,
+                        "repeat": -1,
+                        "repeatDelay": 0.75,
+                        "to": "-0.15 0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide1_Kill",
+                        "type": "Translate",
+                        "delay": 0.75,
+                        "duration": 0.75,
+                        "repeat": -1,
+                        "repeatDelay": 0.75,
+                        "easing": "EaseIn",
+                        "to": "0 0.15"
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Block7",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Or Both",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            }
+        ]
+    },
+    {
+        "name": "Slide2_Kill",
+        "parent": "Slide2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"Slide2",
+                "color": "0.9 0.8 0.3 0.12"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.9 0.0",
+                "anchormax": "1 0.07"
+            }
+        ]
+    },
+    {
+        "parent": "Slide2_Kill",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Next Page",
+                "fontSize":16,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Slide3",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.05 0.15 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 -1",
+                "anchormax": "1 0"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "MoveTo",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "0 0 1 1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Opacity",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Can use Easing functions",
+                "color": "1 1 1 0.6",
+                "fontSize":28,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.65",
+                "anchormax": "0.93 0.92"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block1",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.3 0.7",
+                "anchormax": "0.3 0.7",
+                "offsetmin": "-25 -25",
+                "offsetmax": "25 25",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Easing: Linear",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.7",
+                "anchormax": "0.1 0.7",
+                "offsetmin": "25 25",
+                "offsetmax": "275 75",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block2",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.3 0.7",
+                "anchormax": "0.3 0.7",
+                "offsetmin": "-25 -125",
+                "offsetmax": "25 -75",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "EaseIn",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Easing: EaseIn",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.7",
+                "anchormax": "0.1 0.7",
+                "offsetmin": "25 -75",
+                "offsetmax": "275 -25",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block3",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.3 0.7",
+                "anchormax": "0.3 0.7",
+                "offsetmin": "-25 -225",
+                "offsetmax": "25 -175",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "EaseOut",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Easing: EaseOut",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.7",
+                "anchormax": "0.1 0.7",
+                "offsetmin": "25 -175",
+                "offsetmax": "275 -125",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block4",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.3 0.7",
+                "anchormax": "0.3 0.7",
+                "offsetmin": "-25 -325",
+                "offsetmax": "25 -275",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "EaseInOut",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Easing: EaseInOut",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.7",
+                "anchormax": "0.1 0.7",
+                "offsetmin": "25 -275",
+                "offsetmax": "275 -225",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block5",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.7 0.7",
+                "anchormax": "0.7 0.7",
+                "offsetmin": "-25 -25",
+                "offsetmax": "25 25",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "0.5 0.5 0.5 0.5",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Cubic Bezier: 0.5 0.5 0.5 0.5",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.7",
+                "anchormax": "0.5 0.7",
+                "offsetmin": "25 25",
+                "offsetmax": "275 75",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block6",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.7 0.7",
+                "anchormax": "0.7 0.7",
+                "offsetmin": "-25 -125",
+                "offsetmax": "25 -75",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "0.3 -1 0.7 1.5",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Cubic-Bezier: 0.3 -1 0.7 1.5",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.7",
+                "anchormax": "0.5 0.7",
+                "offsetmin": "25 -75",
+                "offsetmax": "275 -25",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block7",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.7 0.7",
+                "anchormax": "0.7 0.7",
+                "offsetmin": "-25 -225",
+                "offsetmax": "25 -175",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "0 1.5 0.7 0.4",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Cubic-Bezier: 0 1.5 0.7 0.4",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.7",
+                "anchormax": "0.5 0.7",
+                "offsetmin": "25 -175",
+                "offsetmax": "275 -125",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Block8",
+        "parent":"Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.7 0.7",
+                "anchormax": "0.7 0.7",
+                "offsetmin": "-25 -325",
+                "offsetmax": "25 -275",
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide2_Kill",
+                        "type": "Translate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "from": "-0.2 0",
+                        "to": "0.2 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Cubic-Bezier: 0 1.45 0.6 1",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.7",
+                "anchormax": "0.5 0.7",
+                "offsetmin": "25 -275",
+                "offsetmax": "275 -225",
+            }
+        ]
+    },
+    {
+        "name": "Slide3_Kill",
+        "parent": "Slide3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"Slide3",
+                "color": "0.9 0.8 0.3 0.12"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.9 0.0",
+                "anchormax": "1 0.07"
+            }
+        ]
+    },
+    {
+        "parent": "Slide3_Kill",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Next Page",
+                "fontSize":16,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Slide4",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.01 0.01 0.01 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 -1",
+                "anchormax": "1 0"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "type": "Opacity",
+                        "to": "0.0"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide3_Kill",
+                        "type": "MoveTo",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "0 0 1 1"
+                    },
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide3_Kill",
+                        "type": "Opacity",
+                        "delay": 0.2,
+                        "duration": 0.5,
+                        "easing": "0 1.45 0.6 1",
+                        "to": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Brings A Few unrelated but useful additions",
+                "color": "1 1 1 0.6",
+                "fontSize":28,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.65",
+                "anchormax": "0.93 0.92"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "name": "Slide4_Block1",
+        "parent":"Slide4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.1 0.3",
+                "anchormax": "0.4 0.7"
+            },
+            {
+                "type": "UnityEngine.UI.RectMask2D"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide4_Block1",
+                        "type": "Rotate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "from": "0 0 180",
+                        "to": "0 0 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide4_Block1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"RectMask2D is a more performant way to mask objects but... [Hover me]",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.3",
+                "anchormax": "1 1",
+            }
+        ]
+    },
+    {
+        "name": "Slide4_Block1Moving",
+        "parent":"Slide4_Block1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.15 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "-0.1 0.03",
+                "anchormax": "0 0.13"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide3_Kill",
+                        "type": "MoveTo",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "from": "-0.1 0.03 0 0.13",
+                        "to": "1.0 0.03 1.1 0.13"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Slide4_Block1Sub",
+        "parent":"Slide4_Block1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.05 0.05 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 -1",
+                "anchormax": "1 0"
+            },
+            {
+                "type": "UnityEngine.UI.RectMask2D"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnHoverEnter",
+                        "target": "Slide4_Block1",
+                        "type": "MoveTo",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "0 0 1 1"
+                    },
+                    {
+                        "trigger": "OnHoverExit",
+                        "target": "Slide4_Block1",
+                        "type": "MoveTo",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "0 -1 1 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide4_Block1Sub",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"But it Breaks when Using Rotation [ClickMe]",
+                "color": "1 1 1 0.8",
+                "fontSize":30,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1",
+            }
+        ]
+    },
+    {
+        "name": "Slide4_Block2",
+        "parent":"Slide4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.35 0.65 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.3",
+                "anchormax": "0.8 0.7"
+            },
+            {
+                "type": "UnityEngine.UI.Mask"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide4_Block2",
+                        "type": "Rotate",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "from": "0 0 180",
+                        "to": "0 0 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide4_Block2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Mask is a Bit less efficient but more reliable [HoverMe]",
+                "color": "1 1 1 0.8",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.3",
+                "anchormax": "1 1",
+            }
+        ]
+    },
+    {
+        "name": "Slide4_Block2Moving",
+        "parent":"Slide4_Block2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.15 0.45 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "-0.1 0.03",
+                "anchormax": "0 0.13"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnClick",
+                        "target": "Slide3_Kill",
+                        "type": "MoveTo",
+                        "delay": 0,
+                        "duration": 1.5,
+                        "repeat": -1,
+                        "repeatDelay": 0.5,
+                        "from": "-0.1 0.03 0 0.13",
+                        "to": "1.0 0.03 1.1 0.13"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Slide4_Block2Sub",
+        "parent":"Slide4_Block2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.05 0.05 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 -1",
+                "anchormax": "1 0"
+            },
+            {
+                "type": "UnityEngine.UI.Mask"
+            },
+            {
+                "type": "Animation",
+                "properties": [
+                    {
+                        "trigger": "OnHoverEnter",
+                        "target": "Slide4_Block2",
+                        "type": "MoveTo",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "0 0 1 1"
+                    },
+                    {
+                        "trigger": "OnHoverExit",
+                        "target": "Slide4_Block2",
+                        "type": "MoveTo",
+                        "delay": 0,
+                        "duration": 0.5,
+                        "to": "0 -1 1 0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "parent": "Slide4_Block2Sub",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"It Doesnt Break on Rotation [ClickMe]",
+                "color": "1 1 1 0.8",
+                "fontSize":30,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1",
+            }
+        ]
+    },
+    {
+        "parent": "UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Animation",
+                "fontSize":44,
+                "align": "UpperCenter"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.07 0.81",
+                "anchormax": "0.93 1"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "color": "0.0 0 0 0.6",
+                "distance": "2 2"
+            }
+        ]
+    },
+    {
+        "name": "Button88",
+        "parent": "UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"UI",
+                "command":"cui.endtest",
+                "color": "0.9 0.8 0.3 0.02"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.0 0.0",
+                "anchormax": "0.1 0.07"
+            }
+        ]
+    },
+    {
+        "parent": "Button88",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Kill UI",
+                "fontSize":16,
+                "align": "MiddleCenter"
+            }
+        ]
+    }
+]
