@@ -456,8 +456,8 @@ public partial class CommunityEntity
                         var mask = viewportGO.AddComponent<RectMask2D>();
                     	scrollRect.viewport = viewportRT;
 			    
-                        if(obj.ContainsKey("maskSoftness"))
-                            mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+                        // if(obj.ContainsKey("maskSoftness"))
+                        //     mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
 			    
                         // create & register content panel
                         var childGO = new GameObject(go.name + "___Content");
