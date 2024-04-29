@@ -499,7 +499,7 @@ public partial class CommunityEntity
                     bool hideUnlessNeeded;
                     Scrollbar scrollbar;
                     // dont need ShouldUpdateField here either
-                    if(scrollRect.horizontal && obj.ContainsKey("horizonalScrollbar")){
+                    if(scrollRect.horizontal && obj.ContainsKey("horizontalScrollbar")){
                         barGO = new GameObject("Horizontal Scrollbar");
                         scrollObj = obj.GetObject("horizontalScrollbar");
                         invert = scrollObj.GetBoolean("invert", false);
