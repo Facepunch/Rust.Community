@@ -323,7 +323,7 @@ public partial class CommunityEntity
                     if ( ShouldUpdateField( "material" ) )
                         img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
                     if ( ShouldUpdateField( "color" ) ) // This is necessary for proper operation in conjunction with button.colors (You can remove it, it's not necessary.)
-                        img.color = obj.ContainsKey("handleColor") ? ColorEx.Parse("1.0 1.0 1.0 1.0") : ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                        img.color = obj.ContainsKey("normalColor") ? ColorEx.Parse("1.0 1.0 1.0 1.0") : ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
                     if ( ShouldUpdateField( "imagetype" ) )
                         img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
 
