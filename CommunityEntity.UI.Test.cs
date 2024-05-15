@@ -81,6 +81,39 @@ public class cui
 							]
 						},
 						{
+							""name"": ""ButtonLink"",
+							""parent"": ""TestPanel7766"",
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Button"",
+									""url"":""https://facepunch.com/"",
+									""normalColor"": ""0.55 0.78 0.24 1"",
+									""highlightColor"": ""0.8 0.28 0.2 1"",
+									""pressedColor"": ""0.204 0.596 0.859 1"",
+									""fadeDuration"": 0.4,
+									""imagetype"": ""Tiled""
+								},
+								{
+									""type"":""RectTransform"",
+									""anchormin"": ""0.3 0.05"",
+									""anchormax"": ""0.7 0.1""
+								}
+							]
+						},
+						{
+							""parent"": ""ButtonLink"",
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.Text"",
+									""text"":""Go to Facepunch.com"",
+									""fontSize"":15,
+									""align"": ""MiddleCenter""
+								}
+							]
+						},
+						{
 							""name"": ""ItemIcon"",
 							""parent"": ""TestPanel7766"",
 							""components"":
@@ -132,6 +165,11 @@ public class cui
 									""fontSize"":32,
 									""align"": ""MiddleRight"",
 								},
+								{
+									""type"":""RectTransform"",
+									""anchormin"": ""0.3 0.1"",
+									""anchormax"": ""0.7 0.15""
+								}
 							]
 						},
 					]
