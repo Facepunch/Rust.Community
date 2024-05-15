@@ -88,7 +88,7 @@ public class cui
 								{
 									""type"":""UnityEngine.UI.Button"",
 									""url"":""https://facepunch.com/"",
-									""handleColor"": ""0.55 0.78 0.24 1"",
+									""normalColor"": ""0.55 0.78 0.24 1"",
 									""highlightColor"": ""0.8 0.28 0.2 1"",
 									""pressedColor"": ""0.204 0.596 0.859 1"",
 									""fadeDuration"": 0.4,

@@ -303,8 +303,8 @@ public partial class CommunityEntity
                     
                     // style the button
                     var block = button.colors;
-                    if ( ShouldUpdateField( "handleColor" ) )
-                        block.normalColor = ColorEx.Parse( obj.GetString( "handleColor", "1.0 1.0 1.0 1.0" ) );
+                    if ( ShouldUpdateField( "normalColor" ) )
+                        block.normalColor = ColorEx.Parse( obj.GetString( "normalColor", "1.0 1.0 1.0 1.0" ) );
                     if ( ShouldUpdateField( "highlightColor" ) )
                         block.highlightedColor = ColorEx.Parse( obj.GetString( "highlightColor", "1.0 1.0 1.0 1.0" ) );
                     if ( ShouldUpdateField("pressedColor") )
