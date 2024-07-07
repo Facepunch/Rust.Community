@@ -137,7 +137,7 @@ public class cui
 					]
 					";
 
-        CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "AddUI", json );
+        CommunityEntity.ServerInstance.ClientRPC( RpcTarget.Player( "AddUI", args.Connection ), json );
     }
 
     [ServerUserVar]
@@ -206,7 +206,7 @@ public class cui
 					]
 					";
 
-        CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "AddUI", json );
+        CommunityEntity.ServerInstance.ClientRPC( RpcTarget.Player( "AddUI", args.Connection), json );
     }
 
 #if UNITY_EDITOR && CLIENT && SERVER
@@ -220,7 +220,7 @@ public class cui
 
         if ( !string.IsNullOrEmpty( toLoad ) )
         {
-            CommunityEntity.ServerInstance.ClientRPC( null, "AddUI", System.IO.File.ReadAllText( toLoad ) );
+            CommunityEntity.ServerInstance.ClientRPC( RpcTarget.NetworkGroup( "AddUI" ), System.IO.File.ReadAllText( toLoad ) );
         }
     }
 #endif
@@ -229,7 +229,7 @@ public class cui
     public static void endtest( ConsoleSystem.Arg args )
     {
         args.ReplyWith( "Ending Test!" );
-        CommunityEntity.ServerInstance.ClientRPCEx( new Network.SendInfo() { connection = args.Connection }, null, "DestroyUI", "TestPanel7766" );
+        CommunityEntity.ServerInstance.ClientRPC( RpcTarget.Player( "DestroyUI", args.Connection ), "TestPanel7766" );
     }
 }
 #endif
