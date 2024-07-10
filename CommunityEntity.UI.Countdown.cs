@@ -9,7 +9,7 @@ using System.IO;
 public partial class CommunityEntity
 {
 #if CLIENT
-    private class Countdown : FacepunchBehaviour
+    private class Countdown : MonoBehaviour
     {
         public string command = "";
         public float endTime = 0f;
@@ -49,7 +49,7 @@ public partial class CommunityEntity
                 step = 0 - step;
             }
 
-            InvokeRepeating(UpdateCountdown, interval, interval );
+            InvokeRepeating( "UpdateCountdown", interval, interval );
         }
 
         void UpdateCountdown()
@@ -77,18 +77,18 @@ public partial class CommunityEntity
 
         void End()
         {
-            CancelInvoke( UpdateCountdown );
+            CancelInvoke( "UpdateCountdown" );
 
             if(!destroyIfDone) return;
 
             CommunityEntity.ClientInstance.DestroyPanel(gameObject.name);
         }
 
-		public void Reset(){
-            CancelInvoke( UpdateCountdown );
-            InvokeRepeating( UpdateCountdown, interval, interval );
-		}
-		
+	public void Reset(){
+            CancelInvoke( "UpdateCountdown" );
+            InvokeRepeating( "UpdateCountdown", interval, interval );
+	}
+
         void UpdateDisplay(float time){
             TimeSpan t = TimeSpan.FromSeconds( time );
             string formattedTime = timerFormat switch{
