@@ -67,8 +67,9 @@ public partial class CommunityEntity
                 DestroyPanel( json.GetString( "destroyUi", "AddUI CreatedPanel" ) );
             }
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
+            var gameObjectName = json.GetString( "name", "AddUI CreatedPanel" );
+
             // ensuring that unnamed panels are given a unique name
-            var gameObjectName = json.GetString( "name", Guid.NewGuid().ToString() );
             if ( parentPanel == null )
             {
                 Debug.LogWarning( "AddUI: Unknown Parent for \"" + gameObjectName + "\": " + json.GetString( "parent", "Overlay" ) );
@@ -680,7 +681,7 @@ public partial class CommunityEntity
         }
         else
         {
-            Object.Destroy( panel );
+            Destroy( panel );
         }
     }
 }

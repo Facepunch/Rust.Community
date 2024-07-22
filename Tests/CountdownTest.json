@@ -41,6 +41,7 @@
     },
     {
         "parent": "Example",
+        "name": "DefaultTimer",
         "components":
         [
             {
@@ -67,6 +68,7 @@
     },
     {
         "parent": "Example",
+        "name": "FloatTimer",
         "components":
         [
             {
@@ -198,7 +200,7 @@
             {
                 "type":"UnityEngine.UI.Text",
                 "text":"x",
-                "fontSize":22,
+                "fontSize":20,
                 "align": "MiddleCenter"
             }
         ]

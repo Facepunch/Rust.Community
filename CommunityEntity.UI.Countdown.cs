@@ -1,10 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Facepunch.Extend;
-using System.IO;
 
 public partial class CommunityEntity
 {
@@ -84,12 +79,14 @@ public partial class CommunityEntity
             CommunityEntity.ClientInstance.DestroyPanel(gameObject.name);
         }
 
-	public void Reset(){
+	    public void Reset()
+        {
             CancelInvoke( "UpdateCountdown" );
             InvokeRepeating( "UpdateCountdown", interval, interval );
-	}
+	    }
 
-        void UpdateDisplay(float time){
+        void UpdateDisplay(float time)
+        {
             TimeSpan t = TimeSpan.FromSeconds( time );
             string formattedTime = timerFormat switch{
                 TimerFormat.SecondsHundreth => t.ToString("ss\\.ff"),
@@ -102,7 +99,8 @@ public partial class CommunityEntity
             textComponent.text = tempText.Replace( "%TIME_LEFT%", formattedTime );
         }
 
-        public enum TimerFormat {
+        public enum TimerFormat 
+        {
             None,
             SecondsHundreth,
             MinutesSeconds,
