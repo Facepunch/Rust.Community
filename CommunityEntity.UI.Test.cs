@@ -254,7 +254,7 @@ public class cui
         if ( LocalPlayer.Entity == null || !Application.isPlaying )
             return;
 
-        var toLoad = UnityEditor.EditorUtility.OpenFilePanel( "JSON to load", Application.dataPath, "txt" );
+        var toLoad = UnityEditor.EditorUtility.OpenFilePanel( "JSON to load", $"{Application.dataPath}/Third Party/Community/Tests", "json" );
 
         if ( !string.IsNullOrEmpty( toLoad ) )
         {
