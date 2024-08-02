@@ -94,6 +94,9 @@ public partial class CommunityEntity
                 TimerFormat.MinutesSecondsHundreth => t.ToString("mm\\:ss\\.ff"),
                 TimerFormat.HoursMinutes => t.ToString("hh\\:mm"),
                 TimerFormat.HoursMinutesSeconds => t.ToString("hh\\:mm\\:ss"),
+                TimerFormat.DaysHoursMinutes => t.ToString("d\\.hh\\:mm"),
+                TimerFormat.DaysHoursMinutesSeconds => t.ToString("d\\.hh\\:mm\\:ss"),
+                TimerFormat.Custom => time.ToString(numberFormat),
                 _ => time.ToString(numberFormat)
             };
             textComponent.text = tempText.Replace( "%TIME_LEFT%", formattedTime );
@@ -106,7 +109,10 @@ public partial class CommunityEntity
             MinutesSeconds,
             MinutesSecondsHundreth,
             HoursMinutes,
-            HoursMinutesSeconds
+            HoursMinutesSeconds,
+            DaysHoursMinutes,
+            DaysHoursMinutesSeconds,
+            Custom
         }
     }
 
