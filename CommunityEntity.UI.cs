@@ -274,24 +274,50 @@ public partial class CommunityEntity
 
             case "UnityEngine.UI.Button":
                 {
-                    var c = GetOrAddComponent<UnityEngine.UI.Button>();
-                    HandleEnableState( obj, c );
+                    var button = GetOrAddComponent<UnityEngine.UI.Button>();
+                    HandleEnableState( obj, button );
 
                     if ( obj.ContainsKey( "command" ) )
                     {
                         var cmd = obj.GetString( "command" );
                         if ( allowUpdate )
-                            c.onClick.RemoveAllListeners();
-                        c.onClick.AddListener( () => { ConsoleNetwork.ClientRunOnServer( cmd ); } );
+                            button.onClick.RemoveAllListeners();
+                        button.onClick.AddListener( () => { ConsoleNetwork.ClientRunOnServer( cmd ); } );
                     }
 
                     if ( obj.ContainsKey( "close" ) )
                     {
                         var pnlName = obj.GetString( "close" );
                         if ( allowUpdate )
-                            c.onClick.RemoveAllListeners();
-                        c.onClick.AddListener( () => { DestroyPanel( pnlName ); } );
+                            button.onClick.RemoveAllListeners();
+                        button.onClick.AddListener( () => { DestroyPanel( pnlName ); } );
                     }
+                    
+                    if (obj.ContainsKey("url"))
+                    {
+                        string url = obj.GetString("url");
+                        if (url.StartsWith("http://") || url.StartsWith("https://")) // This is necessary for safety. It won't be able to open local files.
+                        {
+                            if (allowUpdate)
+                                button.onClick.RemoveAllListeners();
+                            button.onClick.AddListener(() => { Application.OpenURL(url); });
+                        }
+                    }
+                    
+                    // style the button
+                    var block = button.colors;
+                    if ( ShouldUpdateField( "normalColor" ) )
+                        block.normalColor = ColorEx.Parse( obj.GetString( "normalColor", "1.0 1.0 1.0 1.0" ) );
+                    if ( ShouldUpdateField( "highlightColor" ) )
+                        block.highlightedColor = ColorEx.Parse( obj.GetString( "highlightColor", "1.0 1.0 1.0 1.0" ) );
+                    if ( ShouldUpdateField("pressedColor") )
+                    {
+                        block.pressedColor = ColorEx.Parse( obj.GetString( "pressedColor", "0.78 0.78 0.78 1" ) );
+                        block.selectedColor = block.pressedColor;
+                    }
+                    if ( ShouldUpdateField("fadeDuration") )
+                        block.fadeDuration = obj.GetFloat("fadeDuration", 0.1f); //Smoothness of color change
+                    button.colors = block;
 
                     // bg image
                     var img = GetOrAddComponent<UnityEngine.UI.Image>();
@@ -299,12 +325,12 @@ public partial class CommunityEntity
                         img.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
                     if ( ShouldUpdateField( "material" ) )
                         img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
-                    if ( ShouldUpdateField( "color" ) )
-                        img.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    if ( ShouldUpdateField( "color" ) ) // This is necessary for proper operation in conjunction with button.colors (You can remove it, it's not necessary.)
+                        img.color = obj.ContainsKey("normalColor") ? ColorEx.Parse("1.0 1.0 1.0 1.0") : ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
                     if ( ShouldUpdateField( "imagetype" ) )
                         img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
 
-                    c.image = img;
+                    button.image = img;
 
                     GraphicComponentCreated( img, obj );
 
