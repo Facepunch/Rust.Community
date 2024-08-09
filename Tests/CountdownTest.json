@@ -1,0 +1,208 @@
+[
+    {
+        "name": "UI",
+        "parent":"Overlay",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.05 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            },
+            {
+                "type":"NeedsCursor"
+            }
+        ]
+    },
+    {
+        "name": "Example",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.1 0.1 0.1 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.2 0",
+                "anchormax": "0.8 1"
+            },
+            {
+                "type":"NeedsCursor"
+            }
+        ]
+    },
+    {
+        "parent": "Example",
+        "name": "DefaultTimer",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Destroying default timer in %TIME_LEFT%",
+                "fontSize":26,
+                "align": "MiddleCenter",
+            },
+            {
+                "type":"Countdown",
+                "startTime": 5,
+                "endTime": 0,
+                "step": 1,
+                "command": "test"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.7",
+                "anchormax": "1 0.7",
+                "offsetmin": "0 -50",
+                "offsetmax": "0 0"
+            }
+        ]
+    },
+    {
+        "parent": "Example",
+        "name": "FloatTimer",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Faster Step thanks to float support: %TIME_LEFT%",
+                "fontSize":26,
+                "align": "MiddleCenter",
+            },
+            {
+                "type":"Countdown",
+                "startTime": 5,
+                "endTime": 0,
+                "step": 0.04,
+                "numberFormat": "0.0"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.7",
+                "anchormax": "1 0.7",
+                "offsetmin": "0 -100",
+                "offsetmax": "0 -50"
+            }
+        ]
+    },
+    {
+        "parent": "Example",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Counting up & staying: %TIME_LEFT%",
+                "fontSize":26,
+                "align": "MiddleCenter",
+            },
+            {
+                "type":"Countdown",
+                "startTime": 5.0,
+                "endTime": 16.0,
+                "step": 0.07,
+                "interval": 0.04,
+                "numberFormat": "0.##",
+                "destroyIfDone": false
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.7",
+                "anchormax": "1 0.7",
+                "offsetmin": "0 -150",
+                "offsetmax": "0 -100"
+            }
+        ]
+    },
+    {
+        "parent": "Example",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"You've Spent %TIME_LEFT% Seconds Looking at this Text",
+                "fontSize":26,
+                "align": "MiddleCenter",
+            },
+            {
+                "type":"Countdown",
+                "startTime": 0.0,
+                "endTime": 240.0,
+                "step": 0.035,
+                "interval": 0.035,
+                "timerFormat": "MinutesSecondsHundreth",
+                "destroyIfDone": false
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.7",
+                "anchormax": "1 0.7",
+                "offsetmin": "0 -200",
+                "offsetmax": "0 -150"
+            }
+        ]
+    },
+    {
+        "parent": "Example",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Your Ability is on Cooldown for: %TIME_LEFT%",
+                "fontSize":26,
+                "align": "MiddleCenter",
+            },
+            {
+                "type":"Countdown",
+                "startTime": 5364.43,
+                "endTime": 0.00,
+                "timerFormat": "HoursMinutesSeconds",
+                "destroyIfDone": false
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.7",
+                "anchormax": "1 0.7",
+                "offsetmin": "0 -250",
+                "offsetmax": "0 -200"
+            }
+        ]
+    },
+    {
+        "name": "Button88",
+        "parent": "UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"UI",
+                "command":"cui.endtest",
+                "color": "0.9 0.8 0.3 0.8"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.02 0.02",
+                "anchormax": "0.05 0.05"
+            }
+        ]
+    },
+    {
+        "parent": "Button88",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"x",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            }
+        ]
+    }
+]

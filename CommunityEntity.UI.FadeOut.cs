@@ -1,16 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Facepunch.Extend;
-using System.IO;
 
 #if CLIENT
 
 public partial class CommunityEntity
 {
-
-      private class FadeOut : MonoBehaviour
+    private class FadeOut : MonoBehaviour
     {
         public float duration;
 
@@ -28,7 +22,6 @@ public partial class CommunityEntity
             Destroy( gameObject );
         }
     }
-
 }
 
 #endif
