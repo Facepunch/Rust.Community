@@ -88,14 +88,18 @@ public partial class CommunityEntity
         void UpdateDisplay(float time)
         {
             TimeSpan t = TimeSpan.FromSeconds( time );
-            string formattedTime = timerFormat switch{
+            
+            string formattedTime = timerFormat switch
+            {
                 TimerFormat.SecondsHundreth => t.ToString("ss\\.ff"),
                 TimerFormat.MinutesSeconds => t.ToString("mm\\:ss"),
                 TimerFormat.MinutesSecondsHundreth => t.ToString("mm\\:ss\\.ff"),
-                TimerFormat.HoursMinutes => t.ToString("hh\\:mm"),
-                TimerFormat.HoursMinutesSeconds => t.ToString("hh\\:mm\\:ss"),
-                TimerFormat.DaysHoursMinutes => t.ToString("d\\.hh\\:mm"),
-                TimerFormat.DaysHoursMinutesSeconds => t.ToString("d\\.hh\\:mm\\:ss"),
+                TimerFormat.HoursMinutes => $"{(int)t.TotalHours:0}:{t:mm}",
+                TimerFormat.HoursMinutesSeconds => $"{(int)t.TotalHours:0}:{t:mm\\:ss}",
+                TimerFormat.HoursMinutesSecondsMilliseconds => $"{(int)t.TotalHours:0}:{t:mm\\:ss\\:fff}",
+                TimerFormat.HoursMinutesSecondsTenths => $"{(int)t.TotalHours:0}:{t:mm\\:ss\\.f}",
+                TimerFormat.DaysHoursMinutes => $"{t:%d}.{t:hh\\:mm}",
+                TimerFormat.DaysHoursMinutesSeconds => $"{t:%d}.{t:hh\\:mm\\:ss}",
                 TimerFormat.Custom => t.ToString(numberFormat),
                 _ => time.ToString(numberFormat)
             };
@@ -110,6 +114,8 @@ public partial class CommunityEntity
             MinutesSecondsHundreth,
             HoursMinutes,
             HoursMinutesSeconds,
+            HoursMinutesSecondsMilliseconds,
+            HoursMinutesSecondsTenths,
             DaysHoursMinutes,
             DaysHoursMinutesSeconds,
             Custom
