@@ -1,0 +1,2208 @@
+[{
+		"name": "UI",
+		"parent": "Overlay",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.05 0.05 0.05 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "1 1"
+			},
+			{
+				"type": "NeedsCursor"
+			}
+		]
+	},
+	{
+		"name": "Slide0",
+		"parent": "UI",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.05 0.05 0.05 0.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "1 1",
+				"offsetmin": "0 0",
+				"offsetmax": "0 -60"
+			}
+		]
+	},
+	{
+		"parent": "Slide0",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "Using Multiple Animations with different mouseTargets",
+				"color": "1 1 1 0.6",
+				"fontSize": 28,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.65",
+				"anchormax": "0.93 0.92"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "0.0 0 0 0.6",
+				"distance": "2 2"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Opacity",
+						"to": "0.0"
+					},
+					{
+						"type": "Opacity",
+						"delay": 0.5,
+						"duration": 0.5,
+						"from": "0",
+						"to": "1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Slide0",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "lets us listen to multiple mouseTargets, Opening up things",
+				"color": "1 1 1 0.8",
+				"fontSize": 22,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.8",
+				"anchormax": "0.93 0.8",
+				"offsetmin": "0 -30",
+				"offsetmax": "0 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Opacity",
+						"to": "0.0"
+					},
+					{
+						"type": "Opacity",
+						"delay": 1.0,
+						"duration": 0.5,
+						"from": "0",
+						"to": "1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Slide0",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "Like Tabs",
+				"color": "1 1 1 0.8",
+				"fontSize": 50,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.8",
+				"anchormax": "0.93 0.8",
+				"offsetmin": "0 -170",
+				"offsetmax": "0 -90"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Opacity",
+						"to": "0.0"
+					},
+					{
+						"type": "Opacity",
+						"delay": 1.5,
+						"duration": 0.5,
+						"from": "0",
+						"to": "1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "TabBar",
+		"parent": "UI",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.05 0.05 0.05 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 20",
+				"offsetmax": "0 80"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+					"type": "MoveToPX",
+					"delay": 1.5,
+					"easing": "0 1.45 0.6 1",
+					"duration": 0.5,
+					"to": "0 -60 0 0"
+				}]
+			}
+		]
+	},
+	{
+		"name": "Tab_Button1",
+		"parent": "TabBar",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "0.0 0 0 0.4",
+				"distance": "1 0"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "0.33 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Tab_Button1",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "<b>Details</b>",
+				"color": "1 1 1 1",
+				"fontSize": 24,
+				"align": "MiddleCenter"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Tab_Button2",
+		"parent": "TabBar",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "0.0 0 0 0.4",
+				"distance": "1 0"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.33 0",
+				"anchormax": "0.66 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Tab_Button2",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "<b>Modals</b>",
+				"color": "1 1 1 1",
+				"fontSize": 24,
+				"align": "MiddleCenter"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Tab_Button3",
+		"parent": "TabBar",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "0.0 0 0 0.4",
+				"distance": "1 0"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.66 0",
+				"anchormax": "1 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.15 0.15 0.15 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Tab_Button3",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "<b>Dropdowns</b>",
+				"color": "1 1 1 1",
+				"fontSize": 24,
+				"align": "MiddleCenter"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.2 0.7 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Tab_Highlight",
+		"parent": "TabBar",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "1 0",
+				"offsetmin": "0 0",
+				"offsetmax": "0 3"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0,
+						"to": "0.4 0.4 0.4 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button1",
+						"type": "Color",
+						"duration": 0.3,
+						"easing": "0 1.15 0.6 1",
+						"to": "0.25 0.8 0.35 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button1",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 1.15 0.6 1",
+						"to": "0 0 0.33 0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button2",
+						"type": "Color",
+						"duration": 0.3,
+						"easing": "0 1.15 0.6 1",
+						"to": "0.25 0.8 0.35 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button2",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 1.15 0.6 1",
+						"to": "0.33 0 0.66 0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button3",
+						"type": "Color",
+						"duration": 0.3,
+						"easing": "0 1.15 0.6 1",
+						"to": "0.25 0.8 0.35 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button3",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 1.15 0.6 1",
+						"to": "0.66 0 1 0"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Tabs",
+		"parent": "UI",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.08 0.08 0.08 0.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 0",
+				"anchormax": "2 1",
+				"offsetmin": "0 0",
+				"offsetmax": "0 -60"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+					"trigger": "OnClick",
+					"target": "TabBar",
+					"type": "MoveTo",
+					"easing": "0 1.15 0.6 1",
+					"duration": 0.5,
+					"to": "0 0 1 1"
+				}]
+			}
+		]
+	},
+	{
+		"name": "Tab1",
+		"parent": "Tabs",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.09 0.09 0.09 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "1 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "Tab_Button1",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button2",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "-1 0 0 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button3",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "-1 0 0 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Tab1",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "this subtle change lets us react to mouse events on different panels, which is great for creating more complex UI behaviours completely without server interaction required",
+				"color": "1 1 1 0.9",
+				"fontSize": 22,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.8",
+				"anchormax": "0.93 0.8",
+				"offsetmin": "0 -70",
+				"offsetmax": "0 0"
+			}
+		]
+	},
+	{
+		"parent": "Tab1",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "for example, we can make a tab system that cohesively swipes from right to left depending on which tab the user last selected, and even have a material-style tab indicator that smoothly swipes between the tabs",
+				"color": "1 1 1 0.7",
+				"fontSize": 18,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.8",
+				"anchormax": "0.9 0.8",
+				"offsetmin": "0 -160",
+				"offsetmax": "0 -80"
+			}
+		]
+	},
+	{
+		"parent": "Tab1",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "aside from tabs we can create Modals & dropdowns with great UX",
+				"color": "1 1 1 0.7",
+				"fontSize": 18,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.8",
+				"anchormax": "0.9 0.8",
+				"offsetmin": "0 -240",
+				"offsetmax": "0 -160"
+			}
+		]
+	},
+	{
+		"name": "Tab2",
+		"parent": "Tabs",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.05 0.05 0.05 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 0",
+				"anchormax": "2 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "Tab_Button2",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button1",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "1 0 2 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button3",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "-1 0 0 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "Tab2",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "Click the button below to open a modal",
+				"color": "1 1 1 0.9",
+				"fontSize": 22,
+				"align": "UpperCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.8",
+				"anchormax": "0.93 0.8",
+				"offsetmin": "0 -70",
+				"offsetmax": "0 0"
+			}
+		]
+	},
+	{
+		"name": "ModalButton",
+		"parent": "Tab2",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.5 0.5",
+				"anchormax": "0.5 0.5",
+				"offsetmin": "-50 -20",
+				"offsetmax": "50 20"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "ModalButton",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Open Modal",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "Tab3",
+		"parent": "Tabs",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.09 0.09 0.09 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 0",
+				"anchormax": "2 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "Tab_Button3",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button2",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "1 0 2 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "Tab_Button1",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "1 0 2 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "Tab3_Section1",
+		"parent": "Tab3",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.09 0.09 0.09 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "0.33 1"
+			}
+		]
+	},
+	{
+		"name": "DropDown1_Button",
+		"parent": "Tab3_Section1",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.9",
+				"anchormax": "0.9 0.9",
+				"offsetmin": "0 -20",
+				"offsetmax": "0 20"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown1_Button",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Select Option",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown1_Parent",
+		"parent": "Tab3_Section1",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.09 0.09 0.09 0.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 -1",
+				"anchormax": "1 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [
+
+					{
+						"trigger": "OnClick",
+						"target": "DropDown1_Button",
+						"type": "MoveTo",
+						"duration": 0,
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "DropDown1_Parent",
+						"type": "MoveTo",
+						"delay": 0.3,
+						"duration": 0,
+						"to": "0 -1 1 0"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown1_Container",
+		"parent": "DropDown1_Parent",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.02 0.02 0.02 0.8",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "UnityEngine.UI.RectMask2D"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.9",
+				"anchormax": "0.9 0.9",
+				"offsetmin": "2 -20",
+				"offsetmax": "-2 -20"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "1 1 1 0.1",
+				"distance": "1 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown1_Button",
+						"type": "MoveToPX",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.3,
+						"to": "2 -220 -2 -20"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "DropDown1_Parent",
+						"type": "MoveToPX",
+						"easing": "0 0.85 0.6 1",
+						"duration": 0.3,
+						"to": "2 -20 -2 -20"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown1_Option1",
+		"parent": "DropDown1_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -40",
+				"offsetmax": "0 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown1_Option1",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Selecting an Option Closes the Dropdown",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown1_Option2",
+		"parent": "DropDown1_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -80",
+				"offsetmax": "0 -40"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown1_Option2",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Option 2",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown1_Option3",
+		"parent": "DropDown1_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -120",
+				"offsetmax": "0 -80"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown1_Option3",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Dont choose me",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown1_Option4",
+		"parent": "DropDown1_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -160",
+				"offsetmax": "0 -120"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown1_Option4",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Choose me",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown1_Option5",
+		"parent": "DropDown1_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -200",
+				"offsetmax": "0 -160"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown1_Option5",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "i'm just filler",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "Tab3_Section2",
+		"parent": "Tab3",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.06 0.06 0.06 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.33 0",
+				"anchormax": "0.66 1"
+			}
+		]
+	},
+	{
+		"name": "DropDown2_Button",
+		"parent": "Tab3_Section2",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.9",
+				"anchormax": "0.9 0.9",
+				"offsetmin": "0 -20",
+				"offsetmax": "0 20"
+			},
+			{
+				"type": "UnityEngine.UI.RectMask2D"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown2_ButtonExpand",
+		"parent": "DropDown2_Button",
+		"components": [{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "1 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 0.75 0.6 1",
+						"to": "0 -1 1 0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "DropDown2_ButtonCollapse",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 0.75 0.6 1",
+						"to": "0 0 1 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown2_ButtonExpand",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Expand",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown2_ButtonCollapse",
+		"parent": "DropDown2_Button",
+		"components": [{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 2"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown2_ButtonExpand",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 0.75 0.6 1",
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.3,
+						"easing": "0 0.75 0.6 1",
+						"to": "0 1 1 2"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown2_ButtonCollapse",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Collapse",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown2_Container",
+		"parent": "Tab3_Section2",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.02 0.02 0.02 0.8",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "UnityEngine.UI.RectMask2D"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.9",
+				"anchormax": "0.9 0.9",
+				"offsetmin": "2 -20",
+				"offsetmax": "-2 -20"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "1 1 1 0.1",
+				"distance": "1 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown2_ButtonExpand",
+						"type": "MoveToPX",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.3,
+						"to": "2 -320 -2 -20"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "DropDown2_ButtonCollapse",
+						"type": "MoveToPX",
+						"easing": "0 0.85 0.6 1",
+						"duration": 0.3,
+						"to": "2 -20 -2 -20"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown2_TextContainer",
+		"parent": "DropDown2_Container",
+		"components": [{
+			"type": "RectTransform",
+			"anchormin": "0.05 1",
+			"anchormax": "0.95 1",
+			"offsetmin": "0 -300",
+			"offsetmax": "0 0"
+		}]
+	},
+	{
+		"parent": "DropDown2_TextContainer",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "unlike the first dropdown, this dropdown can only be closed by clicking the Collapse button. the Expand/Collapse button illustrates that this also lets us somewhat track state right in the UI, which allows us to create simple triggerals like checkboxes without requiring any AddUI/Destroy calls from the server",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "Tab3_Section3",
+		"parent": "Tab3",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.09 0.09 0.09 1.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.66 0",
+				"anchormax": "1 1"
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Button",
+		"parent": "Tab3_Section3",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.9",
+				"anchormax": "0.9 0.9",
+				"offsetmin": "0 -20",
+				"offsetmax": "0 20"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 1.0"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.8"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Button",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Select Option",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Parent",
+		"parent": "Tab3_Section3",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.09 0.09 0.09 0.0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 -1",
+				"anchormax": "1 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Button",
+						"type": "MoveTo",
+						"duration": 0,
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"delay": 0.3,
+						"duration": 0,
+						"to": "0 -1 1 0"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Container",
+		"parent": "Tab3_Section3",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.02 0.02 0.02 0.8",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "UnityEngine.UI.ScrollView",
+				"vertical": true,
+				"horizontal": false,
+				"movementType": "Clamped",
+				"inertia": false,
+				"contentTransform": {
+					"anchormin": "0 1",
+					"anchormax": "1 1",
+					"offsetmin": "0 -280",
+					"offsetmax": "0 0"
+				},
+				"verticalScrollbar": {
+					"autoHide": true,
+					"size": 10
+				},
+				"scrollSensitivity": 15.0
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.1 0.9",
+				"anchormax": "0.9 0.9",
+				"offsetmin": "2 -20",
+				"offsetmax": "-2 -20"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "1 1 1 0.1",
+				"distance": "1 1"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Button",
+						"type": "MoveToPX",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.3,
+						"to": "2 -220 -2 -20"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "DropDown3_Parent",
+						"type": "MoveToPX",
+						"easing": "0 0.85 0.6 1",
+						"duration": 0.3,
+						"to": "2 -20 -2 -20"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Option1",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -40",
+				"offsetmax": "0 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option1",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Selecting an Option wont close the Dropdown",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option1Selected",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0.1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "2 1",
+				"offsetmin": "0 -40",
+				"offsetmax": "0 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Option1",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "0 1 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "1 1 2 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Option2",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -80",
+				"offsetmax": "0 -40"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option2",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "You Can Select Me",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option2Selected",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0.1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "2 1",
+				"offsetmin": "0 -80",
+				"offsetmax": "0 -40"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Option2",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "0 1 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "1 1 2 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Option3",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -120",
+				"offsetmax": "0 -80"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option3",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Or Me!",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option3Selected",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0.1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "2 1",
+				"offsetmin": "0 -120",
+				"offsetmax": "0 -80"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Option3",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "0 1 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "1 1 2 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Option4",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -160",
+				"offsetmax": "0 -120"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+					"type": "Color",
+					"duration": 0.1,
+					"to": "0.15 0.35 0.2 0.1"
+				}]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option4",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Not me Though",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option5",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -200",
+				"offsetmax": "0 -160"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option5",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "i'm just filler",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option5Selected",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0.1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "2 1",
+				"offsetmin": "0 -200",
+				"offsetmax": "0 -160"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Option5",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "0 1 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "1 1 2 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Option6",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -240",
+				"offsetmax": "0 -200"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option6",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "i'm just filler",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option6Selected",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0.1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "2 1",
+				"offsetmin": "0 -240",
+				"offsetmax": "0 -200"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "DropDown3_Option6",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "0 1 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"type": "MoveTo",
+						"duration": 0.1,
+						"to": "1 1 2 1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "DropDown3_Option7",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 1",
+				"anchormax": "1 1",
+				"offsetmin": "0 -280",
+				"offsetmax": "0 -240"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.2"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.1"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "DropDown3_Option7",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "i'm just filler",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"name": "DropDown3_Option7Selected",
+		"parent": "DropDown3_Container",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0.1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "2 1",
+				"offsetmin": "0 -280",
+				"offsetmax": "0 -240"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+					"trigger": "OnClick",
+					"target": "DropDown3_Option7",
+					"type": "MoveTo",
+					"duration": 0.1,
+					"to": "0 1 1 1"
+				}]
+			},
+			{
+				"type": "Animation",
+				"mouseTarget": "DropDown3_Option7Selected",
+				"properties": [{
+					"trigger": "OnClick",
+					"type": "MoveTo",
+					"duration": 0.1,
+					"to": "1 1 2 1"
+				}]
+			}
+		]
+	},
+	{
+		"name": "ModalParent",
+		"parent": "UI",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 -1",
+				"anchormax": "1 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"trigger": "OnClick",
+						"target": "ModalButton",
+						"type": "Color",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0,
+						"to": "0.05 0.05 0.05 0.0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "ModalButton",
+						"type": "Color",
+						"easing": "0 1.15 0.6 1",
+						"delay": 0.5,
+						"duration": 0.5,
+						"from": "0.05 0.05 0.05 0.0",
+						"to": "0.05 0.05 0.05 0.98"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "ModalButton",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.5,
+						"to": "0 0 1 1"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "ModalCloseButton",
+						"type": "Color",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.2,
+						"to": "0.05 0.05 0.05 0.0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "ModalCloseButton",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"delay": 0.2,
+						"duration": 0.5,
+						"to": "0 -1 1 0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "ModalBackdrop",
+						"type": "Color",
+						"easing": "0 1.15 0.6 1",
+						"duration": 0.2,
+						"to": "0.05 0.05 0.05 0.0"
+					},
+					{
+						"trigger": "OnClick",
+						"target": "ModalBackdrop",
+						"type": "MoveTo",
+						"easing": "0 1.15 0.6 1",
+						"delay": 0.2,
+						"duration": 0.5,
+						"to": "0 -1 1 0"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "ModalBackdrop",
+		"parent": "ModalParent",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 0",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0 0",
+				"anchormax": "1 1"
+			}
+		]
+	},
+	{
+		"name": "Modal",
+		"parent": "ModalParent",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "0.08 0.08 0.08 1"
+			},
+			{
+				"type": "UnityEngine.UI.Outline",
+				"color": "1 1 1 0.1",
+				"distance": "1 1"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.2 0.2",
+				"anchormax": "0.8 0.8"
+			}
+		]
+	},
+	{
+		"name": "ModalCloseButton",
+		"parent": "Modal",
+		"components": [{
+				"type": "UnityEngine.UI.RawImage",
+				"color": "1 1 1 1",
+				"sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "1 1",
+				"anchormax": "1 1",
+				"offsetmin": "-60 -25",
+				"offsetmax": "0 0"
+			},
+			{
+				"type": "Animation",
+				"properties": [{
+						"type": "Color",
+						"duration": 0,
+						"to": "0.3 0.65 0.35 0.4"
+					},
+					{
+						"trigger": "OnHoverEnter",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.6"
+					},
+					{
+						"trigger": "OnHoverExit",
+						"type": "Color",
+						"duration": 0.1,
+						"to": "0.3 0.65 0.35 0.4"
+					}
+				]
+			}
+		]
+	},
+	{
+		"parent": "ModalCloseButton",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Close",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	},
+	{
+		"parent": "Modal",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "Re-Usable Modals without any server interaction required",
+				"color": "1 1 1 0.8",
+				"fontSize": 24,
+				"align": "MiddleCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.8",
+				"anchormax": "0.93 0.8",
+				"offsetmin": "0 -30",
+				"offsetmax": "0 0"
+			}
+		]
+	},
+	{
+		"parent": "Modal",
+		"components": [{
+				"type": "UnityEngine.UI.Text",
+				"text": "to Close this modal you can click outside of it on the backdrop or use the dedicated close button",
+				"color": "1 1 1 0.8",
+				"fontSize": 20,
+				"align": "MiddleCenter"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.07 0.8",
+				"anchormax": "0.93 0.8",
+				"offsetmin": "0 -120",
+				"offsetmax": "0 -40"
+			}
+		]
+	},
+	{
+		"name": "Button88",
+		"parent": "UI",
+		"components": [{
+				"type": "UnityEngine.UI.Button",
+				"close": "UI",
+				"command": "cui.endtest",
+				"color": "0.9 0.8 0.3 0.52"
+			},
+			{
+				"type": "RectTransform",
+				"anchormin": "0.0 0.0",
+				"anchormax": "0.1 0.07"
+			}
+		]
+	},
+	{
+		"parent": "Button88",
+		"components": [{
+			"type": "UnityEngine.UI.Text",
+			"text": "Kill UI",
+			"fontSize": 16,
+			"align": "MiddleCenter"
+		}]
+	}
+]
