@@ -240,13 +240,7 @@ public partial class CommunityEntity
                             }
                         }
                     }
-
-                    if ( obj.ContainsKey( "steamid" ) )
-                    {
-			var steamid = (ulong)obj.GetNumber( "steamid" );
-                        c.texture = SingletonComponent<SteamClientWrapper>.Instance.GetAvatarTexture(steamid);
-                    }
-
+                    
                     GraphicComponentCreated( c, obj );
 
                     break;
@@ -274,6 +268,13 @@ public partial class CommunityEntity
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
                         ApplyTextureToImage( c, id );
+                    }
+                    
+                    if ( obj.ContainsKey( "steamid" ) )
+                    {
+                        var steamidString = obj.GetString( "steamid" );
+                        if(ulong.TryParse(steamidString, out var steamId))
+                            c.texture = SingletonComponent<SteamClientWrapper>.Instance.GetAvatarTexture(steamId);
                     }
 
                     GraphicComponentCreated( c, obj );

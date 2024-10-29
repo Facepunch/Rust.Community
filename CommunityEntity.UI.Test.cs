@@ -135,6 +135,26 @@ public class cui
 								},
 							]
 						},
+						{
+							""name"": ""SteamAvatar"",
+							""parent"": ""TestPanel7766"",
+							""components"":
+							[
+								{
+									""type"":""UnityEngine.UI.RawImage"",
+									""color"": ""1.0 1.0 1.0 1.0"",
+									""steamid"": ""76561197960279927"",
+								},
+								{
+									""type"":""RectTransform"",
+									""anchormin"":""0.8 0.8"",
+									""anchormax"":""0.8 0.8"",
+									""offsetmin"": ""-32 -32"",
+									""offsetmax"": ""32 32""
+								}
+							]
+						},
+
 					]
 					";
 
