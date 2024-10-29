@@ -129,6 +129,7 @@ public class cui
 								{
 									""type"":""UnityEngine.UI.Text"",
 									""text"":""This should go away once you update!"",
+									""font"":""DroidSansMono.ttf"",
 									""fontSize"":32,
 									""align"": ""MiddleRight"",
 								},
