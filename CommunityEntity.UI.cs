@@ -241,6 +241,12 @@ public partial class CommunityEntity
                         }
                     }
 
+                    if ( obj.ContainsKey( "steamid" ) )
+                    {
+			var steamid = (ulong)obj.GetNumber( "steamid" );
+                        c.texture = SingletonComponent<SteamClientWrapper>.Instance.GetAvatarTexture(steamid);
+                    }
+
                     GraphicComponentCreated( c, obj );
 
                     break;
