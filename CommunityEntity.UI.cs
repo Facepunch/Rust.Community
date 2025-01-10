@@ -374,6 +374,13 @@ public partial class CommunityEntity
                         c.inputType = password ? InputField.InputType.Password : InputField.InputType.Standard;
                     }
 
+                    if (allowUpdate && obj.ContainsKey("placeHolder"))
+                    {
+                        var placeholder = c.placeholder.GetComponent<Text>();
+                        if(placeholder != null)
+                            placeholder.text = obj.GetString("placeHolder");
+                    }
+
                     if ( obj.TryGetBoolean( "needsKeyboard", out var needsKeyboard ) )
                     {
                         var comp = GetOrAddComponent<NeedsKeyboardInputField>();
