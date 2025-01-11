@@ -376,9 +376,15 @@ public partial class CommunityEntity
 
                     if (allowUpdate && obj.ContainsKey("placeHolder"))
                     {
-                        var placeholder = c.placeholder.GetComponent<Text>();
-                        if(placeholder != null)
-                            placeholder.text = obj.GetString("placeHolder");
+                        var placeholder = new GameObject("Placeholder").AddComponent<Text>();
+                        placeholder.font = t.font;
+                        placeholder.fontSize = t.fontSize;
+                        placeholder.alignment = t.alignment;
+                        placeholder.text = obj.GetString("placeHolder", "Enter text...");
+                        placeholder.color = ColorEx.Parse(obj.GetString("placeHolderColor", "1 1 1 0.5"));
+                        
+                        c.placeholder = placeholder;
+                        placeholder.transform.SetParent(c.transform);
                     }
 
                     if ( obj.TryGetBoolean( "needsKeyboard", out var needsKeyboard ) )
