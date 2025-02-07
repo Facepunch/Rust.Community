@@ -30,8 +30,8 @@ public partial class CommunityEntity
             ["OnDestroy"] = new List<AnimationProperty>(),
             ["OnHoverEnter"] = new List<AnimationProperty>(),
             ["OnHoverExit"] = new List<AnimationProperty>(),
-            ["OnDrag"] = new List<AnimationProperty>(),
-            ["OnDrop"] = new List<AnimationProperty>(),
+            // ["OnDrag"] = new List<AnimationProperty>(),
+            // ["OnDrop"] = new List<AnimationProperty>(),
             ["OnClick"] = new List<AnimationProperty>(),
         };
 
@@ -62,8 +62,8 @@ public partial class CommunityEntity
             AttachTriggers(properties["OnHoverEnter"]);
             AttachTriggers(properties["OnHoverExit"]);
             AttachTriggers(properties["OnClick"]);
-            AttachTriggers(properties["OnDrag"]);
-            AttachTriggers(properties["OnDrop"]);
+            // AttachTriggers(properties["OnDrag"]);
+            // AttachTriggers(properties["OnDrop"]);
 
             StartByTrigger("OnCreate");
             initialized = true;
@@ -103,8 +103,8 @@ public partial class CommunityEntity
             StopByTrigger("OnCreate");
             StopByTrigger("OnHoverEnter");
             StopByTrigger("OnHoverExit");
-            StopByTrigger("OnDrag");
-            StopByTrigger("OnDrop");
+            // StopByTrigger("OnDrag");
+            // StopByTrigger("OnDrop");
 
             if(destroyed)
                 return;
@@ -201,16 +201,18 @@ public partial class CommunityEntity
                 listener.onExit += this.OnHoverExit;
                 listener.onClick += this.OnClick;
             }
-
+            /*
             var drag = go.GetComponent<Draggable>();
             if(drag == null)
                 return;
 
             drag.onDragCallback += this.OnDrag;
             drag.onDropCallback += this.OnDrop;
+            */
         }
 
         // Events
+        /*
         public void OnDrag(string panel){
             if(isKilled)
                 return;
@@ -225,6 +227,7 @@ public partial class CommunityEntity
             StopByTrigger("OnDrag", panel);
             StartByTrigger("OnDrop", panel);
         }
+        */
 
         public void OnHoverEnter(string panel){
             if(isKilled)

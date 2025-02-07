@@ -186,7 +186,7 @@ public partial class CommunityEntity
                     if ( ShouldUpdateField( "fontSize" ) )
                         c.fontSize = obj.GetInt( "fontSize", 14 );
                     if ( ShouldUpdateField( "font" ) )
-                    { 
+                    {
                         c.font = LoadFont(obj.GetString("font", strDEFAULT: "RobotoCondensed-Bold.ttf"));
                     }
                     if ( ShouldUpdateField( "align" ) )
@@ -249,7 +249,7 @@ public partial class CommunityEntity
                             }
                         }
                     }
-                    
+
                     GraphicComponentCreated( c, obj );
 
                     break;
@@ -278,7 +278,7 @@ public partial class CommunityEntity
                     {
                         ApplyTextureToImage( c, id );
                     }
-                    
+
                     if ( obj.ContainsKey( "steamid" ) )
                     {
                         var steamidString = obj.GetString( "steamid" );
@@ -486,7 +486,6 @@ public partial class CommunityEntity
             case "Animation":
                 {
                     // Moved Setup to its own function in CommunityEntity.UI.Animation.cs
-                    // now shares the code with the AddAnimation RPC function
                     Animation.ParseAnimation(obj, go, allowUpdate);
                     break;
                 }
@@ -703,17 +702,17 @@ public partial class CommunityEntity
     private Font LoadFont(string fontName)
     {
         var font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + fontName );
-        if (font == null) 
+        if (font == null)
         {
             // Fallback to TMP default font if the loading failed
             font = TMP_Settings.defaultFontAsset.sourceFontFile;
-            
+
             Debug.LogWarning($"Failed loading {fontName}, using RobotoCondensed-Bold as a fallback");
         }
 
         return font;
     }
-    
+
     [RPC_Client]
     public void DestroyUI( RPCMessage msg )
     {
