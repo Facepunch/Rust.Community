@@ -42,7 +42,7 @@ public partial class CommunityEntity
         public UnityEngine.UI.Graphic graphic;
         public RectTransform rt;
         public CanvasGroup group;
-		public bool shouldRaycast = true;
+	public bool shouldRaycast = true;
 
         // flags
         public bool isHidden = false;
@@ -99,7 +99,6 @@ public partial class CommunityEntity
 
         public void Kill(bool destroyed = false)
         {
-            // mark as killed & clean up
             isKilled = true;
             StopByTrigger("OnCreate");
             StopByTrigger("OnHoverEnter");
@@ -118,7 +117,7 @@ public partial class CommunityEntity
                 if(killDelay < totalDelay) killDelay = totalDelay;
                 StartProperty(prop);
             }
-            Invoke(new Action(() => Object.Destroy(gameObject)), killDelay + 0.05f);
+            Invoke(() => Object.Destroy(gameObject), killDelay + 0.05f);
         }
 
         #endregion
@@ -264,17 +263,20 @@ public partial class CommunityEntity
         }
 
         public void TryToggleGraphic(float delay = 0f){
-            if(graphic == null) return;
+            if(delay <= 0f) DoGraphicToggle();
+            else Invoke(DoGraphicToggle, delay);
+        }
 
-            var a = new Action(() => {
-                bool visible = GetAlpha() > 0f;
-                if(group == null)
-                    graphic.canvasRenderer.cullTransparentMesh = visible;
-                isHidden = !visible;
-                SetRaycasting(visible && shouldRaycast);
-            });
-            if(delay <= 0f) a();
-            else Invoke(a, delay);
+        private void DoGraphicToggle() {
+            if(graphic == null)
+                return;
+
+            bool visible = GetAlpha() > 0f;
+            if(group == null)
+                graphic.canvasRenderer.cullTransparentMesh = visible;
+
+            isHidden = !visible;
+            SetRaycasting(visible && shouldRaycast);
         }
 
         public float GetAlpha(){
@@ -283,14 +285,14 @@ public partial class CommunityEntity
 
             return graphic.canvasRenderer.GetAlpha();
         }
-        // uses the canvasGroup if found, otherwise the graphic
+
         public void SetAlpha(float alpha){
             if(group != null)
                 group.alpha = alpha;
             else
                 graphic.canvasRenderer.SetAlpha(alpha);
         }
-        // uses the canvasGroup if found, otherwise the graphic
+
         public void SetRaycasting(bool wants){
             if(group != null)
                 group.blocksRaycasts = wants;
@@ -365,7 +367,6 @@ public partial class CommunityEntity
     public static Animation ParseAnimation(JSON.Object obj, GameObject go = null, bool allowUpdate = false){
 
         Animation anim = go.GetComponent<Animation>();
-        // create a new animation component if no Animation existed
         if(anim == null)
             anim = go.AddComponent<Animation>();
 
@@ -395,7 +396,6 @@ public partial class CommunityEntity
         #endregion
     }
 
-    // this could be a class if the allocation is insignificant
     public class AnimationProperty
     {
 
@@ -619,7 +619,7 @@ public partial class CommunityEntity
         #region Helpers
 
         // manipulates the input based on a preset easing function or a custom Bezier curve
-        // accepts a predefined easing type, or a string of 4 floats to represent a bezier curve
+        // uses dedicated instructions for common presets, even if bezier can technically match them
         // NOTE: the return value is unclamped as this allowes bezier curves with under- and overshoot to work
         public static float Ease(BezierEasing.BezierPoints easing, float input)
         {
@@ -735,13 +735,12 @@ public partial class CommunityEntity
             }
         }
 
-        // a struct that mimics Vector2/3/4/n, previously used a list to hold values, but lists dont work as structs
-        // turning this into a struct makes alot of sense, thanks for the insights @WhiteThunder
+        // a struct that mimics Vector2/3/4/n with built-in conversion methods that support offsets
         public struct DynamicVector : IEquatable<DynamicVector> {
 
             #region Fields
 
-            // need it to hold more than 4? add a _valueN and adjust the Capacity, indexer & Clear method
+            // adjust the Capacity, indexer & Clear method when adding fields
             private float _value0;
             private float _value1;
             private float _value2;
