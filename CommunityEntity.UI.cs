@@ -7,6 +7,7 @@ using System.Linq;
 using Facepunch.Extend;
 using System.IO;
 using Rust.Workshop;
+using TMPro;
 
 #if CLIENT
 
@@ -185,7 +186,9 @@ public partial class CommunityEntity
                     if ( ShouldUpdateField( "fontSize" ) )
                         c.fontSize = obj.GetInt( "fontSize", 14 );
                     if ( ShouldUpdateField( "font" ) )
-                        c.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
+                    { 
+                        c.font = LoadFont(obj.GetString("font", strDEFAULT: "RobotoCondensed-Bold.ttf"));
+                    }
                     if ( ShouldUpdateField( "align" ) )
                         c.alignment = ParseEnum( obj.GetString( "align" ), TextAnchor.UpperLeft );
                     if ( ShouldUpdateField( "color" ) )
@@ -246,7 +249,7 @@ public partial class CommunityEntity
                             }
                         }
                     }
-
+                    
                     GraphicComponentCreated( c, obj );
 
                     break;
@@ -274,6 +277,13 @@ public partial class CommunityEntity
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
                         ApplyTextureToImage( c, id );
+                    }
+                    
+                    if ( obj.ContainsKey( "steamid" ) )
+                    {
+                        var steamidString = obj.GetString( "steamid" );
+                        if(ulong.TryParse(steamidString, out var steamId))
+                            c.texture = SingletonComponent<SteamClientWrapper>.Instance.GetAvatarTexture(steamId);
                     }
 
                     GraphicComponentCreated( c, obj );
@@ -339,7 +349,9 @@ public partial class CommunityEntity
                     if ( ShouldUpdateField( "fontSize" ) )
                         t.fontSize = obj.GetInt( "fontSize", allowUpdate ? t.fontSize : 14 );
                     if ( ShouldUpdateField( "font" ) )
-                        t.font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + obj.GetString( "font", "RobotoCondensed-Bold.ttf" ) );
+                    {
+                        t.font = LoadFont(obj.GetString("font", strDEFAULT: "RobotoCondensed-Bold.ttf"));
+                    }
                     if ( ShouldUpdateField( "align" ) )
                         t.alignment = ParseEnum( obj.GetString( "align" ), TextAnchor.UpperLeft );
                     if ( ShouldUpdateField( "color" ) )
@@ -688,7 +700,20 @@ public partial class CommunityEntity
         www.Dispose();
     }
 
+    private Font LoadFont(string fontName)
+    {
+        var font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + fontName );
+        if (font == null) 
+        {
+            // Fallback to TMP default font if the loading failed
+            font = TMP_Settings.defaultFontAsset.sourceFontFile;
+            
+            Debug.LogWarning($"Failed loading {fontName}, using RobotoCondensed-Bold as a fallback");
+        }
 
+        return font;
+    }
+    
     [RPC_Client]
     public void DestroyUI( RPCMessage msg )
     {
