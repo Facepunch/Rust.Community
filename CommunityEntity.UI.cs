@@ -203,10 +203,18 @@ public partial class CommunityEntity
                         c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
                     if ( ShouldUpdateField( "imagetype" ) )
                         c.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
+                    if( ShouldUpdateField( "fillCenter" ) )
+                        c.fillCenter = obj.GetBoolean("fillCenter", c.fillCenter);
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
-                        ApplyTextureToImage( c, id );
+                        Vector4? slice = null;
+                        if (obj.ContainsKey("slice"))
+                        {
+                            var sliceAsCol = ColorEx.Parse(obj.GetString("slice", "0 0 0 0"));
+                            slice = new Vector4(sliceAsCol.r, sliceAsCol.g, sliceAsCol.b, sliceAsCol.a);
+                        }
+                        ApplyTextureToImage( c, id, slice );
                     }
 
                     if ( obj.ContainsKey( "itemid" ) )
