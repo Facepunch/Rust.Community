@@ -1,0 +1,1428 @@
+[
+    {
+        "name": "UI",
+        "parent":"Overlay",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.04 0.04 0.04 0.99",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            },
+            {
+                "type":"NeedsCursor"
+            }
+        ]
+    },
+    {
+        "name": "Container1",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.15 0.15 0.15 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 1",
+                "anchormax": "0.5 1",
+                "offsetmin": "-620 -340",
+                "offsetmax": "-220 -20"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.1"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.05"
+            }
+        ]
+    },
+    {
+        "name": "Container1_bg",
+        "parent":"Container1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/effects/crossbreed/fx gradient skewed.png",
+                "color": "0.25 0.05 0.05 0.2",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmax": "0 0"
+            },
+        ]
+    },
+    {
+        "parent": "Container1",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "offsetmin": "35 5",
+                "offsetmax": "-35 -5"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''type'': ''Draggable'',",
+                "color": "0.6 0.6 0.6 0.3",
+                "fontSize":24,
+                "align": "TopLeft"
+            }
+        ]
+    },
+    {
+        "name": "drag1",
+        "parent":"Container1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gradient-circle.png",
+                "color": "1 0.7 0.7 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-50 -50",
+                "offsetmax": "50 50"
+            },
+            {
+                "type": "Draggable"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "drag1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gameui/mlrs/mlrs_target_circle_fade.png",
+                "color": "0.6 1 1 0.1",
+            },
+        ]
+    },
+    {
+        "parent": "drag1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Draggable",
+                "color": "0.6 0.6 0.6 1.0",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Container2",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.15 0.15 0.15 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 1",
+                "anchormax": "0.5 1",
+                "offsetmin": "-200 -340",
+                "offsetmax": "200 -20"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.1"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.05"
+            }
+        ]
+    },
+    {
+        "name": "Container2_bg",
+        "parent":"Container2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/effects/crossbreed/fx gradient skewed.png",
+                "color": "0.25 0.05 0.05 0.2",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmax": "0 0"
+            },
+        ]
+    },
+    {
+        "name": "Container2_circle",
+        "parent":"Container2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gameui/mlrs/mlrs_dotted_circle.png",
+                "color": "1 1 1 0.2",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-100 -150",
+                "offsetmax": "100 50"
+            },
+        ]
+    },
+    {
+        "parent": "Container2",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "offsetmin": "35 5",
+                "offsetmax": "-35 -5"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''type'': ''Draggable'',                                                ''maxDistance'': 100.0,                         ''dropAnywhere'': false",
+                "color": "0.6 0.6 0.6 0.3",
+                "fontSize":24,
+                "align": "TopLeft"
+            }
+        ]
+    },
+    {
+        "name": "drag2",
+        "parent":"Container2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gradient-circle.png",
+                "color": "1 0.7 0.7 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-50 -100",
+                "offsetmax": "50 0"
+            },
+            {
+                "type": "Draggable",
+                "maxDistance": 100,
+                "dropAnywhere": false
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "drag2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gameui/mlrs/mlrs_target_circle_fade.png",
+                "color": "0.6 1 1 0.1",
+            },
+        ]
+    },
+    {
+        "parent": "drag2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Draggable",
+                "color": "0.6 0.6 0.6 1.0",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Container3",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.15 0.15 0.15 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 1",
+                "anchormax": "0.5 1",
+                "offsetmin": "220 -340",
+                "offsetmax": "620 -20"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.1"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.05"
+            }
+        ]
+    },
+    {
+        "name": "Container3_bg",
+        "parent":"Container3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/effects/crossbreed/fx gradient skewed.png",
+                "color": "0.25 0.05 0.05 0.2",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmax": "0 0"
+            },
+        ]
+    },
+    {
+        "parent": "Container3",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "offsetmin": "35 5",
+                "offsetmax": "-35 -5"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''type'': ''Draggable'',                                                ''limitToParent'': true",
+                "color": "0.6 0.6 0.6 0.3",
+                "fontSize":24,
+                "align": "TopLeft"
+            }
+        ]
+    },
+    {
+        "name": "drag3",
+        "parent":"Container3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gradient-circle.png",
+                "color": "1 0.7 0.7 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-50 -50",
+                "offsetmax": "50 50"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "drag3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/gameui/mlrs/mlrs_target_circle_fade.png",
+                "color": "0.6 1 1 0.1",
+            },
+        ]
+    },
+    {
+        "parent": "drag3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Draggable",
+                "color": "0.6 0.6 0.6 1.0",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            }
+        ]
+    },
+    {
+        "name": "Container4",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.15 0.15 0.15 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 1",
+                "anchormax": "0.5 1",
+                "offsetmin": "-620 -680",
+                "offsetmax": "-220 -360"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.1"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.05"
+            }
+        ]
+    },
+    {
+        "name": "Container4_bg",
+        "parent":"Container4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/effects/crossbreed/fx gradient skewed.png",
+                "color": "0.25 0.05 0.05 0.2",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmax": "0 0"
+            },
+        ]
+    },
+    {
+        "name": "entry1",
+        "parent":"Container4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.24 0.2 0.2 1",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.03 0.825",
+                "anchormax": "0.97 0.975"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry1_icon",
+        "parent":"entry1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/menu_dots.png",
+                "color": "1 1 1 0.8",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "5 5",
+                "offsetmax": "45 45"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry1_content",
+        "parent":"entry1",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "55 5",
+                "offsetmax": "370 45"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''type'': ''Draggable'',",
+                "color": "0.6 0.6 0.6 0.5",
+                "fontSize":24,
+                "align": "MiddleLeft"
+            }
+        ]
+    },
+    {
+        "name": "entry2",
+        "parent":"Container4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.28 0.19 0.19 1",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.03 0.625",
+                "anchormax": "0.97 0.775"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry2_icon",
+        "parent":"entry2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/menu_dots.png",
+                "color": "1 1 1 0.8",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "5 5",
+                "offsetmax": "45 45"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry2_content",
+        "parent":"entry2",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "55 5",
+                "offsetmax": "370 45"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''limitToParent'': true,",
+                "color": "0.6 0.6 0.6 0.5",
+                "fontSize":24,
+                "align": "MiddleLeft"
+            }
+        ]
+    },
+    {
+        "name": "entry3",
+        "parent":"Container4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.32 0.18 0.18 1",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.03 0.425",
+                "anchormax": "0.97 0.575"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry3_icon",
+        "parent":"entry3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/menu_dots.png",
+                "color": "1 1 1 0.8",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "5 5",
+                "offsetmax": "45 45"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry3_content",
+        "parent":"entry3",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "55 5",
+                "offsetmax": "370 45"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''allowSwapping'': true,",
+                "color": "0.6 0.6 0.6 0.5",
+                "fontSize":24,
+                "align": "MiddleLeft"
+            }
+        ]
+    },
+    {
+        "name": "entry4",
+        "parent":"Container4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.36 0.17 0.17 1",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.03 0.225",
+                "anchormax": "0.97 0.375"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry4_icon",
+        "parent":"entry4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/menu_dots.png",
+                "color": "1 1 1 0.8",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "5 5",
+                "offsetmax": "45 45"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry4_content",
+        "parent":"entry4",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "55 5",
+                "offsetmax": "370 45"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''dropAnywhere'': false,",
+                "color": "0.6 0.6 0.6 0.5",
+                "fontSize":24,
+                "align": "MiddleLeft"
+            }
+        ]
+    },
+    {
+        "name": "entry5",
+        "parent":"Container4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.40 0.16 0.16 1",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.03 0.025",
+                "anchormax": "0.97 0.175"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry5_icon",
+        "parent":"entry5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/menu_dots.png",
+                "color": "1 1 1 0.8",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "5 5",
+                "offsetmax": "45 45"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "entry5_content",
+        "parent":"entry5",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0 0",
+                "offsetmin": "55 5",
+                "offsetmax": "370 45"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"''dragAlpha'': 0.8",
+                "color": "0.6 0.6 0.6 0.5",
+                "fontSize":24,
+                "align": "MiddleLeft"
+            }
+        ]
+    },
+    {
+        "name": "Container5",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.15 0.15 0.15 0.7",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.5 1",
+                "anchormax": "0.5 1",
+                "offsetmin": "-200 -680",
+                "offsetmax": "620 -360"
+            }
+        ]
+    },
+    {
+        "name": "Container5_bg",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/effects/crossbreed/fx gradient skewed.png",
+                "color": "0.25 0.05 0.05 0.2",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmax": "0 0"
+            },
+        ]
+    },
+    {
+        "name": "SlotInfoContainer",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "10 -310",
+                "offsetmax": "270 -10"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "name": "SlotHeader",
+        "parent":"SlotInfoContainer",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "5 -50",
+                "offsetmax": "250 -5"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Slots",
+                "color": "0.7 0.7 0.7 0.9",
+                "fontSize":36,
+                "align": "TopLeft"
+            }
+        ]
+    },
+    {
+        "name": "SlotInfo",
+        "parent":"SlotInfoContainer",
+        "components":
+        [
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "5 -250",
+                "offsetmax": "250 -55"
+            },
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Slots are non Draggable panels that can hold a single draggable. they come with a primitive filter string that allows them to limit what draggables they will accept",
+                "color": "0.6 0.6 0.6 0.7",
+                "fontSize":22,
+                "align": "TopLeft"
+            }
+        ]
+    },
+    {
+        "name": "drag4",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/circle_closed_white_toedge.png",
+                "color": "0.3 0.25 0.25 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "280 -80",
+                "offsetmax": "350 -10"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "drag4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.circlegradient.png",
+                "color": "0.1 0 0 0.4",
+            },
+        ]
+    },
+    {
+        "name": "drag5",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/circle_closed_white_toedge.png",
+                "color": "0.3 0.25 0.25 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "360 -80",
+                "offsetmax": "430 -10"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "drag5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.circlegradient.png",
+                "color": "0.1 0 0 0.4",
+            },
+        ]
+    },
+    {
+        "name": "drag6",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/circle_closed_white_toedge.png",
+                "color": "0.3 0.6 0.25 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "440 -80",
+                "offsetmax": "510 -10"
+            },
+            {
+                "type": "Draggable",
+                "limitToParent": true,
+                "allowSwapping": true,
+                "dropAnywhere": false,
+                "dragAlpha": 0.8,
+                "filter": "greenOnly"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "drag6",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.circlegradient.png",
+                "color": "0.1 0 0 0.4",
+            }
+        ]
+    },
+    {
+        "name": "slot1",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.rounded.tga",
+                "color": "0.2 0.15 0.15 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "620 -100",
+                "offsetmax": "710 -10"
+            },
+            {
+                "type": "Slot"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "slot1",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/add.png",
+                "color": "0.8 0.1 0.1 0.3",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmin": "5 5",
+                "offsetmax": "-5 -5"
+            }
+        ]
+    },
+    {
+        "name": "slot2",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.rounded.tga",
+                "color": "0.2 0.15 0.15 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "720 -100",
+                "offsetmax": "810 -10"
+            },
+            {
+                "type": "Slot"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "slot2",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/add.png",
+                "color": "0.8 0.1 0.1 0.3",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmin": "5 5",
+                "offsetmax": "-5 -5"
+            }
+        ]
+    },
+    {
+        "name": "slot3",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.rounded.tga",
+                "color": "0.2 0.15 0.15 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "620 -200",
+                "offsetmax": "710 -110"
+            },
+            {
+                "type": "Slot"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "slot3",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/add.png",
+                "color": "0.8 0.1 0.1 0.3",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmin": "5 5",
+                "offsetmax": "-5 -5"
+            }
+        ]
+    },
+    {
+        "name": "slot4",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.rounded.tga",
+                "color": "0.2 0.15 0.15 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "720 -200",
+                "offsetmax": "810 -110"
+            },
+            {
+                "type": "Slot"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "slot4",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/add.png",
+                "color": "0.8 0.1 0.1 0.3",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmin": "5 5",
+                "offsetmax": "-5 -5"
+            }
+        ]
+    },
+    {
+        "name": "slot5",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.rounded.tga",
+                "color": "0.15 0.4 0.15 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "620 -300",
+                "offsetmax": "710 -210"
+            },
+            {
+                "type": "Slot",
+                "filter": "greenOnly"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "slot5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/add.png",
+                "color": "0.1 0.8 0.1 0.3",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmin": "5 5",
+                "offsetmax": "-5 -5"
+            }
+        ]
+    },
+    {
+        "name": "slot6",
+        "parent":"Container5",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/content/ui/ui.rounded.tga",
+                "color": "0.15 0.4 0.15 1"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "720 -300",
+                "offsetmax": "810 -210"
+            },
+            {
+                "type": "Slot",
+                "filter": "greenOnly"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "2 2",
+                "color": "0 0 0 0.06"
+            },
+            {
+                "type": "UnityEngine.UI.Outline",
+                "distance": "4 4",
+                "color": "0 0 0 0.025"
+            }
+        ]
+    },
+    {
+        "parent": "slot6",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Image",
+                "sprite": "assets/icons/add.png",
+                "color": "0.1 0.8 0.1 0.3",
+            },
+            {
+                "type":"RectTransform",
+                "offsetmin": "5 5",
+                "offsetmax": "-5 -5"
+            }
+        ]
+    },
+    {
+        "name": "Button88",
+        "parent": "UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"UI",
+                "color": "0.9 0.8 0.3 0.8",
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "0.03 0.04"
+            }
+        ]
+    },
+    {
+        "parent": "Button88",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"x",
+                "fontSize":18,
+                "align": "MiddleCenter"
+            }
+        ]
+    }
+]
