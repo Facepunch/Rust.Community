@@ -158,6 +158,12 @@ public partial class CommunityEntity
             return !allowUpdate || obj.ContainsKey( fieldName );
         }
 
+        // Only checks field name (if we want to keep default value)
+        bool HasField( string fieldName)
+        {
+            return obj.ContainsKey(fieldName);
+        }
+
         T GetOrAddComponent<T>() where T : Component
         {
             if ( allowUpdate && go.TryGetComponent( out T component ) )
@@ -320,6 +326,26 @@ public partial class CommunityEntity
                         img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
 
                     c.image = img;
+                    
+                    // Modify the color of the button when hovered
+                    var colors = c.colors;
+
+                    if (HasField("normalColor"))
+                        colors.normalColor = ColorEx.Parse(obj.GetString("normalColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("highlightedColor"))
+                        colors.highlightedColor = ColorEx.Parse(obj.GetString("highlightedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("pressedColor"))
+                        colors.pressedColor = ColorEx.Parse(obj.GetString("pressedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("selectedColor"))
+                        colors.selectedColor = ColorEx.Parse(obj.GetString("selectedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("disabledColor"))
+                        colors.disabledColor = ColorEx.Parse(obj.GetString("disabledColor", "0.5 0.5 0.5 0.5"));
+                    if (HasField("colorMultiplier"))
+                        colors.colorMultiplier = obj.GetFloat("colorMultiplier", 1.0f);
+                    if (HasField("fadeDuration"))
+                        colors.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
+
+                    c.colors = colors;
 
                     GraphicComponentCreated( img, obj );
 
@@ -501,16 +527,16 @@ public partial class CommunityEntity
                     if( ShouldUpdateField("keepOnTop"))
                         drag.keepOnTop = obj.GetBoolean("keepOnTop", false);
                     
-                    var preferredDefault = Draggable.PositionSendType.NormalizedScreen;
+                    var preferredDefault = DraggablePositionSendType.NormalizedScreen;
                     // find a better default depending on specified settings
                     if(drag.maxDistance > 0f){
-                        preferredDefault = Draggable.PositionSendType.RelativeAnchor;
+                        preferredDefault = DraggablePositionSendType.RelativeAnchor;
                     } else if(drag.limitToParent){
-                        preferredDefault = Draggable.PositionSendType.NormalizedParent;
+                        preferredDefault = DraggablePositionSendType.NormalizedParent;
                     }
                     
                     if( ShouldUpdateField("positionRPC"))
-                        drag.positionRPC = ParseEnum<Draggable.PositionSendType>(obj.GetString("positionRPC", null), preferredDefault);
+                        drag.positionRPC = ParseEnum<DraggablePositionSendType>(obj.GetString("positionRPC", null), preferredDefault);
                     
                     // some Update only fields to trigger certain functions
                     if(allowUpdate & obj.ContainsKey("moveToAnchor"))
