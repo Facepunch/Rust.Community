@@ -15,7 +15,8 @@ using System.IO;
 public partial class CommunityEntity
 {
 
-    public class Draggable : UIBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
+    public class Draggable : UIBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
+    {
 
         //reusable for world corners
         public static Vector3[] corners = new Vector3[4];
@@ -94,7 +95,8 @@ public partial class CommunityEntity
         #region Core
 
         // call to initialize the Draggable, marking it as ready
-        public void Init(){
+        public void Init()
+        {
             // setup values
             rt = (transform as RectTransform);
             canvasGroup = GetComponent<CanvasGroup>();
@@ -108,24 +110,25 @@ public partial class CommunityEntity
             FindParentLimit();
 
             // anchor setup
-            if(anchorObj == null)
+            if (anchorObj == null)
                 CreateAnchor();
             lastDropPosition = anchor;
 
             _initialized = true;
         }
 
-        protected override void OnDestroy(){
-            if(anchorObj != null)
+        protected override void OnDestroy()
+        {
+            if (anchorObj != null)
                 UnityEngine.Object.Destroy(anchorObj);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if(!_initialized)
+            if (!_initialized)
                 return;
 
-            if(ShouldDie())
+            if (ShouldDie())
                 return;
 
             TryRefreshParentBounds();
@@ -134,10 +137,13 @@ public partial class CommunityEntity
             lastDropPosition = rt.position;
             // center the draggable onto the mouse
             var mousePos = eventData.pointerCurrentRaycast.screenPosition;
-            if(limitToParent){
+            if (limitToParent)
+            {
                 // ensure parent limits arent breached
                 LimitToParent(mousePos - lastDropPosition);
-            } else {
+            }
+            else
+            {
                 rt.position = mousePos;
             }
             offset = mousePos - anchor;
@@ -147,7 +153,7 @@ public partial class CommunityEntity
             canvasGroup.alpha = dragAlpha;
             realParent = rt.parent;
             rt.SetParent(dragParent);
-            if(limitToParent)
+            if (limitToParent)
                 rt.SetAsLastSibling(); // because chances are we're already parented to it
 
             onDragCallback?.Invoke(callbackName);
@@ -155,19 +161,21 @@ public partial class CommunityEntity
 
         public void OnDrag(PointerEventData eventData)
         {
-            if(!_initialized)
+            if (!_initialized)
                 return;
             //  set the offset after scaling
             offset += eventData.delta;
 
             // use distance constraint
-            if(maxDistance > 0f){
+            if (maxDistance > 0f)
+            {
                 LimitToRange();
                 return;
             }
 
             // use parent constraint
-            if(limitToParent){
+            if (limitToParent)
+            {
                 LimitToParent(eventData.delta);
                 return;
             }
@@ -178,26 +186,28 @@ public partial class CommunityEntity
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(!_initialized)
+            if (!_initialized)
                 return;
 
-            if(ShouldDie())
+            if (ShouldDie())
                 return;
 
-            if(!wasSnapped)
+            if (!wasSnapped)
                 SendDragRPC();
 
             wasSnapped = false;
 
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
-            if(!keepOnTop){
+            if (!keepOnTop)
+            {
                 rt.SetParent(realParent);
                 rt.SetSiblingIndex(index);
             }
             onDropCallback?.Invoke(callbackName);
 
-            if(!dropAnywhere){
+            if (!dropAnywhere)
+            {
                 rt.position = lastDropPosition;
                 offset = lastDropPosition - anchor;
                 return;
@@ -209,54 +219,55 @@ public partial class CommunityEntity
         // to support swapping
         public void OnDrop(PointerEventData eventData)
         {
-            if(!_initialized)
+            if (!_initialized)
                 return;
 
-            if(ShouldDie())
+            if (ShouldDie())
                 return;
 
-            if(!allowSwapping)
+            if (!allowSwapping)
                 return;
 
             // if this panel is in a slot, let the slot handle the matching & potential swapping
-            if(slot != null){
+            if (slot != null)
+            {
                 // resends the event to the parent and up
                 ExecuteEvents.ExecuteHierarchy(transform.parent.gameObject, eventData, ExecuteEvents.dropHandler);
                 return;
             }
 
             var draggedObj = eventData.pointerDrag.GetComponent<Draggable>();
-            if(draggedObj == null)
+            if (draggedObj == null)
                 return;
 
             // prevent sending the DragRPC regardless. because the player intended to swap it, not drag it.
-            if(!draggedObj.dropAnywhere)
+            if (!draggedObj.dropAnywhere)
                 draggedObj.wasSnapped = true;
 
-            if(!draggedObj.allowSwapping)
+            if (!draggedObj.allowSwapping)
                 return;
 
             // if the 2 objects are on seperate canvases, dont swap
-            if(draggedObj.canvas != canvas)
+            if (draggedObj.canvas != canvas)
                 return;
 
             // if the draggable is in a slot i dont fit inside of
-            if(draggedObj.slot != null && !DraggableSlot.FitsIntoSlot(this, draggedObj.slot))
+            if (draggedObj.slot != null && !DraggableSlot.FitsIntoSlot(this, draggedObj.slot))
                 return;
 
             // cant swap because the draggable's position is too far away
-            if(scaledMaxDistance > 0f && Vector2.Distance(draggedObj.lastDropPosition, anchor) > scaledMaxDistance)
+            if (scaledMaxDistance > 0f && Vector2.Distance(draggedObj.lastDropPosition, anchor) > scaledMaxDistance)
                 return;
 
             // if swapping would violate the draggable's constraints
-            if(draggedObj.limitToParent && !draggedObj.parentWorldRect.Contains(draggedObj.lastDropPosition))
+            if (draggedObj.limitToParent && !draggedObj.parentWorldRect.Contains(draggedObj.lastDropPosition))
                 return;
 
             // incase a resize occured
             TryRefreshParentBounds();
 
             // if swapping would violate our own's constraints
-            if(limitToParent && !parentWorldRect.Contains(draggedObj.lastDropPosition))
+            if (limitToParent && !parentWorldRect.Contains(draggedObj.lastDropPosition))
                 return;
 
             Draggable.Swap(draggedObj, this);
@@ -267,11 +278,12 @@ public partial class CommunityEntity
         #region helpers
 
         // checks if the distance dragged is larger than maxDistance & limits the position if so
-        private void LimitToRange(){
-            if(maxDistance < 0f)
+        private void LimitToRange()
+        {
+            if (maxDistance < 0f)
                 return;
 
-            if(Vector2.Distance(offset, Vector2.zero) <= scaledMaxDistance)
+            if (Vector2.Distance(offset, Vector2.zero) <= scaledMaxDistance)
                 rt.position = anchor + offset;
             else
                 rt.position = anchor + (offset.normalized * scaledMaxDistance);
@@ -316,7 +328,8 @@ public partial class CommunityEntity
         }
 
         // add a gameobject to reference as the anchor position, this makes the anchor position resizing proof
-        private void CreateAnchor(){
+        private void CreateAnchor()
+        {
             anchorObj = new GameObject("Shadow Anchor", typeof(RectTransform));
             var anchorRT = (anchorObj.transform as RectTransform);
             anchorRT.SetParent(limitParent);
@@ -325,24 +338,30 @@ public partial class CommunityEntity
             anchorRT.offsetMin = rt.offsetMin;
             anchorRT.offsetMax = rt.offsetMax;
             anchorRT.localPosition = limitParent.InverseTransformPoint(rt.position);
-            if(anchorOffset != Vector2.zero){
+            if (anchorOffset != Vector2.zero)
+            {
                 anchorRT.offsetMin = new Vector2(anchorRT.offsetMin.x + anchorOffset.x, anchorRT.offsetMin.y + anchorOffset.y);
                 anchorRT.offsetMax = new Vector2(anchorRT.offsetMax.x + anchorOffset.x, anchorRT.offsetMax.y + anchorOffset.y);
             }
         }
 
         // finds the parent to use as a limit based on the parentLimitIndex setting
-        private void FindParentLimit(){
+        private void FindParentLimit()
+        {
             limitParent = rt;
-            if(parentLimitIndex < 1){
+            if (parentLimitIndex < 1)
+            {
                 parentLimitIndex = 1;
             }
-            for(int i = 0; i < parentLimitIndex; i++){
+            for (int i = 0; i < parentLimitIndex; i++)
+            {
                 limitParent = TryGetRectParent(limitParent);
                 DraggableSlot potentialSlot = limitParent.GetComponent<DraggableSlot>();
-                if(potentialSlot){
+                if (potentialSlot)
+                {
                     // only set our parent as the slot if its actually the first one we encounter
-                    if(slot == null){
+                    if (slot == null)
+                    {
                         slot = potentialSlot;
                         slot.content = this;
                     }
@@ -355,9 +374,10 @@ public partial class CommunityEntity
             TryRefreshParentBounds();
 
             // returns parent if its a rectTransform. this may not be the case if the parent is a root layer
-            static RectTransform TryGetRectParent(RectTransform current){
+            static RectTransform TryGetRectParent(RectTransform current)
+            {
                 var potentialParent = (current.parent as RectTransform);
-                if(potentialParent != null)
+                if (potentialParent != null)
                     return potentialParent;
 
                 return current;
@@ -365,8 +385,9 @@ public partial class CommunityEntity
         }
 
         // check if this draggable should die, this covers if the real parent gets destroyed while this object is detached from it
-        public bool ShouldDie(){
-            if(realParent.gameObject != null)
+        public bool ShouldDie()
+        {
+            if (realParent.gameObject != null)
                 return false;
 
             UnityEngine.Object.Destroy(gameObject);
@@ -375,36 +396,41 @@ public partial class CommunityEntity
         }
 
         // sets the appropiate transform index
-        public void SetIndex(int index){
+        public void SetIndex(int index)
+        {
             this.index = index;
             rt.SetSiblingIndex(index);
         }
         // re-caches the parent's world rect
-        public void TryRefreshParentBounds(){
+        public void TryRefreshParentBounds()
+        {
             var current = (limitParent.lossyScale, limitParent.position);
-            if(current == _scalePosAtLastCache)
+            if (current == _scalePosAtLastCache)
                 return;
 
-            if(limitToParent)
+            if (limitToParent)
                 parentWorldRect = GetWorldRect(limitParent);
 
             _scalePosAtLastCache = current;
         }
 
         // used via the json API
-        public void MoveToAnchor(){
+        public void MoveToAnchor()
+        {
             rt.position = anchor;
             lastDropPosition = rt.position;
             offset = Vector2.zero;
         }
 
         // used via the json API
-        public void RebuildAnchor(){
+        public void RebuildAnchor()
+        {
             UnityEngine.Object.Destroy(anchorObj);
             CreateAnchor();
         }
 
-        public Vector2 PositionForRPC(){
+        public Vector2 PositionForRPC()
+        {
             Vector2 pos = rt.position;
             Rect parent = parentWorldRect;
             switch (positionRPC)
@@ -417,22 +443,26 @@ public partial class CommunityEntity
             };
         }
         // packetsize go brrrr
-        public void SendDragRPC(){
+        public void SendDragRPC()
+        {
             ClientInstance.ServerRPC<string, Vector2, byte>("DragRPC", gameObject.name, PositionForRPC(), (byte)positionRPC);
         }
 
         // the same as the extension method, but without the allocation
-        public Rect GetWorldRect(RectTransform transform){
+        public Rect GetWorldRect(RectTransform transform)
+        {
             transform.GetWorldCorners(corners);
             return new Rect(corners[0], corners[2] - corners[0]);
         }
 
         // packetsize go brrrr
-        public static void SendDropRPC(string draggedName, string draggedSlot, string swappedName, string swappedSlot){
+        public static void SendDropRPC(string draggedName, string draggedSlot, string swappedName, string swappedSlot)
+        {
             ClientInstance.ServerRPC<string, string, string, string>("DropRPC", draggedName, draggedSlot, swappedName, swappedSlot);
         }
 
-        public static void Swap(Draggable from, Draggable to){
+        public static void Swap(Draggable from, Draggable to)
+        {
             // set this incase a resize occured since the last time this got dragged
             to.lastDropPosition = to.rt.position;
 
@@ -451,15 +481,17 @@ public partial class CommunityEntity
             from.realParent = to.realParent;
             //from.rt.SetParent(to.realParent); // probably not needed because the from object should always be in drag mode
             from.SetIndex(to.index);
-            if(from.swapAnchors){
+            if (from.swapAnchors)
+            {
                 from.anchorObj = to.anchorObj;
                 to.anchorObj.transform.SetParent(from.anchorObj.transform.parent);
             }
             from.offset = from.lastDropPosition - from.anchor;
-            if(from.slot){
+            if (from.slot)
+            {
                 from.slot.content = null;
                 from.slot = to.slot;
-                if(from.slot)
+                if (from.slot)
                     from.slot.content = from;
             }
 
@@ -469,12 +501,14 @@ public partial class CommunityEntity
             to.rt.SetParent(oldParent);
             to.realParent = oldParent;
             to.SetIndex(oldIndex);
-            if(to.swapAnchors){
+            if (to.swapAnchors)
+            {
                 to.anchorObj = oldAnchorObj;
                 to.anchorObj.transform.SetParent(oldAnchorParent);
             }
             to.offset = to.lastDropPosition - to.anchor;
-            if(oldSlot){
+            if (oldSlot)
+            {
                 to.slot = oldSlot;
                 oldSlot.content = to;
             }
@@ -484,7 +518,8 @@ public partial class CommunityEntity
 
         #endregion
 
-        public enum PositionSendType : byte{
+        public enum PositionSendType : byte
+        {
             NormalizedScreen = 0,
             NormalizedParent = 1,
             Relative = 2,
