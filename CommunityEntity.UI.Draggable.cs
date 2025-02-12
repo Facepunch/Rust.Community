@@ -10,11 +10,34 @@ using Facepunch;
 using Facepunch.Extend;
 using System.IO;
 
-#if CLIENT
 
 public partial class CommunityEntity
 {
+    public enum DraggablePositionSendType
+    {
+        NormalizedScreen = 0,
+        NormalizedParent = 1,
+        Relative = 2,
+        RelativeAnchor = 3,
+    }
 
+    // Empty methods for oxide to hook
+#if SERVER
+    [RPC_Server]
+    public void DragRPC(string name, Vector3 position, int positionTypeByte)
+    {
+        // Cast byte -> Enum
+        DraggablePositionSendType type = (DraggablePositionSendType)positionTypeByte;
+    }
+
+    [RPC_Server]
+    public void DropRPC(string draggedName, string draggedSlot, string swappedName, string swappedSlot)
+    {
+
+    }
+#endif
+
+#if CLIENT
     public class Draggable : UIBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
     {
 
@@ -43,7 +66,7 @@ public partial class CommunityEntity
         // used to add additional padding to the parent bounds check
         public Vector2 parentPadding = Vector2.zero;
         // what type of position should be sent back
-        public PositionSendType positionRPC;
+        public DraggablePositionSendType positionRPC;
         // if true, the draggable will not return to its orignal position in the hirarchy, and will instead stay at the front of the dragParent
         public bool keepOnTop = false;
 
@@ -435,17 +458,18 @@ public partial class CommunityEntity
             Rect parent = parentWorldRect;
             switch (positionRPC)
             {
-                case PositionSendType.NormalizedScreen: return new Vector2(pos.x / Screen.width, 1 - (pos.y / Screen.height));
-                case PositionSendType.NormalizedParent: return new Vector2((pos.x - parent.xMin) / parent.width, (pos.y - parent.yMin) / parent.height);
-                case PositionSendType.Relative: return (pos - lastDropPosition) / rt.lossyScale;
-                case PositionSendType.RelativeAnchor: return (pos - anchor) / rt.lossyScale;
+                case DraggablePositionSendType.NormalizedScreen: return new Vector2(pos.x / Screen.width, 1 - (pos.y / Screen.height));
+                case DraggablePositionSendType.NormalizedParent: return new Vector2((pos.x - parent.xMin) / parent.width, (pos.y - parent.yMin) / parent.height);
+                case DraggablePositionSendType.Relative: return (pos - lastDropPosition) / rt.lossyScale;
+                case DraggablePositionSendType.RelativeAnchor: return (pos - anchor) / rt.lossyScale;
                 default: throw new Exception($"Invalid PositionSendType {positionRPC}");
             };
         }
         // packetsize go brrrr
         public void SendDragRPC()
         {
-            ClientInstance.ServerRPC<string, Vector2, byte>("DragRPC", gameObject.name, PositionForRPC(), (byte)positionRPC);
+            // Convert Vector2 -> Vector3 because RPCs don't support serializing a Vector2
+            ClientInstance.ServerRPC<string, Vector3, int>("DragRPC", gameObject.name, PositionForRPC(), (int)positionRPC);
         }
 
         // the same as the extension method, but without the allocation
@@ -517,14 +541,6 @@ public partial class CommunityEntity
         }
 
         #endregion
-
-        public enum PositionSendType : byte
-        {
-            NormalizedScreen = 0,
-            NormalizedParent = 1,
-            Relative = 2,
-            RelativeAnchor = 3,
-        }
     }
-}
 #endif
+}
