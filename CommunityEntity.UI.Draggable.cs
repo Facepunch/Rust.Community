@@ -77,7 +77,7 @@ public partial class CommunityEntity
         public Vector2 offset; // distance the panel has been dragged from its anchor
 
         // a reference to the parent slot if inside of one
-        public Slot slot;
+        public DraggableSlot slot;
 
         // set by other Scripts if the position was set, in those cases the script is responsible for sending the appropriate RPC
         public bool wasSnapped = false;
@@ -85,7 +85,7 @@ public partial class CommunityEntity
         private bool _initialized;
 
         // callbacks
-        string name;
+        private string callbackName;
         public Action<string> onDragCallback;
         public Action<string> onDropCallback;
 
@@ -102,7 +102,7 @@ public partial class CommunityEntity
             realParent = rt.parent;
             index = rt.GetSiblingIndex();
 
-            name = gameObject.name;
+            callbackName = gameObject.name;
 
             // bounds setup
             FindParentLimit();
@@ -115,7 +115,7 @@ public partial class CommunityEntity
             _initialized = true;
         }
 
-        public void OnDestroy(){
+        protected override void OnDestroy(){
             if(anchorObj != null)
                 UnityEngine.Object.Destroy(anchorObj);
         }
@@ -150,7 +150,7 @@ public partial class CommunityEntity
             if(limitToParent)
                 rt.SetAsLastSibling(); // because chances are we're already parented to it
 
-            onDragCallback?.Invoke(name);
+            onDragCallback?.Invoke(callbackName);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -195,7 +195,7 @@ public partial class CommunityEntity
                 rt.SetParent(realParent);
                 rt.SetSiblingIndex(index);
             }
-            onDropCallback?.Invoke(name);
+            onDropCallback?.Invoke(callbackName);
 
             if(!dropAnywhere){
                 rt.position = lastDropPosition;
@@ -241,7 +241,7 @@ public partial class CommunityEntity
                 return;
 
             // if the draggable is in a slot i dont fit inside of
-            if(draggedObj.slot != null && !Slot.FitsIntoSlot(this, draggedObj.slot))
+            if(draggedObj.slot != null && !DraggableSlot.FitsIntoSlot(this, draggedObj.slot))
                 return;
 
             // cant swap because the draggable's position is too far away
@@ -339,7 +339,7 @@ public partial class CommunityEntity
             }
             for(int i = 0; i < parentLimitIndex; i++){
                 limitParent = TryGetRectParent(limitParent);
-                Slot potentialSlot = limitParent.GetComponent<Slot>();
+                DraggableSlot potentialSlot = limitParent.GetComponent<DraggableSlot>();
                 if(potentialSlot){
                     // only set our parent as the slot if its actually the first one we encounter
                     if(slot == null){
@@ -407,11 +407,13 @@ public partial class CommunityEntity
         public Vector2 PositionForRPC(){
             Vector2 pos = rt.position;
             Rect parent = parentWorldRect;
-            return positionRPC switch{
-                PositionSendType.NormalizedScreen => new Vector2(pos.x / Screen.width, 1 - (pos.y / Screen.height)),
-                PositionSendType.NormalizedParent => new Vector2((pos.x - parent.xMin) / parent.width, (pos.y - parent.yMin) / parent.height),
-                PositionSendType.Relative => (pos - lastDropPosition) / rt.lossyScale,
-                PositionSendType.RelativeAnchor => (pos - anchor) / rt.lossyScale,
+            switch (positionRPC)
+            {
+                case PositionSendType.NormalizedScreen: return new Vector2(pos.x / Screen.width, 1 - (pos.y / Screen.height));
+                case PositionSendType.NormalizedParent: return new Vector2((pos.x - parent.xMin) / parent.width, (pos.y - parent.yMin) / parent.height);
+                case PositionSendType.Relative: return (pos - lastDropPosition) / rt.lossyScale;
+                case PositionSendType.RelativeAnchor: return (pos - anchor) / rt.lossyScale;
+                default: throw new Exception($"Invalid PositionSendType {positionRPC}");
             };
         }
         // packetsize go brrrr
@@ -483,10 +485,10 @@ public partial class CommunityEntity
         #endregion
 
         public enum PositionSendType : byte{
-            NormalizedScreen,
-            NormalizedParent,
-            Relative,
-            RelativeAnchor
+            NormalizedScreen = 0,
+            NormalizedParent = 1,
+            Relative = 2,
+            RelativeAnchor = 3,
         }
     }
 }

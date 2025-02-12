@@ -525,7 +525,7 @@ public partial class CommunityEntity
                 }
             case "Slot":
                 {
-                    var slot = GetOrAddComponent<Slot>();
+                    var slot = GetOrAddComponent<DraggableSlot>();
                     
                     if(ShouldUpdateField("filter"))
                         slot.filter = obj.GetString("filter", null);

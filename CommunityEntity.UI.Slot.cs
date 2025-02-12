@@ -15,7 +15,7 @@ using System.IO;
 public partial class CommunityEntity
 {
 
-    public class Slot : UIBehaviour, IDropHandler {
+    public class DraggableSlot : UIBehaviour, IDropHandler {
 
 
         #region Config
@@ -115,7 +115,7 @@ public partial class CommunityEntity
         #region Helpers
 
         // checks filters
-        public static bool FitsIntoSlot(Draggable drag, Slot slot){
+        public static bool FitsIntoSlot(Draggable drag, DraggableSlot slot){
             if(slot.filter == null)
                 return true;
 
