@@ -114,10 +114,19 @@ public partial class CommunityEntity
             }
 
             if ( json.ContainsKey( "fadeOut" ) )
+                Animation.AddFadeOut(go, json.GetFloat( "fadeOut", 0 ), json.GetBoolean( "fadeAsGroup", false ));
+
+            var anim = go.GetComponent<Animation>();
+            if(anim != null)
+                Animation.AddPendingAnim(anim);
+
+            if ( json.ContainsKey( "addCanvas" ) )
             {
-                go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
+                go.AddComponent<Canvas>();
+                go.AddComponent<GraphicRaycaster>();
             }
         }
+        Animation.InitPendingAnims();
     }
 
     private GameObject FindPanel( string name, bool allowScrollviews = true )
@@ -188,7 +197,7 @@ public partial class CommunityEntity
                     if ( ShouldUpdateField( "fontSize" ) )
                         c.fontSize = obj.GetInt( "fontSize", 14 );
                     if ( ShouldUpdateField( "font" ) )
-                    { 
+                    {
                         c.font = LoadFont(obj.GetString("font", strDEFAULT: "RobotoCondensed-Bold.ttf"));
                     }
                     if ( ShouldUpdateField( "align" ) )
@@ -251,7 +260,7 @@ public partial class CommunityEntity
                             }
                         }
                     }
-                    
+
                     GraphicComponentCreated( c, obj );
 
                     break;
@@ -280,7 +289,7 @@ public partial class CommunityEntity
                     {
                         ApplyTextureToImage( c, id );
                     }
-                    
+
                     if ( obj.ContainsKey( "steamid" ) )
                     {
                         var steamidString = obj.GetString( "steamid" );
@@ -490,7 +499,7 @@ public partial class CommunityEntity
                         c.numberFormat = obj.GetString( "numberFormat", allowUpdate ? c.numberFormat : "0.####" );
                     if ( ShouldUpdateField( "destroyIfDone" ) )
                         c.destroyIfDone = obj.GetBoolean( "destroyIfDone", allowUpdate ? c.destroyIfDone : true);
-        
+
                     if ( obj.ContainsKey( "command" ) )
                     {
                         c.command = obj.GetString( "command" );
@@ -567,11 +576,35 @@ public partial class CommunityEntity
                     HandleEnableState( obj, c );
                     break;
                 }
+            case "UnityEngine.UI.RectMask2D":
+                {
+                    var c = GetOrAddComponent<RectMask2D>();
+                    if( ShouldUpdateField("maskSoftness") )
+                        c.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+
+                    HandleEnableState( obj, c );
+                    break;
+                }
+            case "UnityEngine.UI.Mask":
+                {
+                    var c = GetOrAddComponent<Mask>();
+                    if( ShouldUpdateField("showMaskGraphic") )
+                        c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
+
+                    HandleEnableState( obj, c );
+                    break;
+                }
+            case "Animation":
+                {
+                    // Moved Setup to its own function in CommunityEntity.UI.Animation.cs
+                    Animation.ParseAnimation(obj, go, allowUpdate);
+                    break;
+                }
             case "UnityEngine.UI.ScrollView":
                 {
                     var scrollRect = GetOrAddComponent<ScrollRect>();
                     HandleEnableState(obj, scrollRect);
-                    
+
                     if(!ScrollViews.Contains(go.name)) ScrollViews.Add(go.name);
                     // Adding a Canvas allows unity to isolate any changes inside the scrollrect, improving performance as the outer canvas wont need an update on scroll
                     var canvas = go.GetComponent<Canvas>();
@@ -592,10 +625,10 @@ public partial class CommunityEntity
                         viewportRT.SetParent(go.transform, false);
                         var mask = viewportGO.AddComponent<RectMask2D>();
                     	scrollRect.viewport = viewportRT;
-			    
+
                         // if(obj.ContainsKey("maskSoftness"))
                         //     mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
-			    
+
                         // create & register content panel
                         var childGO = new GameObject(go.name + "___Content");
                         childGO.transform.SetParent(viewportGO.transform, false);
@@ -610,7 +643,7 @@ public partial class CommunityEntity
                         scrollRect.content.anchorMax = Vector2Ex.Parse( contentObj.GetString( "anchormax", "1.0 1.0" ) );
                         scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
 			// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
-                        scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
+                        scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) );
                     }
                     if(ShouldUpdateField("horizontal"))
                         scrollRect.horizontal = obj.GetBoolean("horizontal", false);
@@ -741,10 +774,10 @@ public partial class CommunityEntity
     private void GraphicComponentCreated( UnityEngine.UI.Graphic c, JSON.Object obj )
     {
         if ( obj.ContainsKey( "fadeIn" ) )
-        {
-            c.canvasRenderer.SetAlpha( 0f );
-            c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
-        }
+            Animation.AddFadeIn(c.gameObject, obj.GetFloat( "fadeIn", 0 ), obj.GetBoolean( "fadeAsGroup", false ));
+
+        if ( obj.ContainsKey( "shouldRaycast" ) )
+            c.raycastTarget = obj.GetBoolean("shouldRaycast", true);
     }
 
     private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
@@ -780,17 +813,17 @@ public partial class CommunityEntity
     private Font LoadFont(string fontName)
     {
         var font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + fontName );
-        if (font == null) 
+        if (font == null)
         {
             // Fallback to TMP default font if the loading failed
             font = TMP_Settings.defaultFontAsset.sourceFontFile;
-            
+
             Debug.LogWarning($"Failed loading {fontName}, using RobotoCondensed-Bold as a fallback");
         }
 
         return font;
     }
-    
+
     [RPC_Client]
     public void DestroyUI( RPCMessage msg )
     {
@@ -806,15 +839,14 @@ public partial class CommunityEntity
 
         if ( !panel )
             return;
-
         //Remove it from the scrollviews if its present
         ScrollViews.Remove(pnlName);
 
-        var fadeOut = panel.GetComponent<FadeOut>();
-        if ( fadeOut )
-        {
-            fadeOut.FadeOutAndDestroy();
-        }
+
+        Animation animation = panel.GetComponent<Animation>();
+
+        if(animation != null && animation.HasForTrigger("OnDestroy"))
+            animation.Kill();
         else
         {
             Destroy( panel );
