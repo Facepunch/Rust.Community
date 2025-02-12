@@ -35,9 +35,14 @@ public partial class CommunityEntity
 
     public void SetVisible( bool b )
     {
-        foreach ( var c in GetComponentsInChildren<Canvas>( true ) )
+        foreach (var go in OverallPanels)
         {
-            c.gameObject.SetActive( b );
+            var c = go.GetComponent<Canvas>();
+
+            if (c != null)
+            {
+                c.gameObject.SetActive(b);
+            }
         }
     }
 
