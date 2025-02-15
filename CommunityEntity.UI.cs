@@ -405,6 +405,19 @@ public partial class CommunityEntity
                         c.inputType = password ? InputField.InputType.Password : InputField.InputType.Standard;
                     }
 
+                    if (allowUpdate && obj.ContainsKey("placeHolder"))
+                    {
+                        var placeholder = new GameObject("Placeholder").AddComponent<Text>();
+                        placeholder.font = t.font;
+                        placeholder.fontSize = t.fontSize;
+                        placeholder.alignment = t.alignment;
+                        placeholder.text = obj.GetString("placeHolder", "Enter text...");
+                        placeholder.color = ColorEx.Parse(obj.GetString("placeHolderColor", "1 1 1 0.5"));
+                        
+                        c.placeholder = placeholder;
+                        placeholder.transform.SetParent(c.transform);
+                    }
+
                     if ( obj.TryGetBoolean( "needsKeyboard", out var needsKeyboard ) )
                     {
                         var comp = GetOrAddComponent<NeedsKeyboardInputField>();
