@@ -107,6 +107,9 @@ public partial class CommunityEntity
                 if ( rt )
                     FitParent(rt);
             }
+		
+	    if (json.ContainsKey("activeSelf"))
+                go.SetActive(json.GetBoolean("activeSelf", true));
 
             foreach ( var component in json.GetArray( "components" ) )
             {
