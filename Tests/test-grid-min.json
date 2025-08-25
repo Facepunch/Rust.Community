@@ -1,0 +1,50 @@
+[
+  {
+    "name":"G_Panel","parent":"Overlay",
+    "components":[
+      { "type":"UnityEngine.UI.Image","color":"0 0 0 0.18" },
+      { "type":"RectTransform","anchormin":"0.2 0.25","anchormax":"0.8 0.75","offsetmin":"0 0","offsetmax":"0 0" },
+      { "type":"UnityEngine.UI.GridLayoutGroup",
+        "cellSize":"160 64",
+        "spacing":"16 16",
+        "startCorner":"UpperLeft",
+        "startAxis":"Horizontal",
+        "childAlignment":"MiddleCenter",
+        "constraint":"Flexible",
+        "padding":"12 12 12 12"
+      }
+    ]
+  },
+
+  { "name":"G_Item_1","parent":"G_Panel","components":[
+      { "type":"UnityEngine.UI.Image","color":"0.9 0.3 0.3 0.95" }
+  ]},
+  { "name":"G_Item_1_Label","parent":"G_Item_1","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Item 1","fontSize":16,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"G_Item_2","parent":"G_Panel","components":[
+      { "type":"UnityEngine.UI.Image","color":"0.3 0.9 0.3 0.95" }
+  ]},
+  { "name":"G_Item_2_Label","parent":"G_Item_2","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Item 2","fontSize":16,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"G_Item_3","parent":"G_Panel","components":[
+      { "type":"UnityEngine.UI.Image","color":"0.3 0.3 0.9 0.95" }
+  ]},
+  { "name":"G_Item_3_Label","parent":"G_Item_3","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Item 3","fontSize":16,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"G_Item_4","parent":"G_Panel","components":[
+      { "type":"UnityEngine.UI.Image","color":"0.9 0.9 0.3 0.95" }
+  ]},
+  { "name":"G_Item_4_Label","parent":"G_Item_4","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Item 4","fontSize":16,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]}
+]
