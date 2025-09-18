@@ -394,12 +394,12 @@ public partial class CommunityEntity
                         c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
                     }
 
+                    if ( ShouldUpdateField( "lineType" ) )
+                        c.lineType = ParseEnum( obj.GetString( "lineType", "SingleLine" ), InputField.LineType.SingleLine );
                     if ( ShouldUpdateField( "text" ) )
                         c.text = obj.GetString( "text", "Text" );
                     if ( ShouldUpdateField( "readOnly" ) )
                         c.readOnly = obj.GetBoolean( "readOnly", false );
-                    if ( ShouldUpdateField( "lineType" ) )
-                        c.lineType = ParseEnum( obj.GetString( "lineType", "SingleLine" ), InputField.LineType.SingleLine );
 
                     if ( obj.TryGetBoolean( "password", out var password ) )
                     {
