@@ -1,0 +1,43 @@
+[
+  {
+    "name":"H_Panel","parent":"Overlay",
+    "components":[
+      { "type":"UnityEngine.UI.Image","color":"0 0 0 0.18" },
+      { "type":"RectTransform","anchormin":"0.15 0.72","anchormax":"0.85 0.86","offsetmin":"0 0","offsetmax":"0 0" },
+      { "type":"UnityEngine.UI.HorizontalLayoutGroup",
+        "spacing":20,
+        "childAlignment":"MiddleCenter",
+        "childForceExpandWidth":false,"childForceExpandHeight":false,
+        "childControlWidth":true,"childControlHeight":true,
+        "padding":"12 12 12 12"
+      }
+    ]
+  },
+
+  { "name":"H_Item_A","parent":"H_Panel","components":[
+      { "type":"UnityEngine.UI.LayoutElement","preferredWidth":200,"preferredHeight":120 },
+      { "type":"UnityEngine.UI.Image","sprite":"assets/content/ui/ui.rounded.tga","imagetype":"Sliced","color":"0.2 0.6 1 0.9" }
+  ]},
+  { "name":"H_Item_A_Label","parent":"H_Item_A","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 8","offsetmax":"-8 -8" },
+      { "type":"UnityEngine.UI.Text","text":"COMBAT","fontSize":18,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"H_Item_B","parent":"H_Panel","components":[
+      { "type":"UnityEngine.UI.LayoutElement","preferredWidth":220,"preferredHeight":120 },
+      { "type":"UnityEngine.UI.Image","sprite":"assets/content/ui/ui.rounded.tga","imagetype":"Sliced","color":"1 0.5 0.2 0.9" }
+  ]},
+  { "name":"H_Item_B_Label","parent":"H_Item_B","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 8","offsetmax":"-8 -8" },
+      { "type":"UnityEngine.UI.Text","text":"RAID","fontSize":18,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"H_Item_C","parent":"H_Panel","components":[
+      { "type":"UnityEngine.UI.LayoutElement","preferredWidth":204,"preferredHeight":120 },
+      { "type":"UnityEngine.UI.Image","sprite":"assets/content/ui/ui.rounded.tga","imagetype":"Sliced","color":"0.4 1 0.4 0.9" }
+  ]},
+  { "name":"H_Item_C_Label","parent":"H_Item_C","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 8","offsetmax":"-8 -8" },
+      { "type":"UnityEngine.UI.Text","text":"THIRD (+4px)","fontSize":18,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]}
+]
