@@ -10,28 +10,13 @@ using MaskableGraphic = UnityEngine.UI.MaskableGraphic;
 
 public partial class CommunityEntity
 {
-    private static Dictionary<uint, ImageRequest> requestingTextureImages = new Dictionary<uint, ImageRequest>();
+    private static Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>> requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>>();
     private static Dictionary<uint, CachedTexture> _textureCache = new Dictionary<uint, CachedTexture>();
-
-    private class ImageRequest
-    {
-        public List<UnityEngine.UI.MaskableGraphic> MaskableGraphics = new List<MaskableGraphic>();
-    }
 
     private class CachedTexture
     {
         public Texture2D Texture;
         public Sprite Sprite;
-
-        public Sprite GetOrCreateSprite()
-        {
-            if (Sprite == null)
-            {
-                Sprite = Sprite.Create(Texture, new Rect(0, 0, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));
-            }
-
-            return Sprite;
-        }
 
         public void Destroy()
         {
@@ -64,18 +49,15 @@ public partial class CommunityEntity
 
         var texture = StoreCachedTexture( textureID, bytes );
 
-        // Get existing image request
-        var request = RequestImage(textureID, false);
-
-        if (request != null)
+        List<UnityEngine.UI.MaskableGraphic> components;
+        if ( requestingTextureImages.TryGetValue( textureID, out components ) )
         {
-            foreach (var c in request.MaskableGraphics)
+            requestingTextureImages.Remove( textureID );
+
+            foreach ( var c in components )
             {
-                ApplyCachedTextureToImage(c, texture);
+                ApplyCachedTextureToImage( c, texture );
             }
-            
-            // Remove request
-            requestingTextureImages.Remove(textureID);
         }
     }
 
@@ -105,45 +87,7 @@ public partial class CommunityEntity
         return texture;
     }
 
-    // Request an image or get the existing request
-    private ImageRequest RequestImage(uint textureID, bool createRequest)
-    {
-        if (!requestingTextureImages.TryGetValue(textureID, out var request) && createRequest)
-        {
-            request = new ImageRequest();
-            requestingTextureImages[textureID] = request;
-            RequestFileFromServer(textureID, FileStorage.Type.png, "CL_ReceiveFilePng");
-        }
-        return request;
-    }
-
-    public Sprite GetOrRequestSprite(uint id)
-    {
-        var cachedImage = GetCachedTexture(id);
-
-        // Cached in memory
-        if (cachedImage != null)
-        {
-            return cachedImage.GetOrCreateSprite();
-        }
-
-        var bytes = FileStorage.client.Get(id, FileStorage.Type.png, net.ID);
-
-        // Cached on disk
-        if (bytes != null)
-        {
-            cachedImage = StoreCachedTexture(id, bytes);
-            return cachedImage.GetOrCreateSprite();
-        }
-
-        // Create request for texture
-        // NOTE: don't worry about callback since ItemIcon should be polling every frame
-        RequestImage(id, true);
-
-        return null;
-    }
-
-    public void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID )
+    private void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID )
     {
         var texture = GetCachedTexture( textureID );
 
@@ -156,8 +100,14 @@ public partial class CommunityEntity
             }
             else
             {
-                var request = RequestImage(textureID, true);
-                request.MaskableGraphics.Add( component );
+                List<UnityEngine.UI.MaskableGraphic> components;
+                if ( !requestingTextureImages.TryGetValue( textureID, out components ) )
+                {
+                    components = new List<UnityEngine.UI.MaskableGraphic>();
+                    requestingTextureImages[ textureID ] = components;
+                    RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
+                }
+                components.Add( component );
                 return;
             }
         }
@@ -170,7 +120,12 @@ public partial class CommunityEntity
         var image = component as UnityEngine.UI.Image;
         if ( image )
         {
-            image.sprite = texture.GetOrCreateSprite();
+            if ( texture.Sprite == null )
+            {
+                texture.Sprite = Sprite.Create( texture.Texture, new Rect( 0, 0, texture.Texture.width, texture.Texture.height ), new Vector2( 0.5f, 0.5f ) );
+            }
+
+            image.sprite = texture.Sprite;
             return;
         }
 
@@ -189,9 +144,6 @@ public partial class CommunityEntity
         }
 
         _textureCache.Clear();
-
-        // Clear image requests as well
-        requestingTextureImages.Clear();
     }
 }
 

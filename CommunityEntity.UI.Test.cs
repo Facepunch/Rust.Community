@@ -133,12 +133,6 @@ public class cui
 									""fontSize"":32,
 									""align"": ""MiddleRight"",
 								},
-								{
-									""type"":""RectTransform"",
-									""anchormin"":""0.4 0.4"",
-									""anchormax"":""0.6 0.6"",
-
-								}
 							]
 						},
 						{
