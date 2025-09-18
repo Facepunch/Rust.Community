@@ -10,7 +10,7 @@ using MaskableGraphic = UnityEngine.UI.MaskableGraphic;
 
 public partial class CommunityEntity
 {
-    private static Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>> requestingTextureImages = new Dictionary<uint, List<UnityEngine.UI.MaskableGraphic>>();
+    private static Dictionary<uint, List<ImageRequest>> requestingTextureImages = new Dictionary<uint, List<ImageRequest>>();
     private static Dictionary<uint, CachedTexture> _textureCache = new Dictionary<uint, CachedTexture>();
 
     private class CachedTexture
@@ -56,7 +56,7 @@ public partial class CommunityEntity
 
             foreach ( var c in components )
             {
-                ApplyCachedTextureToImage( c, texture );
+                ApplyCachedTextureToImage( c.graphic, texture, c.slice );
             }
         }
     }
@@ -87,7 +87,7 @@ public partial class CommunityEntity
         return texture;
     }
 
-    private void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID )
+    private void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID, Vector4? slice = null )
     {
         var texture = GetCachedTexture( textureID );
 
@@ -107,19 +107,27 @@ public partial class CommunityEntity
                     requestingTextureImages[ textureID ] = components;
                     RequestFileFromServer( textureID, FileStorage.Type.png, "CL_ReceiveFilePng" );
                 }
-                components.Add( component );
+                components.Add( new ImageRequest()
+                {
+                    graphic = component,
+                    slice = slice
+                });
                 return;
             }
         }
 
-        ApplyCachedTextureToImage( component, texture );
+        ApplyCachedTextureToImage( component, texture, slice );
     }
 
-    private void ApplyCachedTextureToImage( UnityEngine.UI.MaskableGraphic component, CachedTexture texture )
+    private void ApplyCachedTextureToImage( UnityEngine.UI.MaskableGraphic component, CachedTexture texture, Vector4? slice = null )
     {
         var image = component as UnityEngine.UI.Image;
         if ( image )
         {
+            if(slice != null){
+                image.sprite = Sprite.Create( texture.Texture, new Rect( 0, 0, texture.Texture.width, texture.Texture.height ), new Vector2( 0.5f, 0.5f ), 100, 0, SpriteMeshType.Tight, slice.Value);
+                return;
+            }
             if ( texture.Sprite == null )
             {
                 texture.Sprite = Sprite.Create( texture.Texture, new Rect( 0, 0, texture.Texture.width, texture.Texture.height ), new Vector2( 0.5f, 0.5f ) );
