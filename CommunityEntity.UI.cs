@@ -612,6 +612,7 @@ public partial class CommunityEntity
                         scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
 			// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
                         scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
+                        scrollRect.content.pivot = Vector2Ex.Parse( contentObj.GetString( "pivot", "0.5 0.5" ) ); 
                     }
                     if(ShouldUpdateField("horizontal"))
                         scrollRect.horizontal = obj.GetBoolean("horizontal", false);
