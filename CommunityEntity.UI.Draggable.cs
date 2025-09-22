@@ -24,14 +24,14 @@ public partial class CommunityEntity
     // Empty methods for oxide to hook
 #if SERVER
     [RPC_Server]
-    public void DragRPC(BasePlayer player,  string name, Vector3 position, int positionTypeByte)
+    public void DragRPC(RPCMessage rpc,  string name, Vector3 position, int positionTypeByte)
     {
         // Cast byte -> Enum
         DraggablePositionSendType type = (DraggablePositionSendType)positionTypeByte;
     }
 
     [RPC_Server]
-    public void DropRPC(BasePlayer player, string draggedName, string draggedSlot, string swappedName, string swappedSlot)
+    public void DropRPC(RPCMessage rpc, string draggedName, string draggedSlot, string swappedName, string swappedSlot)
     {
 
     }
