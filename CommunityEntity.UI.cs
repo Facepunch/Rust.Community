@@ -791,7 +791,14 @@ public partial class CommunityEntity
 
                         BuildScrollbar(scrollbar, scrollObj, true);
                     }
-					break;
+
+                    // Add ability to set scroll progress
+                    if (ShouldUpdateField("horizontalNormalizedPosition"))
+                        scrollRect.horizontalNormalizedPosition = obj.GetFloat("horizontalNormalizedPosition", 0f);
+
+                    if (ShouldUpdateField("verticalNormalizedPosition"))
+                        scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 0f);
+                break;
                 }
         }
     }
@@ -894,7 +901,7 @@ public partial class CommunityEntity
         if (ShouldUpdateField("padding") && obj.ContainsKey("padding"))
         {
             var raw = obj.GetString("padding", "0 0 0 0");
-            var parts = raw.Split(new[] { ' ', ',', ';', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = raw.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             int l = g.padding.left, t = g.padding.top, r = g.padding.right, b = g.padding.bottom;
 
