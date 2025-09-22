@@ -1,0 +1,43 @@
+[
+  {
+    "name":"V_Panel","parent":"Overlay",
+    "components":[
+      { "type":"UnityEngine.UI.Image","color":"0 0 0 0.18" },
+      { "type":"RectTransform","anchormin":"0.4 0.22","anchormax":"0.6 0.72","offsetmin":"0 0","offsetmax":"0 0" },
+      { "type":"UnityEngine.UI.VerticalLayoutGroup",
+        "spacing":14,
+        "childAlignment":"MiddleCenter",
+        "childForceExpandWidth":false,"childForceExpandHeight":false,
+        "childControlWidth":true,"childControlHeight":true,
+        "padding":"12 12 12 12"
+      }
+    ]
+  },
+
+  { "name":"V_Item_1","parent":"V_Panel","components":[
+      { "type":"UnityEngine.UI.LayoutElement","preferredWidth":320,"preferredHeight":52 },
+      { "type":"UnityEngine.UI.Image","color":"0.2 0.6 1 0.9" }
+  ]},
+  { "name":"V_Item_1_Label","parent":"V_Item_1","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Line 1","fontSize":18,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"V_Item_2","parent":"V_Panel","components":[
+      { "type":"UnityEngine.UI.LayoutElement","preferredWidth":360,"preferredHeight":52 },
+      { "type":"UnityEngine.UI.Image","color":"1 0.5 0.2 0.9" }
+  ]},
+  { "name":"V_Item_2_Label","parent":"V_Item_2","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Line 2","fontSize":18,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]},
+
+  { "name":"V_Item_3","parent":"V_Panel","components":[
+      { "type":"UnityEngine.UI.LayoutElement","preferredWidth":300,"preferredHeight":52 },
+      { "type":"UnityEngine.UI.Image","color":"0.4 1 0.4 0.9" }
+  ]},
+  { "name":"V_Item_3_Label","parent":"V_Item_3","components":[
+      { "type":"RectTransform","anchormin":"0 0","anchormax":"1 1","offsetmin":"8 6","offsetmax":"-8 -6" },
+      { "type":"UnityEngine.UI.Text","text":"Line 3","fontSize":18,"font":"RobotoCondensed-Bold.ttf","align":"MiddleCenter","color":"1 1 1 1" }
+  ]}
+]

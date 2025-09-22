@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-#if CLIENT
 
 public partial class CommunityEntity
 {
     private class FadeOut : MonoBehaviour
     {
         public float duration;
+#if CLIENT
 
         public void FadeOutAndDestroy()
         {
@@ -21,7 +21,7 @@ public partial class CommunityEntity
         {
             Destroy( gameObject );
         }
+#endif
     }
 }
 
-#endif

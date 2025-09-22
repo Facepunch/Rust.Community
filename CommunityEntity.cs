@@ -6,7 +6,10 @@ public partial class CommunityEntity : PointEntity
 	public static CommunityEntity ServerInstance = null;
 	public static CommunityEntity ClientInstance = null;
 
-	public override void InitShared()
+	// Inside shared class so it stays serialized when switching defines
+    public GameObject[] OverallPanels;
+
+    public override void InitShared()
 	{
 		if ( isServer ) ServerInstance = this;
 		else ClientInstance = this;

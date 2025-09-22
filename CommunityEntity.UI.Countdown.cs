@@ -3,7 +3,6 @@ using System;
 
 public partial class CommunityEntity
 {
-#if CLIENT
     private class Countdown : MonoBehaviour
     {
         public string command = "";
@@ -14,6 +13,23 @@ public partial class CommunityEntity
         public TimerFormat timerFormat = TimerFormat.None;
         public string numberFormat = "0.####";
         public bool destroyIfDone = true;
+
+        public enum TimerFormat 
+        {
+            None,
+            SecondsHundreth,
+            MinutesSeconds,
+            MinutesSecondsHundreth,
+            HoursMinutes,
+            HoursMinutesSeconds,
+            HoursMinutesSecondsMilliseconds,
+            HoursMinutesSecondsTenths,
+            DaysHoursMinutes,
+            DaysHoursMinutesSeconds,
+            Custom
+        }
+        
+#if CLIENT
 
         private string sign = "";
         private string tempText = "";
@@ -105,22 +121,8 @@ public partial class CommunityEntity
             };
             textComponent.text = tempText.Replace( "%TIME_LEFT%", formattedTime );
         }
+#endif
 
-        public enum TimerFormat 
-        {
-            None,
-            SecondsHundreth,
-            MinutesSeconds,
-            MinutesSecondsHundreth,
-            HoursMinutes,
-            HoursMinutesSeconds,
-            HoursMinutesSecondsMilliseconds,
-            HoursMinutesSecondsTenths,
-            DaysHoursMinutes,
-            DaysHoursMinutesSeconds,
-            Custom
-        }
     }
 
-#endif
 }

@@ -35,9 +35,14 @@ public partial class CommunityEntity
 
     public void SetVisible( bool b )
     {
-        foreach ( var c in GetComponentsInChildren<Canvas>( true ) )
+        foreach (var go in OverallPanels)
         {
-            c.gameObject.SetActive( b );
+            var c = go.GetComponent<Canvas>();
+
+            if (c != null)
+            {
+                c.gameObject.SetActive(b);
+            }
         }
     }
 
@@ -102,6 +107,9 @@ public partial class CommunityEntity
                 if ( rt )
                     FitParent(rt);
             }
+		
+	    if (json.ContainsKey("activeSelf"))
+                go.SetActive(json.GetBoolean("activeSelf", true));
 
             foreach ( var component in json.GetArray( "components" ) )
             {
@@ -151,6 +159,12 @@ public partial class CommunityEntity
         bool ShouldUpdateField( string fieldName )
         {
             return !allowUpdate || obj.ContainsKey( fieldName );
+        }
+
+        // Only checks field name (if we want to keep default value)
+        bool HasField( string fieldName)
+        {
+            return obj.ContainsKey(fieldName);
         }
 
         T GetOrAddComponent<T>() where T : Component
@@ -323,6 +337,27 @@ public partial class CommunityEntity
                         img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
 
                     c.image = img;
+                    
+                    // Modify the color of the button when hovered
+                    // Have to grab colorBlock, modify then reassign
+                    var colors = c.colors;
+
+                    if (HasField("normalColor"))
+                        colors.normalColor = ColorEx.Parse(obj.GetString("normalColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("highlightedColor"))
+                        colors.highlightedColor = ColorEx.Parse(obj.GetString("highlightedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("pressedColor"))
+                        colors.pressedColor = ColorEx.Parse(obj.GetString("pressedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("selectedColor"))
+                        colors.selectedColor = ColorEx.Parse(obj.GetString("selectedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("disabledColor"))
+                        colors.disabledColor = ColorEx.Parse(obj.GetString("disabledColor", "0.5 0.5 0.5 0.5"));
+                    if (HasField("colorMultiplier"))
+                        colors.colorMultiplier = obj.GetFloat("colorMultiplier", 1.0f);
+                    if (HasField("fadeDuration"))
+                        colors.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
+
+                    c.colors = colors;
 
                     GraphicComponentCreated( img, obj );
 
@@ -370,12 +405,17 @@ public partial class CommunityEntity
                         c.onEndEdit.AddListener( ( value ) => { ConsoleNetwork.ClientRunOnServer( cmd + " " + value ); } );
                     }
 
+                    if ( ShouldUpdateField( "lineType" ) )
+                        c.lineType = ParseEnum( obj.GetString( "lineType", "SingleLine" ), InputField.LineType.SingleLine );
                     if ( ShouldUpdateField( "text" ) )
                         c.text = obj.GetString( "text", "Text" );
                     if ( ShouldUpdateField( "readOnly" ) )
                         c.readOnly = obj.GetBoolean( "readOnly", false );
-                    if ( ShouldUpdateField( "lineType" ) )
-                        c.lineType = ParseEnum( obj.GetString( "lineType", "SingleLine" ), InputField.LineType.SingleLine );
+
+                    if (ShouldUpdateField("placeholderId"))
+                    {
+                        AssignInputFieldPlaceholder(c, obj.GetString("placeholderId"));
+                    }
 
                     if ( obj.TryGetBoolean( "password", out var password ) )
                     {
@@ -425,6 +465,25 @@ public partial class CommunityEntity
                             rt.offsetMin = Vector2Ex.Parse( obj.GetString( "offsetmin", "0.0 0.0" ) );
                         if ( ShouldUpdateField( "offsetmax" ) )
                             rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
+                        if ( ShouldUpdateField( "rotation" ) )
+                            rt.rotation = Quaternion.Euler( 0, 0, obj.GetFloat("rotation", 0) );
+                            
+                        
+                        
+                        // some Update only fields to allow reparenting of draggables if needed
+                        if (allowUpdate && obj.ContainsKey( "setParent" ) ){
+                            var newParentName = obj.GetString( "setParent", null );
+                            if(!string.IsNullOrEmpty(newParentName)){
+                                var newParent = FindPanel(newParentName);
+                                if(newParent)
+                                    rt.SetParent(newParent.transform);
+                            }
+                        }
+                        if(allowUpdate && obj.ContainsKey( "setTransformIndex" ) ){
+                            var newIndex = obj.GetInt("setTransformIndex", -1);
+                            if(newIndex >= 0)
+                                rt.SetSiblingIndex(newIndex);
+                        }
                     }
                     break;
                 }
@@ -456,6 +515,179 @@ public partial class CommunityEntity
                         c.command = obj.GetString( "command" );
                     }
 
+                    break;
+                }
+            case "UnityEngine.UI.HorizontalLayoutGroup":
+                {
+                    var c = GetOrAddComponent<HorizontalLayoutGroup>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("spacing"))
+                        c.spacing = obj.GetFloat("spacing", 0f);
+                    if (ShouldUpdateField("childAlignment"))
+                        c.childAlignment = ParseEnum(obj.GetString("childAlignment", "UpperLeft"), TextAnchor.UpperLeft);
+                    if (ShouldUpdateField("childForceExpandWidth"))
+                        c.childForceExpandWidth = obj.GetBoolean("childForceExpandWidth", true);
+                    if (ShouldUpdateField("childForceExpandHeight"))
+                        c.childForceExpandHeight = obj.GetBoolean("childForceExpandHeight", true);
+                    if (ShouldUpdateField("childControlWidth"))
+                        c.childControlWidth = obj.GetBoolean("childControlWidth", false);
+                    if (ShouldUpdateField("childControlHeight"))
+                        c.childControlHeight = obj.GetBoolean("childControlHeight", false);
+                    if (ShouldUpdateField("childScaleWidth"))        
+                        c.childScaleWidth  = obj.GetBoolean("childScaleWidth",  false);
+                    if (ShouldUpdateField("childScaleHeight"))        
+                        c.childScaleHeight = obj.GetBoolean("childScaleHeight", false);
+
+                    ApplyPadding(c, obj, ShouldUpdateField);
+
+                    break;
+                }
+            case "UnityEngine.UI.VerticalLayoutGroup":
+                {
+                    var c = GetOrAddComponent<VerticalLayoutGroup>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("spacing"))                 
+                        c.spacing = obj.GetFloat("spacing", 0f);
+                    if (ShouldUpdateField("childAlignment"))          
+                        c.childAlignment = ParseEnum(obj.GetString("childAlignment", "UpperLeft"), TextAnchor.UpperLeft);
+                    if (ShouldUpdateField("childForceExpandWidth"))   
+                        c.childForceExpandWidth  = obj.GetBoolean("childForceExpandWidth",  true);
+                    if (ShouldUpdateField("childForceExpandHeight")) 
+                        c.childForceExpandHeight = obj.GetBoolean("childForceExpandHeight", true);
+                    if (ShouldUpdateField("childControlWidth"))      
+                        c.childControlWidth  = obj.GetBoolean("childControlWidth",  false);
+                    if (ShouldUpdateField("childControlHeight"))   
+                        c.childControlHeight = obj.GetBoolean("childControlHeight", false);
+                    if (ShouldUpdateField("childScaleWidth"))     
+                        c.childScaleWidth  = obj.GetBoolean("childScaleWidth",  false);
+                    if (ShouldUpdateField("childScaleHeight"))   
+                        c.childScaleHeight = obj.GetBoolean("childScaleHeight", false);
+
+                    ApplyPadding(c, obj, ShouldUpdateField);
+                    
+                    break;
+                }
+            case "UnityEngine.UI.GridLayoutGroup":
+                {
+                    var c = GetOrAddComponent<GridLayoutGroup>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("cellSize"))
+                        c.cellSize = Vector2Ex.Parse(obj.GetString("cellSize", "100 100"));
+                    if (ShouldUpdateField("spacing"))
+                        c.spacing = Vector2Ex.Parse(obj.GetString("spacing", "0 0"));
+                    if (ShouldUpdateField("startCorner"))
+                        c.startCorner = ParseEnum(obj.GetString("startCorner", "UpperLeft"), GridLayoutGroup.Corner.UpperLeft);
+                    if (ShouldUpdateField("startAxis"))
+                        c.startAxis = ParseEnum(obj.GetString("startAxis", "Horizontal"), GridLayoutGroup.Axis.Horizontal);
+                    if (ShouldUpdateField("childAlignment"))
+                        c.childAlignment = ParseEnum(obj.GetString("childAlignment", "UpperLeft"), TextAnchor.UpperLeft);
+                    if (ShouldUpdateField("constraint"))
+                        c.constraint = ParseEnum(obj.GetString("constraint", "Flexible"), GridLayoutGroup.Constraint.Flexible);
+                    if (ShouldUpdateField("constraintCount"))
+                        c.constraintCount = obj.GetInt("constraintCount", c.constraintCount);
+
+                    ApplyPadding(c, obj, ShouldUpdateField);
+                    
+                    break;
+                }
+            case "UnityEngine.UI.ContentSizeFitter":
+                {
+                    var c = GetOrAddComponent<ContentSizeFitter>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("horizontalFit"))
+                        c.horizontalFit = ParseEnum(obj.GetString("horizontalFit", "Unconstrained"), ContentSizeFitter.FitMode.Unconstrained);
+                    if (ShouldUpdateField("verticalFit"))
+                        c.verticalFit = ParseEnum(obj.GetString("verticalFit", "Unconstrained"), ContentSizeFitter.FitMode.Unconstrained);
+
+                    break;
+                }
+            case "UnityEngine.UI.LayoutElement":
+                {
+                    var c = GetOrAddComponent<LayoutElement>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("preferredWidth"))  
+                        c.preferredWidth = obj.GetFloat("preferredWidth", -1f);
+                    if (ShouldUpdateField("preferredHeight")) 
+                        c.preferredHeight = obj.GetFloat("preferredHeight", -1f);
+                    if (ShouldUpdateField("minWidth"))      
+                        c.minWidth = obj.GetFloat("minWidth", 0f);
+                    if (ShouldUpdateField("minHeight"))      
+                        c.minHeight = obj.GetFloat("minHeight", 0f);
+                    if (ShouldUpdateField("flexibleWidth"))  
+                        c.flexibleWidth = obj.GetFloat("flexibleWidth", 0f);
+                    if (ShouldUpdateField("flexibleHeight")) 
+                        c.flexibleHeight = obj.GetFloat("flexibleHeight", 0f);
+                    if (ShouldUpdateField("ignoreLayout"))
+                        c.ignoreLayout = obj.GetBoolean("ignoreLayout", false);
+
+                    break;
+                }
+            case "Draggable":
+                {
+                    var drag = go.GetComponent<Draggable>();
+                    if(!drag){
+                        drag = go.AddComponent<Draggable>();
+                        go.AddComponent<CanvasGroup>();
+                    }
+                    
+                    if( ShouldUpdateField("limitToParent"))
+                        drag.limitToParent = obj.GetBoolean("limitToParent", false);
+                    if( ShouldUpdateField("maxDistance"))
+                        drag.maxDistance = obj.GetFloat("maxDistance", -1f);
+                    if( ShouldUpdateField("allowSwapping"))
+                        drag.allowSwapping = obj.GetBoolean("allowSwapping", false);
+                    if( ShouldUpdateField("dropAnywhere"))
+                        drag.dropAnywhere = obj.GetBoolean("dropAnywhere", true);
+                    if( ShouldUpdateField("dragAlpha"))
+                        drag.dragAlpha = obj.GetFloat("dragAlpha", 1f);
+                    if( ShouldUpdateField("parentLimitIndex"))
+                        drag.parentLimitIndex = obj.GetInt("parentLimitIndex", 1);
+                    if( ShouldUpdateField("filter"))
+                        drag.filter = obj.GetString("filter", null);
+                    if( ShouldUpdateField("parentPadding"))
+                        drag.parentPadding = Vector2Ex.Parse(obj.GetString("parentPadding", "0 0"));
+                    if( ShouldUpdateField("anchorOffset"))
+                        drag.anchorOffset = Vector2Ex.Parse(obj.GetString("anchorOffset", "0 0"));
+                    if( ShouldUpdateField("keepOnTop"))
+                        drag.keepOnTop = obj.GetBoolean("keepOnTop", false);
+                    
+                    var preferredDefault = DraggablePositionSendType.NormalizedScreen;
+                    // find a better default depending on specified settings
+                    if(drag.maxDistance > 0f){
+                        preferredDefault = DraggablePositionSendType.RelativeAnchor;
+                    } else if(drag.limitToParent){
+                        preferredDefault = DraggablePositionSendType.NormalizedParent;
+                    }
+                    
+                    if( ShouldUpdateField("positionRPC"))
+                        drag.positionRPC = ParseEnum<DraggablePositionSendType>(obj.GetString("positionRPC", null), preferredDefault);
+                    
+                    // some Update only fields to trigger certain functions
+                    if(allowUpdate & obj.ContainsKey("moveToAnchor"))
+                        drag.MoveToAnchor();
+                    if(allowUpdate & obj.ContainsKey("rebuildAnchor"))
+                        drag.RebuildAnchor();
+                    
+                    drag.Init();
+                    
+                    HandleEnableState(obj, drag);
+                    break;
+                }
+            case "Slot":
+                {
+                    var slot = GetOrAddComponent<DraggableSlot>();
+                    
+                    if(ShouldUpdateField("filter"))
+                        slot.filter = obj.GetString("filter", null);
+                    
+                    slot.Init();
+                    
+                    HandleEnableState(obj, slot);
                     break;
                 }
             case "NeedsKeyboard":
@@ -508,6 +740,7 @@ public partial class CommunityEntity
                         scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
 			// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
                         scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
+                        scrollRect.content.pivot = Vector2Ex.Parse( contentObj.GetString( "pivot", "0.5 0.5" ) ); 
                     }
                     if(ShouldUpdateField("horizontal"))
                         scrollRect.horizontal = obj.GetBoolean("horizontal", false);
@@ -566,9 +799,49 @@ public partial class CommunityEntity
 
                         BuildScrollbar(scrollbar, scrollObj, true);
                     }
-					break;
+
+                    // Add ability to set scroll progress
+                    if (ShouldUpdateField("horizontalNormalizedPosition"))
+                        scrollRect.horizontalNormalizedPosition = obj.GetFloat("horizontalNormalizedPosition", 0f);
+
+                    if (ShouldUpdateField("verticalNormalizedPosition"))
+                        scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 0f);
+                break;
                 }
         }
+    }
+
+    private void AssignInputFieldPlaceholder(InputField input, string panelId)
+    {
+        // If clearing placeholder
+        if (string.IsNullOrEmpty(panelId))
+        {
+            input.placeholder = null;
+            return;
+        }
+        
+        // Search for panel
+        var panel = FindPanel(panelId);
+
+        if (panel == null)
+        {
+            Debug.LogWarning($"[AddUI] Unable to find placeholder panel '{panelId}' for InputField '{input.name}'");
+            input.placeholder = null;
+            return;
+        }
+
+        // Get graphic component
+        var graphic = panel.GetComponent<Graphic>();
+
+        if (graphic == null)
+        {
+            Debug.LogWarning($"[AddUI] Unable to find Graphic component on placeholder panel '{panelId}' for InputField '{input.name}'");
+            input.placeholder = null;
+            return;
+        }
+
+        // Assign if it's all good
+        input.placeholder = graphic;
     }
 
     private void BuildScrollbar(Scrollbar scrollbar, JSON.Object obj, bool vertical){
@@ -627,6 +900,38 @@ public partial class CommunityEntity
         transform.offsetMin = Vector2.zero;
         transform.offsetMax = Vector2.one; // to preserve the shoddy offsetmax default that alot of existing UIs rely on
     }
+    
+    private void ApplyPadding(LayoutGroup g, JSON.Object obj, Func<string, bool> ShouldUpdateField)
+    {
+        if (g == null || obj == null) return;
+
+        // 1) Shorthand "padding" field: "l t r b" (or a single "x" to apply to all sides)
+        if (ShouldUpdateField("padding") && obj.ContainsKey("padding"))
+        {
+            var raw = obj.GetString("padding", "0 0 0 0");
+            var parts = raw.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            int l = g.padding.left, t = g.padding.top, r = g.padding.right, b = g.padding.bottom;
+
+            if (parts.Length == 1)
+            {
+                if (int.TryParse(parts[0], out var v))
+                    l = t = r = b = v;
+            }
+            else if (parts.Length >= 4)
+            {
+                int.TryParse(parts[0], out l);
+                int.TryParse(parts[1], out t);
+                int.TryParse(parts[2], out r);
+                int.TryParse(parts[3], out b);
+            }
+
+            g.padding.left   = l;
+            g.padding.top    = t;
+            g.padding.right  = r;
+            g.padding.bottom = b;
+        }
+    }
 
     private static T ParseEnum<T>(string value, T defaultValue)
         where T : struct, System.Enum
@@ -641,6 +946,15 @@ public partial class CommunityEntity
         {
             c.canvasRenderer.SetAlpha( 0f );
             c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
+        }
+
+        if (obj.ContainsKey("placeholderParentId"))
+        {
+            var panel = FindPanel(obj.GetString("placeholderParentId"));
+            if (panel != null && panel.TryGetComponent<InputField>( out var input))
+            {
+                input.placeholder = c;
+            }
         }
     }
 
