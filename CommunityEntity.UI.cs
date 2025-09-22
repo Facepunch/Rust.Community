@@ -404,6 +404,11 @@ public partial class CommunityEntity
                     if ( ShouldUpdateField( "readOnly" ) )
                         c.readOnly = obj.GetBoolean( "readOnly", false );
 
+                    if (ShouldUpdateField("placeholderId"))
+                    {
+                        AssignInputFieldPlaceholder(c, obj.GetString("placeholderId"));
+                    }
+
                     if ( obj.TryGetBoolean( "password", out var password ) )
                     {
                         c.inputType = password ? InputField.InputType.Password : InputField.InputType.Standard;
@@ -681,6 +686,39 @@ public partial class CommunityEntity
         }
     }
 
+    private void AssignInputFieldPlaceholder(InputField input, string panelId)
+    {
+        // If clearing placeholder
+        if (string.IsNullOrEmpty(panelId))
+        {
+            input.placeholder = null;
+            return;
+        }
+        
+        // Search for panel
+        var panel = FindPanel(panelId);
+
+        if (panel == null)
+        {
+            Debug.LogWarning($"[AddUI] Unable to find placeholder panel '{panelId}' for InputField '{input.name}'");
+            input.placeholder = null;
+            return;
+        }
+
+        // Get graphic component
+        var graphic = panel.GetComponent<Graphic>();
+
+        if (graphic == null)
+        {
+            Debug.LogWarning($"[AddUI] Unable to find Graphic component on placeholder panel '{panelId}' for InputField '{input.name}'");
+            input.placeholder = null;
+            return;
+        }
+
+        // Assign if it's all good
+        input.placeholder = graphic;
+    }
+
     private void BuildScrollbar(Scrollbar scrollbar, JSON.Object obj, bool vertical){
         // build the scrollbar handle
         var handle = new GameObject("Scrollbar Handle");
@@ -751,6 +789,15 @@ public partial class CommunityEntity
         {
             c.canvasRenderer.SetAlpha( 0f );
             c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
+        }
+
+        if (obj.ContainsKey("placeholderParentId"))
+        {
+            var panel = FindPanel(obj.GetString("placeholderParentId"));
+            if (panel != null && panel.TryGetComponent<InputField>( out var input))
+            {
+                input.placeholder = c;
+            }
         }
     }
 
