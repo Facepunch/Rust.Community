@@ -509,6 +509,116 @@ public partial class CommunityEntity
 
                     break;
                 }
+            case "UnityEngine.UI.HorizontalLayoutGroup":
+                {
+                    var c = GetOrAddComponent<HorizontalLayoutGroup>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("spacing"))
+                        c.spacing = obj.GetFloat("spacing", 0f);
+                    if (ShouldUpdateField("childAlignment"))
+                        c.childAlignment = ParseEnum(obj.GetString("childAlignment", "UpperLeft"), TextAnchor.UpperLeft);
+                    if (ShouldUpdateField("childForceExpandWidth"))
+                        c.childForceExpandWidth = obj.GetBoolean("childForceExpandWidth", true);
+                    if (ShouldUpdateField("childForceExpandHeight"))
+                        c.childForceExpandHeight = obj.GetBoolean("childForceExpandHeight", true);
+                    if (ShouldUpdateField("childControlWidth"))
+                        c.childControlWidth = obj.GetBoolean("childControlWidth", false);
+                    if (ShouldUpdateField("childControlHeight"))
+                        c.childControlHeight = obj.GetBoolean("childControlHeight", false);
+                    if (ShouldUpdateField("childScaleWidth"))        
+                        c.childScaleWidth  = obj.GetBoolean("childScaleWidth",  false);
+                    if (ShouldUpdateField("childScaleHeight"))        
+                        c.childScaleHeight = obj.GetBoolean("childScaleHeight", false);
+
+                    ApplyPadding(c, obj, ShouldUpdateField);
+
+                    break;
+                }
+            case "UnityEngine.UI.VerticalLayoutGroup":
+                {
+                    var c = GetOrAddComponent<VerticalLayoutGroup>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("spacing"))                 
+                        c.spacing = obj.GetFloat("spacing", 0f);
+                    if (ShouldUpdateField("childAlignment"))          
+                        c.childAlignment = ParseEnum(obj.GetString("childAlignment", "UpperLeft"), TextAnchor.UpperLeft);
+                    if (ShouldUpdateField("childForceExpandWidth"))   
+                        c.childForceExpandWidth  = obj.GetBoolean("childForceExpandWidth",  true);
+                    if (ShouldUpdateField("childForceExpandHeight")) 
+                        c.childForceExpandHeight = obj.GetBoolean("childForceExpandHeight", true);
+                    if (ShouldUpdateField("childControlWidth"))      
+                        c.childControlWidth  = obj.GetBoolean("childControlWidth",  false);
+                    if (ShouldUpdateField("childControlHeight"))   
+                        c.childControlHeight = obj.GetBoolean("childControlHeight", false);
+                    if (ShouldUpdateField("childScaleWidth"))     
+                        c.childScaleWidth  = obj.GetBoolean("childScaleWidth",  false);
+                    if (ShouldUpdateField("childScaleHeight"))   
+                        c.childScaleHeight = obj.GetBoolean("childScaleHeight", false);
+
+                    ApplyPadding(c, obj, ShouldUpdateField);
+                    
+                    break;
+                }
+            case "UnityEngine.UI.GridLayoutGroup":
+                {
+                    var c = GetOrAddComponent<GridLayoutGroup>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("cellSize"))
+                        c.cellSize = Vector2Ex.Parse(obj.GetString("cellSize", "100 100"));
+                    if (ShouldUpdateField("spacing"))
+                        c.spacing = Vector2Ex.Parse(obj.GetString("spacing", "0 0"));
+                    if (ShouldUpdateField("startCorner"))
+                        c.startCorner = ParseEnum(obj.GetString("startCorner", "UpperLeft"), GridLayoutGroup.Corner.UpperLeft);
+                    if (ShouldUpdateField("startAxis"))
+                        c.startAxis = ParseEnum(obj.GetString("startAxis", "Horizontal"), GridLayoutGroup.Axis.Horizontal);
+                    if (ShouldUpdateField("childAlignment"))
+                        c.childAlignment = ParseEnum(obj.GetString("childAlignment", "UpperLeft"), TextAnchor.UpperLeft);
+                    if (ShouldUpdateField("constraint"))
+                        c.constraint = ParseEnum(obj.GetString("constraint", "Flexible"), GridLayoutGroup.Constraint.Flexible);
+                    if (ShouldUpdateField("constraintCount"))
+                        c.constraintCount = obj.GetInt("constraintCount", c.constraintCount);
+
+                    ApplyPadding(c, obj, ShouldUpdateField);
+                    
+                    break;
+                }
+            case "UnityEngine.UI.ContentSizeFitter":
+                {
+                    var c = GetOrAddComponent<ContentSizeFitter>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("horizontalFit"))
+                        c.horizontalFit = ParseEnum(obj.GetString("horizontalFit", "Unconstrained"), ContentSizeFitter.FitMode.Unconstrained);
+                    if (ShouldUpdateField("verticalFit"))
+                        c.verticalFit = ParseEnum(obj.GetString("verticalFit", "Unconstrained"), ContentSizeFitter.FitMode.Unconstrained);
+
+                    break;
+                }
+            case "UnityEngine.UI.LayoutElement":
+                {
+                    var c = GetOrAddComponent<LayoutElement>();
+                    HandleEnableState(obj, c);
+
+                    if (ShouldUpdateField("preferredWidth"))  
+                        c.preferredWidth = obj.GetFloat("preferredWidth", -1f);
+                    if (ShouldUpdateField("preferredHeight")) 
+                        c.preferredHeight = obj.GetFloat("preferredHeight", -1f);
+                    if (ShouldUpdateField("minWidth"))      
+                        c.minWidth = obj.GetFloat("minWidth", 0f);
+                    if (ShouldUpdateField("minHeight"))      
+                        c.minHeight = obj.GetFloat("minHeight", 0f);
+                    if (ShouldUpdateField("flexibleWidth"))  
+                        c.flexibleWidth = obj.GetFloat("flexibleWidth", 0f);
+                    if (ShouldUpdateField("flexibleHeight")) 
+                        c.flexibleHeight = obj.GetFloat("flexibleHeight", 0f);
+                    if (ShouldUpdateField("ignoreLayout"))
+                        c.ignoreLayout = obj.GetBoolean("ignoreLayout", false);
+
+                    break;
+                }
             case "Draggable":
                 {
                     var drag = go.GetComponent<Draggable>();
@@ -774,6 +884,38 @@ public partial class CommunityEntity
         transform.anchorMax = Vector2.one;
         transform.offsetMin = Vector2.zero;
         transform.offsetMax = Vector2.one; // to preserve the shoddy offsetmax default that alot of existing UIs rely on
+    }
+    
+    private void ApplyPadding(LayoutGroup g, JSON.Object obj, Func<string, bool> ShouldUpdateField)
+    {
+        if (g == null || obj == null) return;
+
+        // 1) Shorthand "padding" field: "l t r b" (or a single "x" to apply to all sides)
+        if (ShouldUpdateField("padding") && obj.ContainsKey("padding"))
+        {
+            var raw = obj.GetString("padding", "0 0 0 0");
+            var parts = raw.Split(new[] { ' ', ',', ';', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+            int l = g.padding.left, t = g.padding.top, r = g.padding.right, b = g.padding.bottom;
+
+            if (parts.Length == 1)
+            {
+                if (int.TryParse(parts[0], out var v))
+                    l = t = r = b = v;
+            }
+            else if (parts.Length >= 4)
+            {
+                int.TryParse(parts[0], out l);
+                int.TryParse(parts[1], out t);
+                int.TryParse(parts[2], out r);
+                int.TryParse(parts[3], out b);
+            }
+
+            g.padding.left   = l;
+            g.padding.top    = t;
+            g.padding.right  = r;
+            g.padding.bottom = b;
+        }
     }
 
     private static T ParseEnum<T>(string value, T defaultValue)
