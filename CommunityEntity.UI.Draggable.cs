@@ -24,16 +24,21 @@ public partial class CommunityEntity
     // Empty methods for oxide to hook
 #if SERVER
     [RPC_Server]
-    public void DragRPC(RPCMessage rpc,  string name, Vector3 position, int positionTypeByte)
+    public void DragRPC(RPCMessage rpc)
     {
         // Cast byte -> Enum
-        DraggablePositionSendType type = (DraggablePositionSendType)positionTypeByte;
+        string name = rpc.read.String();
+        Vector3 position = rpc.read.Vector3();
+        DraggablePositionSendType type = (DraggablePositionSendType)rpc.read.Int32();
     }
 
     [RPC_Server]
-    public void DropRPC(RPCMessage rpc, string draggedName, string draggedSlot, string swappedName, string swappedSlot)
+    public void DropRPC(RPCMessage rpc)
     {
-
+        string draggedName = rpc.read.String();
+        string draggedSlot = rpc.read.String();
+        string swappedName = rpc.read.String();
+        string swappedSlot = rpc.read.String();
     }
 #endif
 
