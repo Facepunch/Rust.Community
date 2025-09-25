@@ -27,24 +27,29 @@ public partial class CommunityEntity
     private class CachedTexture
     {
         public Texture2D Texture;
+        // Default non-sliced sprite
         public Sprite Sprite;
+        // Cache sprites created with slicing settings
         public Dictionary<Vector4, Sprite> SlicedSprites;
 
         public Sprite GetOrCreateSprite(Vector4? slice = null)
         {
+            // Create sliced sprite if Vector4 settings provided
             if(slice != null)
             {
                 if (SlicedSprites != null && SlicedSprites.TryGetValue(slice.Value, out var slicedSprite))
                     return slicedSprite;
                 
                 SlicedSprites ??= new Dictionary<Vector4, Sprite>();
-                
+
+                // 100 pixels per unit is the same as the constructor below uses for non-sliced sprites
                 slicedSprite = Sprite.Create( Texture, new Rect( 0, 0, Texture.width, Texture.height ), new Vector2( 0.5f, 0.5f ), 100, 0, SpriteMeshType.FullRect, slice.Value);
                 SlicedSprites.Add(slice.Value, slicedSprite);
 
                 return slicedSprite;
             }
             
+            // Otherwise create a normal sprite
             if (Sprite == null)
             {
                 Sprite = Sprite.Create(Texture, new Rect(0, 0, Texture.width, Texture.height), new Vector2(0.5f, 0.5f));

@@ -225,8 +225,7 @@ public partial class CommunityEntity
                         Vector4? slice = null;
                         if (obj.ContainsKey("slice"))
                         {
-                            var sliceAsCol = ColorEx.Parse(obj.GetString("slice", "0 0 0 0"));
-                            slice = new Vector4(sliceAsCol.r, sliceAsCol.g, sliceAsCol.b, sliceAsCol.a);
+                            slice = Vector4Ex.Parse(obj.GetString("slice", "0 0 0 0"));
                         }
                         ApplyTextureToImage( c, id, slice );
                     }
