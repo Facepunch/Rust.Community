@@ -177,7 +177,7 @@ public partial class CommunityEntity
         return null;
     }
 
-    private void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID, Vector4? slice = null )
+    public void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID, Vector4? slice = null )
     {
         var texture = GetCachedTexture( textureID );
         if ( texture == null )

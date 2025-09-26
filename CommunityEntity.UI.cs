@@ -31,6 +31,12 @@ public partial class CommunityEntity
         requestingTextureImages.Clear();
 		ScrollViews.Clear();
         UnloadTextureCache();
+
+        // Cleanup any custom vitals we created
+        if (NoticeArea.Instance != null)
+        {
+            NoticeArea.Instance.DeleteAllCustomVitals();
+        }
     }
 
     public void SetVisible( bool b )
