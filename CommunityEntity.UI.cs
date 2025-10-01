@@ -362,6 +362,12 @@ public partial class CommunityEntity
                     if (HasField("fadeDuration"))
                         colors.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
 
+
+                    // apply it with fadeDuration of 0 first so the colors instantly apply rather than tweening from img.color
+                    var fadeDur = colors.fadeDuration;
+                    colors.fadeDuration = 0f;
+                    c.colors = colors;
+                    colors.fadeDuration = fadeDur;
                     c.colors = colors;
 
                     GraphicComponentCreated( img, obj );
@@ -869,6 +875,11 @@ public partial class CommunityEntity
         block.highlightedColor = ColorEx.Parse( obj.GetString( "highlightColor", "0.17 0.17 0.17 1" ) ); // hover
         block.pressedColor = ColorEx.Parse( obj.GetString( "pressedColor", "0.2 0.2 0.2 1" ) ); // press
         block.selectedColor = block.pressedColor; // never really used, but can still show up sometimes
+        
+        var fadeDur = block.fadeDuration;
+        block.fadeDuration = 0f;
+        scrollbar.colors = block;
+        block.fadeDuration = fadeDur;
         scrollbar.colors = block;
 
         // style the background track
