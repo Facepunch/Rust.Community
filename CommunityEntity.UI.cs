@@ -470,6 +470,8 @@ public partial class CommunityEntity
                             rt.offsetMin = Vector2Ex.Parse( obj.GetString( "offsetmin", "0.0 0.0" ) );
                         if ( ShouldUpdateField( "offsetmax" ) )
                             rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
+						if ( ShouldUpdateField( "pivot" ) )
+                            rt.pivot = Vector2Ex.Parse( obj.GetString( "pivot", "0.5 0.5" ) ); 
                         if ( ShouldUpdateField( "rotation" ) )
                             rt.rotation = Quaternion.Euler( 0, 0, obj.GetFloat("rotation", 0) );
                             
