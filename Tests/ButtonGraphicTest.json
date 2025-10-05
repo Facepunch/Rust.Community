@@ -1,0 +1,171 @@
+[
+  {
+    "name": "UI",
+    "parent":"Overlay",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.RawImage",
+        "color": "0.04 0.04 0.04 1.0"
+      },
+      {
+        "type":"RectTransform",
+        "anchormin": "0 0",
+        "anchormax": "1 1"
+      },
+      {
+        "type":"NeedsCursor"
+      }
+    ]
+  },
+  {
+    "name": "OldButton",
+    "parent":"UI",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Button",
+        "color": "0.7 0.6 0.3 0.8"
+      },
+      {
+        "type":"RectTransform",
+        "anchormin": "0.5 0.8",
+        "anchormax": "0.5 0.8",
+        "offsetmin": "-200 -48",
+        "offsetmax": "200 0"
+      }
+    ]
+  },
+  {
+    "parent": "OldButton",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Text",
+        "text":"Old Button",
+        "fontSize":16,
+        "align": "MiddleCenter"
+      }
+    ]
+  },
+  {
+    "name": "NewImageButton",
+    "parent":"UI",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Image",
+        "sprite": "assets/content/ui/ui.box.tga",
+        "color": "0.7 0.6 0.3 0.8"
+      },
+      {
+        "type":"UnityEngine.UI.Button"
+      },
+      {
+        "type":"RectTransform",
+        "anchormin": "0.5 0.8",
+        "anchormax": "0.5 0.8",
+        "offsetmin": "-200 -100",
+        "offsetmax": "200 -52"
+      }
+    ]
+  },
+  {
+    "parent": "NewImageButton",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Text",
+        "text":"New Image Button",
+        "fontSize":16,
+        "align": "MiddleCenter"
+      }
+    ]
+  },
+  {
+    "name": "NewRawImageButton",
+    "parent":"UI",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.RawImage",
+        "sprite": "assets/content/ui/ui.box.tga",
+        "color": "0.7 0.6 0.3 0.8"
+      },
+      {
+        "type":"UnityEngine.UI.Button"
+      },
+      {
+        "type":"RectTransform",
+        "anchormin": "0.5 0.8",
+        "anchormax": "0.5 0.8",
+        "offsetmin": "-200 -152",
+        "offsetmax": "200 -104"
+      }
+    ]
+  },
+  {
+    "parent": "NewRawImageButton",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Text",
+        "text":"New Raw Image Button",
+        "fontSize":16,
+        "align": "MiddleCenter"
+      }
+    ]
+  },
+  {
+    "name": "NewRawImageButton",
+    "parent":"UI",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Text",
+        "text":"New Raw Image Button",
+        "fontSize":16,
+        "align": "MiddleCenter"
+      },
+      {
+        "type":"UnityEngine.UI.Button"
+      },
+      {
+        "type":"RectTransform",
+        "anchormin": "0.5 0.8",
+        "anchormax": "0.5 0.8",
+        "offsetmin": "-200 -204",
+        "offsetmax": "200 -156"
+      }
+    ]
+  },
+  {
+    "name": "Button88",
+    "parent": "UI",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Button",
+        "close":"UI",
+        "color": "0.9 0.8 0.3 0.8"
+      },
+      {
+        "type":"RectTransform",
+        "anchormin": "0 0",
+        "anchormax": "0.03 0.04"
+      }
+    ]
+  },
+  {
+    "parent": "Button88",
+    "components":
+    [
+      {
+        "type":"UnityEngine.UI.Text",
+        "text":"x",
+        "fontSize":18,
+        "align": "MiddleCenter"
+      }
+    ]
+  }
+]

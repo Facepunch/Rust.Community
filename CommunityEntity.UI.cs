@@ -331,17 +331,24 @@ public partial class CommunityEntity
                     }
 
                     // bg image
-                    var img = GetOrAddComponent<UnityEngine.UI.Image>();
-                    if ( ShouldUpdateField( "sprite" ) )
-                        img.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
-                    if ( ShouldUpdateField( "material" ) )
-                        img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
-                    if ( ShouldUpdateField( "color" ) )
-                        img.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
-                    if ( ShouldUpdateField( "imagetype" ) )
-                        img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
+                    var graphic = go.GetComponent<UnityEngine.UI.Graphic>();
+                    if (graphic == null)
+                        graphic = go.AddComponent<UnityEngine.UI.Image>();
 
-                    c.image = img;
+                    // backwards compatability
+                    if (graphic is UnityEngine.UI.Image img)
+                    {
+                        if ( ShouldUpdateField( "sprite" ) )
+                            img.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
+                        if ( ShouldUpdateField( "material" ) )
+                            img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
+                        if ( ShouldUpdateField( "color" ) )
+                            img.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                        if ( ShouldUpdateField( "imagetype" ) )
+                            img.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
+                    }
+
+                    c.targetGraphic = graphic;
                     
                     // Modify the color of the button when hovered
                     // Have to grab colorBlock, modify then reassign
@@ -364,7 +371,7 @@ public partial class CommunityEntity
 
                     c.colors = colors;
 
-                    GraphicComponentCreated( img, obj );
+                    GraphicComponentCreated( graphic, obj );
 
                     break;
                 }
