@@ -462,6 +462,8 @@ public partial class CommunityEntity
                     var rt = go.GetComponent<RectTransform>();
                     if ( rt )
                     {
+						if ( ShouldUpdateField( "pivot" ) )
+                            rt.pivot = Vector2Ex.Parse( obj.GetString( "pivot", "0.5 0.5" ) ); 
                         if ( ShouldUpdateField( "anchormin" ) )
                             rt.anchorMin = Vector2Ex.Parse( obj.GetString( "anchormin", "0.0 0.0" ) );
                         if ( ShouldUpdateField( "anchormax" ) )
@@ -1039,3 +1041,4 @@ public partial class CommunityEntity
 }
 
 #endif
+
