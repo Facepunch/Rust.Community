@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -995,7 +995,12 @@ public partial class CommunityEntity
 
     private Font LoadFont(string fontName)
     {
-        var font = FileSystem.Load<Font>( "Assets/Content/UI/Fonts/" + fontName );
+        if (!fontName.StartsWith("assets/", StringComparison.OrdinalIgnoreCase))
+        {
+            fontName = "Assets/Content/UI/Fonts/" + fontName;
+        }
+        
+        var font = FileSystem.Load<Font>( fontName );
         if (font == null) 
         {
             // Fallback to TMP default font if the loading failed
