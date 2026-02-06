@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -375,6 +375,18 @@ public partial class CommunityEntity
                     HandleEnableState( obj, c );
                     if ( ShouldUpdateField( "color" ) )
                         c.effectColor = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+                    if ( ShouldUpdateField( "distance" ) )
+                        c.effectDistance = Vector2Ex.Parse( obj.GetString( "distance", "1.0 -1.0" ) );
+                    c.useGraphicAlpha = obj.ContainsKey( "useGraphicAlpha" );
+                    break;
+                }
+            
+            case "UnityEngine.UI.Shadow":
+                {
+                    var c = GetOrAddComponent<UnityEngine.UI.Shadow>();
+                    HandleEnableState( obj, c );
+                    if ( ShouldUpdateField( "color" ) )
+                        c.effectColor = ColorEx.Parse( obj.GetString( "color", "0 0 0 0.5" ) );
                     if ( ShouldUpdateField( "distance" ) )
                         c.effectDistance = Vector2Ex.Parse( obj.GetString( "distance", "1.0 -1.0" ) );
                     c.useGraphicAlpha = obj.ContainsKey( "useGraphicAlpha" );
