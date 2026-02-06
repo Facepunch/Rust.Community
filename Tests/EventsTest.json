@@ -1,0 +1,73 @@
+﻿[
+    {
+        "name": "Events_Panel1",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 1 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "20 -200",
+                "offsetmax": "500 -15"
+            },
+            {
+                "type": "UnityEngine.Events",
+                "allowChildren": 0,
+                "onPointerUp": 1,
+                "onPointerDown": 1,
+                "onPointerEnter": 1,
+                "onPointerExit": 1,
+                "onPointerClick": 1,
+                "onDestroy": 0
+            }
+        ]
+    },
+    {
+        "name": "Events_Panel2",
+        "parent": "Events_Panel1",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 0 1 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "20 -200",
+                "offsetmax": "500 -15"
+            },
+            {
+                "type": "UnityEngine.Events",
+                "allowChildren": 1,
+                "onPointerUp": 1,
+                "onPointerDown": 1,
+                "onPointerEnter": 1,
+                "onPointerExit": 1,
+                "onPointerClick": 1,
+                "onDestroy": 1
+            }
+        ]
+    },
+    {
+        "name": "Events_Panel3",
+        "parent": "Events_Panel2",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "1 0 1 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "20 -200",
+                "offsetmax": "500 -15"
+            }
+        ]
+    }
+]
