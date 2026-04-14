@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ProtoBuf;
 
 public partial class CommunityEntity : PointEntity 
 {
@@ -8,6 +9,7 @@ public partial class CommunityEntity : PointEntity
 
 	// Inside shared class so it stays serialized when switching defines
     public GameObject[] OverallPanels;
+    public Canvas[] AllCanvases;
 
     public override void InitShared()
 	{
@@ -25,4 +27,11 @@ public partial class CommunityEntity : PointEntity
 		else ClientInstance = null;
 	}
 
+	#if CLIENT
+	protected override void ClientInit(Entity info)
+	{
+		base.ClientInit(info);
+		UpdateCanvasesVisibility();
+	}
+	#endif
 }

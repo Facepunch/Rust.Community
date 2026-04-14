@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Facepunch.Extend;
-using System.IO;
 using Rust.Workshop;
 using TMPro;
 
@@ -52,6 +51,18 @@ public partial class CommunityEntity
         }
     }
 
+    public void UpdateCanvasesVisibility()
+    {
+        foreach (var canvas in AllCanvases)
+        {
+            if (canvas != null)
+            {
+                bool hasChildren = canvas.transform.childCount != 0;
+                canvas.enabled = hasChildren;
+            }
+        }
+    }
+
     private static void RegisterUi( GameObject go )
     {
         AllUi.Add( go );
@@ -85,7 +96,7 @@ public partial class CommunityEntity
             if ( parentPanel == null )
             {
                 Debug.LogWarning( "AddUI: Unknown Parent for \"" + gameObjectName + "\": " + json.GetString( "parent", "Overlay" ) );
-                return;
+                continue; // Allow UI to show even if a single panel can't find it's parent
             }
 
             var allowUpdate = json.GetBoolean( "update", false );
@@ -113,9 +124,11 @@ public partial class CommunityEntity
                 if ( rt )
                     FitParent(rt);
             }
-		
-	    if (json.ContainsKey("activeSelf"))
+
+            if (json.ContainsKey("activeSelf"))
+            {
                 go.SetActive(json.GetBoolean("activeSelf", true));
+            }
 
             foreach ( var component in json.GetArray( "components" ) )
             {
@@ -127,6 +140,8 @@ public partial class CommunityEntity
                 go.AddComponent<FadeOut>().duration = json.GetFloat( "fadeOut", 0 );
             }
         }
+        
+        UpdateCanvasesVisibility();
     }
 
     private GameObject FindPanel( string name, bool allowScrollviews = true )
@@ -144,8 +159,27 @@ public partial class CommunityEntity
             return panel;
         }
 
+        // Initial safeguard against using '/Name' to access root level objects, but additional check below to double check the transform found is a child
+        if (name.StartsWith('/'))
+        {
+            Debug.LogWarning($"FindPanel() was given an invalid panel name that starts with '/': '{name}'");
+            return null;
+        }
+
         var tx = transform.FindChildRecursive( name );
-        if ( tx ) return tx.gameObject;
+
+        if (tx != null)
+        {
+            // Somehow it passed a name that allowed it to get a transform that isn't parented to the CommunityEntity
+            // Return null to prevent parenting CUI to built-in Rust UI
+            if (tx == transform || !tx.IsChildOf(transform))
+            {
+                Debug.LogWarning($"FindPanel() found a panel that isn't parented to the CommunityEntity: '{name}'");
+                return null;
+            }
+
+            return tx.gameObject;
+        }
 
         return null;
     }
@@ -472,11 +506,13 @@ public partial class CommunityEntity
                             rt.offsetMax = Vector2Ex.Parse( obj.GetString( "offsetmax", "1.0 1.0" ) );
                         if ( ShouldUpdateField( "rotation" ) )
                             rt.rotation = Quaternion.Euler( 0, 0, obj.GetFloat("rotation", 0) );
-                            
-                        
-                        
-                        // some Update only fields to allow reparenting of draggables if needed
-                        if (allowUpdate && obj.ContainsKey( "setParent" ) ){
+                        if (ShouldUpdateField("pivot"))
+                            rt.pivot = Vector2Ex.Parse(obj.GetString("pivot", "0.5 0.5"));
+
+
+
+                    // some Update only fields to allow reparenting of draggables if needed
+                    if (allowUpdate && obj.ContainsKey( "setParent" ) ){
                             var newParentName = obj.GetString( "setParent", null );
                             if(!string.IsNullOrEmpty(newParentName)){
                                 var newParent = FindPanel(newParentName);
@@ -745,6 +781,7 @@ public partial class CommunityEntity
                         scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
 			// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
                         scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
+                        scrollRect.content.rotation = Quaternion.Euler(0, 0, obj.GetFloat("rotation", 0));
                         scrollRect.content.pivot = Vector2Ex.Parse( contentObj.GetString( "pivot", "0.5 0.5" ) ); 
                     }
                     if(ShouldUpdateField("horizontal"))
@@ -810,7 +847,7 @@ public partial class CommunityEntity
                         scrollRect.horizontalNormalizedPosition = obj.GetFloat("horizontalNormalizedPosition", 0f);
 
                     if (ShouldUpdateField("verticalNormalizedPosition"))
-                        scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 0f);
+                        scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 1f);
                 break;
                 }
         }
@@ -1011,6 +1048,7 @@ public partial class CommunityEntity
     public void DestroyUI( RPCMessage msg )
     {
         DestroyPanel( msg.read.StringRaw() );
+        UpdateCanvasesVisibility();
     }
 
     private void DestroyPanel( string pnlName )

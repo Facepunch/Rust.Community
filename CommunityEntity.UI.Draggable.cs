@@ -21,7 +21,6 @@ public partial class CommunityEntity
         RelativeAnchor = 3,
     }
 
-    // Empty methods for oxide to hook
 #if SERVER
     [RPC_Server]
     public void DragRPC(RPCMessage rpc)
@@ -30,6 +29,14 @@ public partial class CommunityEntity
         string name = rpc.read.String();
         Vector3 position = rpc.read.Vector3();
         DraggablePositionSendType type = (DraggablePositionSendType)rpc.read.Int32();
+
+        Hook_DragRPC(rpc.player, name, position, type);
+    }
+
+    // Empty method for oxide / harmony to hook
+    private void Hook_DragRPC(BasePlayer player, string name, Vector3 position, DraggablePositionSendType type)
+    {
+
     }
 
     [RPC_Server]
@@ -39,6 +46,14 @@ public partial class CommunityEntity
         string draggedSlot = rpc.read.String();
         string swappedName = rpc.read.String();
         string swappedSlot = rpc.read.String();
+
+        Hook_DropRPC(rpc.player, draggedName, draggedSlot, swappedName, swappedSlot);
+    }
+
+    // Empty method for oxide / harmony to hook
+    private void Hook_DropRPC(BasePlayer player, string draggedName, string draggedSlot, string swappedName, string swappedSlot)
+    {
+
     }
 #endif
 
@@ -468,7 +483,7 @@ public partial class CommunityEntity
                 case DraggablePositionSendType.Relative: return (pos - lastDropPosition) / rt.lossyScale;
                 case DraggablePositionSendType.RelativeAnchor: return (pos - anchor) / rt.lossyScale;
                 default: throw new Exception($"Invalid PositionSendType {positionRPC}");
-            };
+            }
         }
         // packetsize go brrrr
         public void SendDragRPC()

@@ -21,6 +21,7 @@ public partial class CommunityEntity
         }
 
         panel.gameObject.SetActive( open );
+        UpdateCanvasesVisibility();
     }
 
     public enum Panel

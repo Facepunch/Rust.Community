@@ -121,20 +121,18 @@ public partial class CommunityEntity
 
     private CachedTexture StoreCachedTexture( uint textureId, byte[] bytes )
     {
-        var texture = new CachedTexture()
+        if ( !_textureCache.TryGetValue( textureId, out var texture ) )
         {
-            Texture = new Texture2D( 1, 1, TextureFormat.RGBA32, false ),
-        };
+            texture = new CachedTexture()
+            {
+                Texture = new Texture2D(1, 1, TextureFormat.RGBA32, false),
+            };
 
-        texture.Texture.LoadImage( bytes );
-
-        // Check for duplicate textureId and unload old one ( dont think they will conflict but safety first)
-        if ( _textureCache.TryGetValue( textureId, out var oldTexture ) )
-        {
-            oldTexture.Destroy(); 
+            _textureCache[textureId] = texture;
         }
 
-        _textureCache[ textureId ] = texture;
+        // Either we made a new texture and need to load it, or we are replacing the existing texture
+        texture.Texture.LoadImage(bytes);
 
         return texture;
     }
