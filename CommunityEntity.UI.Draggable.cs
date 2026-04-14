@@ -128,7 +128,7 @@ public partial class CommunityEntity
             // setup values
             rt = (transform as RectTransform);
             canvasGroup = GetComponent<CanvasGroup>();
-            canvas = GetComponentInParent<Canvas>().transform;
+            canvas = GetComponentInParent<Canvas>(true).transform;
             realParent = rt.parent;
             index = rt.GetSiblingIndex();
 
