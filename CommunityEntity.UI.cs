@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -347,7 +347,8 @@ public partial class CommunityEntity
                 {
                     var c = GetOrAddComponent<UnityEngine.UI.Button>();
                     HandleEnableState( obj, c );
-
+                    if (ShouldUpdateField("interactable"))
+                        c.interactable = obj.GetBoolean( "interactable", true );
                     if ( obj.ContainsKey( "command" ) )
                     {
                         var cmd = obj.GetString( "command" );
@@ -433,6 +434,8 @@ public partial class CommunityEntity
                     var c = GetOrAddComponent<UnityEngine.UI.InputField>();
                     HandleEnableState( obj, c );
                     c.textComponent = t;
+                    if (ShouldUpdateField("interactable"))
+                        c.interactable = obj.GetBoolean( "interactable", true );
                     if ( ShouldUpdateField( "characterLimit" ) )
                         c.characterLimit = obj.GetInt( "characterLimit", allowUpdate ? c.characterLimit : 0 );
 
