@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
@@ -850,6 +850,85 @@ public partial class CommunityEntity
                         scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 1f);
                 break;
                 }
+            
+            case "UnityEngine.UI.Slider":
+                {
+                    var slider = GetOrAddComponent<Slider>();
+                    HandleEnableState(obj, slider);
+
+                    if (ShouldUpdateField("minValue"))
+                        slider.minValue = obj.GetFloat("minValue", 0f);
+                    if (ShouldUpdateField("maxValue"))
+                        slider.maxValue = obj.GetFloat("maxValue", 1f);
+                    if (ShouldUpdateField("wholeNumbers"))
+                        slider.wholeNumbers = obj.GetBoolean("wholeNumbers", false);
+                    if (ShouldUpdateField("interactable"))
+                        slider.interactable = obj.GetBoolean("interactable", true);
+                    if (ShouldUpdateField("direction"))
+                        slider.direction = ParseEnum(obj.GetString("direction"), Slider.Direction.LeftToRight);
+
+                    ColorBlock colors = slider.colors;
+                    if (HasField("normalColor"))
+                        colors.normalColor = ColorEx.Parse(obj.GetString("normalColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("highlightedColor"))
+                        colors.highlightedColor = ColorEx.Parse(obj.GetString("highlightedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("pressedColor"))
+                        colors.pressedColor = ColorEx.Parse(obj.GetString("pressedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("selectedColor"))
+                        colors.selectedColor = ColorEx.Parse(obj.GetString("selectedColor", "1.0 1.0 1.0 1.0"));
+                    if (HasField("disabledColor"))
+                        colors.disabledColor = ColorEx.Parse(obj.GetString("disabledColor", "0.5 0.5 0.5 0.5"));
+                    if (HasField("colorMultiplier"))
+                        colors.colorMultiplier = obj.GetFloat("colorMultiplier", 1.0f);
+                    if (HasField("fadeDuration"))
+                        colors.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
+
+                    // apply it with fadeDuration of 0 first so the colors instantly apply rather than tweening from img.color
+                    var fadeDur = colors.fadeDuration;
+                    colors.fadeDuration = 0f;
+                    slider.colors = colors;
+                    colors.fadeDuration = fadeDur;
+                    slider.colors = colors;
+
+                    if(obj.ContainsKey("handle"))
+                        BuildSliderHandle(slider, obj.GetObject("handle"));
+
+                    if (ShouldUpdateField("value"))
+                    {
+                        var v = obj.GetFloat("value", slider.value);
+                        if (allowUpdate && !obj.ContainsKey("setSilently"))
+                            slider.value = v;
+                        else 
+                            slider.SetValueWithoutNotify(v);
+                    }
+
+                    //Callback when the slider is done being dragged
+                    if ( obj.ContainsKey("onPointerUp") )
+                    {
+                        SliderEventHandler handler = go.GetComponent<SliderEventHandler>() ?? go.AddComponent<SliderEventHandler>();
+                        handler.onPointerUpCommand = obj.GetString("onPointerUp");
+                    }
+
+                    //Callback when the slider starts being dragged
+                    if ( obj.ContainsKey("onPointerDown") )
+                    {
+                        SliderEventHandler handler = go.GetComponent<SliderEventHandler>() ?? go.AddComponent<SliderEventHandler>();
+                        handler.onPointerDownCommand = obj.GetString("onPointerDown");
+                    }
+
+                    // Text to display the value of the slider
+                    if (obj.ContainsKey("text"))
+                        BuildSliderText(slider, obj.GetObject("text"));
+
+                    //ID of the UI element that should be toggled on / off when the slider is being dragged
+                    if (obj.ContainsKey("toggleId"))
+                    {
+                        SliderEventHandler handler = go.GetComponent<SliderEventHandler>() ?? go.AddComponent<SliderEventHandler>();
+                        handler.SetToggleGO(FindPanel(obj.GetString("toggleId")));
+                    }
+
+                    break;
+                }
         }
     }
 
@@ -933,6 +1012,88 @@ public partial class CommunityEntity
             rt.offsetMin = new Vector2(0f, -size);
             rt.offsetMax = Vector2.zero;
         }
+    }
+    
+    private void BuildSliderHandle(Slider slider, JSON.Object obj)
+    {
+        GameObject handleGO = null;
+        RectTransform handleRT = null;
+        if (obj.ContainsKey("handleId"))
+        {
+            // Try to find an existing handle for the slider
+            var existingHandle = FindPanel(obj.GetString("handleId"));
+            if (existingHandle)
+            {
+                handleGO = existingHandle;
+                handleRT = existingHandle.GetComponent<RectTransform>();
+            }
+        }
+
+        // No existing handle was found, create a new one
+        if (!handleGO)
+        {
+            handleGO = new GameObject($"{slider.gameObject.name}___handle", typeof(RectTransform));
+            handleRT = handleGO.GetComponent<RectTransform>();
+            RegisterUi(handleGO);
+            float size = obj.GetFloat("size", 20f) / 2f;
+            handleRT.offsetMin = new Vector2(-size, -size);
+            handleRT.offsetMax = new Vector2(size, size);
+        }
+
+        handleGO.transform.SetParent(slider.transform, false);
+
+        // Try to get the graphic component, if not found, add one
+        var graphic = handleGO.GetComponent<Graphic>();
+        if (!graphic)
+            graphic = handleGO.AddComponent<Image>();
+
+        // If the graphic is an image, set any properties we have
+        if (graphic is Image img)
+        {
+            if ( obj.ContainsKey( "sprite" ) ) 
+                img.sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite", "Assets/Content/UI/UI.Background.Tile.psd" ) );
+            if ( obj.ContainsKey( "color" ) ) 
+                img.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+            if ( obj.ContainsKey( "imagetype" ) ) 
+                img.type = ParseEnum( obj.GetString( "imagetype", "Sliced" ), UnityEngine.UI.Image.Type.Sliced );
+            if ( obj.ContainsKey( "material" ) ) 
+                img.material = FileSystem.Load<Material>( obj.GetString( "material", "Assets/Icons/IconMaterial.mat" ) );
+            if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
+                ApplyTextureToImage( img, id );
+        }
+
+        slider.targetGraphic = graphic;
+        slider.handleRect = handleRT;
+    }
+
+    private void BuildSliderText(Slider slider, JSON.Object obj)
+    {
+        if (!obj.ContainsKey("textId"))
+        {
+            return;
+        }
+
+        var textGO = FindPanel(obj.GetString("textId"));
+        if (!textGO)
+        {
+            return;
+        }
+
+        Text text = textGO.GetComponent<Text>();
+        if (!text)
+        {
+            return;
+        }
+
+        string format = obj.GetString("format", "{0:0.00}");
+
+        text.text = string.Format(format, slider.value);
+        slider.onValueChanged.RemoveAllListeners();
+        slider.onValueChanged.AddListener(value =>
+        {
+            if(text != null)
+                text.text = string.Format(format, value);
+        });
     }
 
     // sets the transform to a sensible default

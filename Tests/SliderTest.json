@@ -1,0 +1,300 @@
+﻿[
+    {
+        "name": "Slider_Default",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Slider",
+                "minValue": 0,
+                "maxValue": 100,
+                "wholeNumbers": false,
+                "interactable": true,
+                "direction": "LeftToRight",
+                "onPointerUp": "onPointerUp_default",
+                "onPointerDown": "onPointerDown_default",
+                "handle": {
+                    "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
+                    "material": "Assets/Icons/IconMaterial.mat",
+                    "color": "0.0 0.0 1.0 1.0",
+                    "size": 20
+                }
+            },
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 1 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "20 -35",
+                "offsetmax": "300 -20"
+            }
+        ]
+    },
+
+    {
+        "name": "Slider_Label",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Text",
+                "color": "1 1 1 1",
+                "fontSize": 16,
+                "align": "MiddleLeft"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "310 -85",
+                "offsetmax": "500 -60"
+            }
+        ]
+    },
+    {
+        "name": "Slider_With_Label",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Slider",
+                "minValue": 0,
+                "maxValue": 100,
+                "wholeNumbers": false,
+                "interactable": true,
+                "direction": "LeftToRight",
+                "onPointerUp": "onPointerUp_label",
+                "onPointerDown": "onPointerDown_label",
+                "handle": {
+                    "sprite": "Assets/Content/UI/UI.Background.Tile.psd",
+                    "material": "Assets/Icons/IconMaterial.mat",
+                    "color": "0.0 0.0 1.0 1.0",
+                    "size": 20
+                },
+                "text": {
+                    "format": "Value: {0:0.00}",
+                    "textId": "Slider_Label"
+                }
+            },
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 1 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "20 -80",
+                "offsetmax": "300 -65"
+            }
+        ]
+    },
+    
+    {
+        "name": "Slider_Custom_Handle",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "1 0.65 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-10 -10",
+                "offsetmax": "10 10"
+            }
+        ]
+    },
+    {
+        "name": "Slider_With_Custom Handle",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Slider",
+                "minValue": 0,
+                "maxValue": 100,
+                "wholeNumbers": false,
+                "interactable": true,
+                "direction": "LeftToRight",
+                "onPointerUp": "onPointerUp_handle",
+                "onPointerDown": "onPointerDown_handle",
+                "handle": {
+                    "handleId": "Slider_Custom_Handle"
+                }
+            },
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 1 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "20 -125",
+                "offsetmax": "300 -110"
+            }
+        ]
+    },
+
+    {
+        "name": "Slider_Handle_Floating_Label",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "1 0 0.65 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-10 -10",
+                "offsetmax": "10 10"
+            }
+        ]
+    },
+    {
+        "name": "Slider_Floating_Label",
+        "parent": "Slider_Handle_Floating_Label",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Text",
+                "color": "1 1 1 1",
+                "fontSize": 16,
+                "align": "MiddleCenter"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-75 -40",
+                "offsetmax": "75 -15"
+            }
+        ]
+    },
+    {
+        "name": "Slider_With_Floating_Label",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Slider",
+                "minValue": 0,
+                "maxValue": 100,
+                "wholeNumbers": false,
+                "interactable": true,
+                "direction": "LeftToRight",
+                "onPointerUp": "onPointerUp_label",
+                "onPointerDown": "onPointerDown_label",
+                "handle": {
+                    "handleId": "Slider_Handle_Floating_Label"
+                },
+                "text": {
+                    "format": "{0:0.00}",
+                    "textId": "Slider_Floating_Label"
+                }
+            },
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 1 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "20 -185",
+                "offsetmax": "300 -170"
+            }
+        ]
+    },
+
+    {
+        "name": "Slider_Handle_Toggle",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "1 0 0.65 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-10 -10",
+                "offsetmax": "10 10"
+            }
+        ]
+    },
+    {
+        "name": "Slider_Handle_SubPanel",
+        "parent": "Slider_Handle_Toggle",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 0 1 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0.5 0.5",
+                "anchormax": "0.5 0.5",
+                "offsetmin": "-25 -45",
+                "offsetmax": "25 -20"
+            }
+        ]
+    },
+    {
+        "name": "Slider_Handle_SubPanel_Text",
+        "parent": "Slider_Handle_SubPanel",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Text",
+                "color": "1 1 1 1",
+                "fontSize": 16,
+                "align": "MiddleCenter"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1",
+                "offsetmin": "0 0",
+                "offsetmax": "0 0"
+            }
+        ]
+    },
+    {
+        "name": "Slider_With_Toggle_Panel",
+        "parent": "Overlay",
+        "components": [
+            {
+                "type": "UnityEngine.UI.Slider",
+                "minValue": 0,
+                "maxValue": 100,
+                "wholeNumbers": false,
+                "interactable": true,
+                "direction": "LeftToRight",
+                "onPointerUp": "onPointerUp_label",
+                "onPointerDown": "onPointerDown_label",
+                "toggleId": "Slider_Handle_SubPanel",
+                "handle": {
+                    "handleId": "Slider_Handle_Toggle"
+                },
+                "text": {
+                    "format": "{0:0.00}",
+                    "textId": "Slider_Handle_SubPanel_Text"
+                }
+            },
+            {
+                "type": "UnityEngine.UI.Image",
+                "color": "0 1 0 1"
+            },
+            {
+                "type": "RectTransform",
+                "anchormin": "0 1",
+                "anchormax": "0 1",
+                "offsetmin": "20 -255",
+                "offsetmax": "300 -240"
+            }
+        ]
+    }
+]
