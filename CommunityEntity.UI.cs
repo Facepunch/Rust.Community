@@ -581,6 +581,8 @@ public partial class CommunityEntity
                         c.childScaleHeight = obj.GetBoolean("childScaleHeight", false);
 
                     ApplyPadding(c, obj, ShouldUpdateField);
+                    if (obj.ContainsKey("layoutPriority"))
+                        c.layoutPriority = obj.GetInt("layoutPriority", 1);
 
                     break;
                 }
@@ -607,7 +609,9 @@ public partial class CommunityEntity
                         c.childScaleHeight = obj.GetBoolean("childScaleHeight", false);
 
                     ApplyPadding(c, obj, ShouldUpdateField);
-                    
+                    if (obj.ContainsKey("layoutPriority"))
+                        c.layoutPriority = obj.GetInt("layoutPriority", 1);
+
                     break;
                 }
             case "UnityEngine.UI.GridLayoutGroup":
@@ -631,7 +635,9 @@ public partial class CommunityEntity
                         c.constraintCount = obj.GetInt("constraintCount", c.constraintCount);
 
                     ApplyPadding(c, obj, ShouldUpdateField);
-                    
+                    if (obj.ContainsKey("layoutPriority"))
+                        c.layoutPriority = obj.GetInt("layoutPriority", 1);
+
                     break;
                 }
             case "UnityEngine.UI.ContentSizeFitter":
@@ -665,6 +671,8 @@ public partial class CommunityEntity
                         c.flexibleHeight = obj.GetFloat("flexibleHeight", 0f);
                     if (ShouldUpdateField("ignoreLayout"))
                         c.ignoreLayout = obj.GetBoolean("ignoreLayout", false);
+                    if (obj.ContainsKey("layoutPriority"))
+                        c.layoutPriority = obj.GetInt("layoutPriority", 1);
 
                     break;
                 }
