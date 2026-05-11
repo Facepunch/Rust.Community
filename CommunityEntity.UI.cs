@@ -737,6 +737,22 @@ public partial class CommunityEntity
                     HandleEnableState( obj, c );
                     break;
                 }
+            case "UnityEngine.UI.RectMask2D":
+                {
+                    var c = GetOrAddComponent<RectMask2D>();
+                    //if(ShouldUpdateField("softness"))
+                    //    c.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "softness", "0 0" )));
+                    if(ShouldUpdateField("padding"))
+                        c.padding = Vector4Ex.Parse( obj.GetString( "padding", "0 0 0 0" ));
+                    break;
+                }
+            case "UnityEngine.UI.Mask":
+                {
+                    var c = GetOrAddComponent<Mask>();
+                    if(ShouldUpdateField("showMaskGraphic"))
+                        c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
+                    break;
+                }
             case "UnityEngine.UI.ScrollView":
                 {
                     var scrollRect = GetOrAddComponent<ScrollRect>();
