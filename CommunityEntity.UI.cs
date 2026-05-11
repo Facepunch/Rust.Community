@@ -259,6 +259,9 @@ public partial class CommunityEntity
                         c.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
                     if( ShouldUpdateField( "fillCenter" ) )
                         c.fillCenter = obj.GetBoolean("fillCenter", c.fillCenter);
+                    if (obj.ContainsKey("ppuMultiplier"))
+                        c.pixelsPerUnitMultiplier = obj.GetFloat("ppuMultiplier", 1f);
+
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
