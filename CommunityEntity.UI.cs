@@ -668,12 +668,28 @@ public partial class CommunityEntity
 
                     break;
                 }
+            case "UnityEngine.UI.CanvasGroup":
+                {
+                    var c = go.GetOrAddComponent<CanvasGroup>();
+                    if (ShouldUpdateField("alpha"))
+                        c.alpha = obj.GetFloat("alpha", 1f);
+                    if (ShouldUpdateField("blocksRaycasts"))
+                        c.blocksRaycasts = obj.GetBoolean("blocksRaycasts", true);
+                    if (ShouldUpdateField("interactable"))
+                        c.interactable = obj.GetBoolean("interactable", true);
+                    if (obj.ContainsKey("fade"))
+                    {
+                        var fade = Vector2Ex.Parse(obj.GetString("fade", "0 1"));
+                        StartCoroutine(FadeCanvasGroup(c, fade.y, fade.x));
+                    }
+                    break;
+                }
             case "Draggable":
                 {
                     var drag = go.GetComponent<Draggable>();
                     if(!drag){
                         drag = go.AddComponent<Draggable>();
-                        go.AddComponent<CanvasGroup>();
+                        go.GetOrAddComponent<CanvasGroup>();
                     }
                     
                     if( ShouldUpdateField("limitToParent"))
@@ -986,9 +1002,21 @@ public partial class CommunityEntity
     {
         if ( obj.ContainsKey( "fadeIn" ) )
         {
-            c.canvasRenderer.SetAlpha( 0f );
-            c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
+            var group = c.GetComponent<CanvasGroup>();
+            if ( group )
+            {
+                group.alpha = 0f;
+                StartCoroutine( FadeCanvasGroup( group, 1f, obj.GetFloat( "fadeIn", 0 ) ) );
+            }
+            else
+            {
+                c.canvasRenderer.SetAlpha( 0f );
+                c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
+            }
         }
+
+        if ( obj.ContainsKey( "blocksRaycast" ) )
+            c.raycastTarget = obj.GetBoolean( "blocksRaycast", true );
 
         if (obj.ContainsKey("placeholderParentId"))
         {
@@ -1043,7 +1071,24 @@ public partial class CommunityEntity
 
         return font;
     }
-    
+
+    static IEnumerator FadeCanvasGroup( CanvasGroup group, float to, float duration )
+    {
+        float from = group.alpha;
+        float elapsed = 0f;
+        while ( elapsed < duration )
+        {
+            elapsed += Time.deltaTime;
+            float value = Mathf.Lerp( from, to, elapsed / duration );
+            group.alpha = value;
+            yield return null;
+            // another fade changed the value since we set it, abort
+            if ( group.alpha != value )
+                yield break;
+        }
+        group.alpha = to;
+    }
+
     [RPC_Client]
     public void DestroyUI( RPCMessage msg )
     {
