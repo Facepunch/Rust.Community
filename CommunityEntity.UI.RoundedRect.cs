@@ -7,8 +7,12 @@ using UnityEngine.UI;
 [RequireComponent( typeof( RectTransform ) )]
 public class RoundedRectGraphic : MaskableGraphic
 {
+    private const int MaxSegments = 64;
+    private const float MaxRadius = 64f;
+
     [SerializeField] private float radius = 16f;
     [SerializeField] private int segments = 8;
+    [SerializeField] private float softness = 1.5f;
     [SerializeField] private Sprite sprite;
     [SerializeField] private bool preserveAspect;
 
@@ -17,7 +21,7 @@ public class RoundedRectGraphic : MaskableGraphic
         get => radius;
         set
         {
-            radius = Mathf.Max( 0f, value );
+            radius = Mathf.Clamp( value, 0f, MaxRadius );
             SetVerticesDirty();
         }
     }
@@ -27,7 +31,17 @@ public class RoundedRectGraphic : MaskableGraphic
         get => segments;
         set
         {
-            segments = Mathf.Clamp( value, 1, 32 );
+            segments = Mathf.Clamp( value, 1, MaxSegments );
+            SetVerticesDirty();
+        }
+    }
+
+    public float Softness
+    {
+        get => softness;
+        set
+        {
+            softness = Mathf.Max( 0f, value );
             SetVerticesDirty();
         }
     }
@@ -53,23 +67,15 @@ public class RoundedRectGraphic : MaskableGraphic
         }
     }
 
-    public override Texture mainTexture
-    {
-        get
-        {
-            if ( sprite == null )
-                return s_WhiteTexture;
-
-            return sprite.texture;
-        }
-    }
+    public override Texture mainTexture => sprite == null ? s_WhiteTexture : sprite.texture;
 
     protected override void OnValidate()
     {
         base.OnValidate();
 
-        radius = Mathf.Max( 0f, radius );
-        segments = Mathf.Clamp( segments, 1, 32 );
+        radius = Mathf.Clamp( radius, 0f, MaxRadius );
+        segments = Mathf.Clamp( segments, 1, MaxSegments );
+        softness = Mathf.Max( 0f, softness );
 
         SetMaterialDirty();
         SetVerticesDirty();
@@ -81,58 +87,93 @@ public class RoundedRectGraphic : MaskableGraphic
 
         Rect rect = rectTransform.rect;
 
-        float width = rect.width;
-        float height = rect.height;
-
-        if ( width <= 0f || height <= 0f )
+        if ( rect.width <= 0f || rect.height <= 0f )
             return;
 
         Rect drawingRect = preserveAspect && sprite != null
             ? GetPreservedAspectRect( rect, sprite )
             : rect;
 
-        float left = drawingRect.xMin;
-        float right = drawingRect.xMax;
-        float bottom = drawingRect.yMin;
-        float top = drawingRect.yMax;
-
         float r = Mathf.Min( radius, drawingRect.width * 0.5f, drawingRect.height * 0.5f );
-        int seg = Mathf.Max( 1, segments );
-
-        Color32 color32 = color;
-
-        var points = new List<Vector2>();
-
-        AddCorner( points, new Vector2( right - r, top - r ), r, 0f, 90f, seg );
-        AddCorner( points, new Vector2( left + r, top - r ), r, 90f, 180f, seg );
-        AddCorner( points, new Vector2( left + r, bottom + r ), r, 180f, 270f, seg );
-        AddCorner( points, new Vector2( right - r, bottom + r ), r, 270f, 360f, seg );
+        int seg = Mathf.Clamp( segments, 1, MaxSegments );
+        float soft = Mathf.Min( softness, drawingRect.width * 0.5f, drawingRect.height * 0.5f );
 
         Vector4 uv = GetSpriteOuterUV( sprite );
+
+        var innerPoints = BuildRoundedRectPoints( drawingRect, r, seg );
+        Color32 innerColor = color;
+
+        if ( soft <= 0f )
+        {
+            AddFilledShape( vh, drawingRect.center, innerPoints, innerColor, uv, drawingRect );
+            return;
+        }
+
+        Rect outerRect = new Rect(
+            drawingRect.xMin - soft,
+            drawingRect.yMin - soft,
+            drawingRect.width + soft * 2f,
+            drawingRect.height + soft * 2f
+        );
+
+        float outerRadius = r + soft;
+        var outerPoints = BuildRoundedRectPoints( outerRect, outerRadius, seg );
+
+        Color32 outerColor = innerColor;
+        outerColor.a = 0;
 
         int centerIndex = 0;
         vh.AddVert(
             drawingRect.center,
-            color32,
-            new Vector2(
-                Mathf.Lerp( uv.x, uv.z, 0.5f ),
-                Mathf.Lerp( uv.y, uv.w, 0.5f )
-            )
+            innerColor,
+            GetUv( drawingRect.center, uv, drawingRect )
         );
+
+        int innerStart = 1;
+        for ( int i = 0; i < innerPoints.Count; i++ )
+        {
+            Vector2 point = innerPoints[i];
+            vh.AddVert( point, innerColor, GetUv( point, uv, drawingRect ) );
+        }
+
+        int outerStart = innerStart + innerPoints.Count;
+        for ( int i = 0; i < outerPoints.Count; i++ )
+        {
+            Vector2 point = outerPoints[i];
+            vh.AddVert( point, outerColor, GetUv( point, uv, drawingRect ) );
+        }
+
+        int count = innerPoints.Count;
+
+        for ( int i = 0; i < count; i++ )
+        {
+            int currentInner = innerStart + i;
+            int nextInner = innerStart + ( ( i + 1 ) % count );
+
+            vh.AddTriangle( centerIndex, currentInner, nextInner );
+        }
+
+        for ( int i = 0; i < count; i++ )
+        {
+            int currentInner = innerStart + i;
+            int nextInner = innerStart + ( ( i + 1 ) % count );
+            int currentOuter = outerStart + i;
+            int nextOuter = outerStart + ( ( i + 1 ) % count );
+
+            vh.AddTriangle( currentInner, currentOuter, nextOuter );
+            vh.AddTriangle( currentInner, nextOuter, nextInner );
+        }
+    }
+
+    private static void AddFilledShape( VertexHelper vh, Vector2 center, List<Vector2> points, Color32 color, Vector4 uv, Rect uvRect )
+    {
+        int centerIndex = 0;
+        vh.AddVert( center, color, GetUv( center, uv, uvRect ) );
 
         for ( int i = 0; i < points.Count; i++ )
         {
             Vector2 point = points[i];
-
-            float normalizedX = Mathf.InverseLerp( drawingRect.xMin, drawingRect.xMax, point.x );
-            float normalizedY = Mathf.InverseLerp( drawingRect.yMin, drawingRect.yMax, point.y );
-
-            Vector2 pointUv = new Vector2(
-                Mathf.Lerp( uv.x, uv.z, normalizedX ),
-                Mathf.Lerp( uv.y, uv.w, normalizedY )
-            );
-
-            vh.AddVert( point, color32, pointUv );
+            vh.AddVert( point, color, GetUv( point, uv, uvRect ) );
         }
 
         for ( int i = 0; i < points.Count; i++ )
@@ -142,6 +183,36 @@ public class RoundedRectGraphic : MaskableGraphic
 
             vh.AddTriangle( centerIndex, current, next );
         }
+    }
+
+    private static List<Vector2> BuildRoundedRectPoints( Rect rect, float radius, int segments )
+    {
+        float left = rect.xMin;
+        float right = rect.xMax;
+        float bottom = rect.yMin;
+        float top = rect.yMax;
+
+        float r = Mathf.Min( radius, rect.width * 0.5f, rect.height * 0.5f );
+
+        var points = new List<Vector2>( ( segments + 1 ) * 4 );
+
+        AddCorner( points, new Vector2( right - r, top - r ), r, 0f, 90f, segments, true );
+        AddCorner( points, new Vector2( left + r, top - r ), r, 90f, 180f, segments, false );
+        AddCorner( points, new Vector2( left + r, bottom + r ), r, 180f, 270f, segments, false );
+        AddCorner( points, new Vector2( right - r, bottom + r ), r, 270f, 360f, segments, false );
+
+        return points;
+    }
+
+    private static Vector2 GetUv( Vector2 point, Vector4 uv, Rect rect )
+    {
+        float normalizedX = Mathf.InverseLerp( rect.xMin, rect.xMax, point.x );
+        float normalizedY = Mathf.InverseLerp( rect.yMin, rect.yMax, point.y );
+
+        return new Vector2(
+            Mathf.Lerp( uv.x, uv.z, normalizedX ),
+            Mathf.Lerp( uv.y, uv.w, normalizedY )
+        );
     }
 
     private static Rect GetPreservedAspectRect( Rect rect, Sprite sprite )
@@ -161,12 +232,10 @@ public class RoundedRectGraphic : MaskableGraphic
             float y = rect.y + ( rect.height - height ) * 0.5f;
             return new Rect( rect.x, y, rect.width, height );
         }
-        else
-        {
-            float width = rect.height * spriteRatio;
-            float x = rect.x + ( rect.width - width ) * 0.5f;
-            return new Rect( x, rect.y, width, rect.height );
-        }
+
+        float width = rect.height * spriteRatio;
+        float x = rect.x + ( rect.width - width ) * 0.5f;
+        return new Rect( x, rect.y, width, rect.height );
     }
 
     private static Vector4 GetSpriteOuterUV( Sprite sprite )
@@ -191,10 +260,13 @@ public class RoundedRectGraphic : MaskableGraphic
         float radius,
         float startAngle,
         float endAngle,
-        int segments
+        int segments,
+        bool includeFirstPoint
     )
     {
-        for ( int i = 0; i <= segments; i++ )
+        int start = includeFirstPoint ? 0 : 1;
+
+        for ( int i = start; i <= segments; i++ )
         {
             float t = i / (float)segments;
             float angle = Mathf.Lerp( startAngle, endAngle, t ) * Mathf.Deg2Rad;
