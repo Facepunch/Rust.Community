@@ -27,7 +27,8 @@
         "type": "RoundedRect",
         "color": "0.1 0.1 0.1 0.9",
         "radius": 8,
-        "segments": 8
+        "segments": 8,
+        "softness": 1.5
       },
       {
         "type": "RectTransform",
@@ -46,7 +47,8 @@
         "type": "RoundedRect",
         "color": "0.1 0.25 0.1 0.9",
         "radius": 24,
-        "segments": 12
+        "segments": 12,
+        "softness": 1.5
       },
       {
         "type": "RectTransform",
@@ -65,7 +67,8 @@
         "type": "RoundedRect",
         "color": "0.25 0.1 0.1 0.9",
         "radius": 48,
-        "segments": 16
+        "segments": 16,
+        "softness": 1.5
       },
       {
         "type": "RectTransform",
@@ -86,6 +89,7 @@
         "color": "1.0 1.0 1.0 1.0",
         "radius": 24,
         "segments": 12,
+        "softness": 1.5,
         "preserveAspect": false
       },
       {
