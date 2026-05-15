@@ -303,11 +303,7 @@ public partial class CommunityEntity
         {
             Initialize();
 
-            if ( transitionCoroutine != null )
-            {
-                StopCoroutine( transitionCoroutine );
-                transitionCoroutine = null;
-            }
+            StopTransition();
 
             if ( !container.gameObject.activeSelf )
                 return;
