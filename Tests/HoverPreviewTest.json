@@ -1,0 +1,288 @@
+[
+  {
+    "name": "UI",
+    "parent": "Overlay",
+    "components": [
+      {
+        "type": "UnityEngine.UI.RawImage",
+        "color": "0 0 0 0.45"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0 0",
+        "anchormax": "1 1",
+        "offsetmin": "0 0",
+        "offsetmax": "0 0"
+      },
+      {
+        "type": "NeedsCursor"
+      }
+    ]
+  },
+
+  {
+    "name": "PreviewRoot",
+    "parent": "UI",
+    "components": [
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 1",
+        "anchormax": "0.5 1",
+        "offsetmin": "310 -350",
+        "offsetmax": "560 -90"
+      }
+    ]
+  },
+
+  {
+    "name": "Row1",
+    "parent": "UI",
+    "components": [
+      {
+        "type": "UnityEngine.UI.RawImage",
+        "color": "0 0 0 0.75"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 1",
+        "anchormax": "0.5 1",
+        "offsetmin": "-470 -155",
+        "offsetmax": "300 -95"
+      }
+    ]
+  },
+  {
+    "parent": "Row1",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "TEST PANEL",
+        "fontSize": 30,
+        "color": "1 1 1 0.9",
+        "align": "MiddleLeft"
+      },
+      {
+        "type": "RectTransform",
+        "offsetmin": "25 0",
+        "offsetmax": "-330 0"
+      }
+    ]
+  },
+  {
+    "name": "Button1",
+    "parent": "Row1",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Button",
+        "color": "0.25 0.25 0.25 1",
+        "highlightedColor": "0.35 0.35 0.35 1",
+        "pressedColor": "0.2 0.2 0.2 1",
+        "fadeDuration": 0.08
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "1 0.5",
+        "anchormax": "1 0.5",
+        "offsetmin": "-295 -25",
+        "offsetmax": "-5 25"
+      },
+      {
+        "type": "HoverPreview",
+        "target": "PreviewRoot",
+        "title": "Title",
+        "description": "Description",
+        "titleFontSize": 28,
+        "descriptionFontSize": 18,
+        "titleColor": "1 1 1 1",
+        "descriptionColor": "1 1 1 0.75",
+        "imageColor": "0.75 0 0 1",
+        "spacing": 4,
+        "imageHeight": 190,
+        "contentAlignment": "TopLeft",
+        "fadeIn": 0.12,
+        "fadeOut": 0.08,
+        "waitFadeOutBeforeReplace": true
+      }
+    ]
+  },
+  {
+    "parent": "Button1",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "Test 1",
+        "fontSize": 30,
+        "color": "1 1 1 0.8",
+        "align": "MiddleCenter"
+      }
+    ]
+  },
+
+  {
+    "name": "Row2",
+    "parent": "UI",
+    "components": [
+      {
+        "type": "UnityEngine.UI.RawImage",
+        "color": "0.06 0.1 0.15 0.75"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 1",
+        "anchormax": "0.5 1",
+        "offsetmin": "-470 -240",
+        "offsetmax": "300 -180"
+      }
+    ]
+  },
+  {
+    "parent": "Row2",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "TEST PANEL",
+        "fontSize": 30,
+        "color": "1 1 1 0.9",
+        "align": "MiddleLeft"
+      },
+      {
+        "type": "RectTransform",
+        "offsetmin": "25 0",
+        "offsetmax": "-330 0"
+      }
+    ]
+  },
+  {
+    "name": "Button2",
+    "parent": "Row2",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Button",
+        "color": "0.25 0.25 0.25 1",
+        "highlightedColor": "0.35 0.35 0.35 1",
+        "pressedColor": "0.2 0.2 0.2 1",
+        "fadeDuration": 0.08
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "1 0.5",
+        "anchormax": "1 0.5",
+        "offsetmin": "-295 -25",
+        "offsetmax": "-5 25"
+      },
+      {
+        "type": "HoverPreview",
+        "target": "PreviewRoot",
+        "title": "Second Title",
+        "description": "Another preview block",
+        "titleFontSize": 28,
+        "descriptionFontSize": 18,
+        "titleColor": "1 1 1 1",
+        "descriptionColor": "1 1 1 0.75",
+        "imageColor": "0.1 0.45 1 1",
+        "spacing": 4,
+        "imageHeight": 190,
+        "contentAlignment": "TopLeft",
+        "fadeIn": 0.12,
+        "fadeOut": 0.08,
+        "waitFadeOutBeforeReplace": true
+      }
+    ]
+  },
+  {
+    "parent": "Button2",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "Test 2",
+        "fontSize": 30,
+        "color": "1 1 1 0.8",
+        "align": "MiddleCenter"
+      }
+    ]
+  },
+
+  {
+    "name": "Row3",
+    "parent": "UI",
+    "components": [
+      {
+        "type": "UnityEngine.UI.RawImage",
+        "color": "0.06 0.1 0.15 0.75"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 1",
+        "anchormax": "0.5 1",
+        "offsetmin": "-470 -325",
+        "offsetmax": "300 -265"
+      }
+    ]
+  },
+  {
+    "parent": "Row3",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "TEST PANEL",
+        "fontSize": 30,
+        "color": "1 1 1 0.9",
+        "align": "MiddleLeft"
+      },
+      {
+        "type": "RectTransform",
+        "offsetmin": "25 0",
+        "offsetmax": "-330 0"
+      }
+    ]
+  },
+  {
+    "name": "Button3",
+    "parent": "Row3",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Button",
+        "color": "0.25 0.25 0.25 1",
+        "highlightedColor": "0.35 0.35 0.35 1",
+        "pressedColor": "0.2 0.2 0.2 1",
+        "fadeDuration": 0.08
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "1 0.5",
+        "anchormax": "1 0.5",
+        "offsetmin": "-295 -25",
+        "offsetmax": "-5 25"
+      },
+      {
+        "type": "HoverPreview",
+        "target": "PreviewRoot",
+        "title": "Third Title",
+        "description": "Third preview example",
+        "titleFontSize": 28,
+        "descriptionFontSize": 18,
+        "titleColor": "1 1 1 1",
+        "descriptionColor": "1 1 1 0.75",
+        "imageColor": "1 0.8 0.1 1",
+        "spacing": 4,
+        "imageHeight": 190,
+        "contentAlignment": "TopLeft",
+        "fadeIn": 0.12,
+        "fadeOut": 0.08,
+        "waitFadeOutBeforeReplace": true
+      }
+    ]
+  },
+  {
+    "parent": "Button3",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "Test 3",
+        "fontSize": 30,
+        "color": "1 1 1 0.8",
+        "align": "MiddleCenter"
+      }
+    ]
+  }
+]
