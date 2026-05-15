@@ -1,0 +1,387 @@
+[
+  {
+    "name": "Core_Layer",
+    "parent": "Overlay",
+    "destroyUi": "Core_Layer",
+    "components": [
+      {
+        "type": "NeedsCursor"
+      },
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "0 0 0 0.494"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0 0",
+        "anchormax": "1 1",
+        "offsetmin": "0 0.008",
+        "offsetmax": "0 0.005"
+      }
+    ]
+  },
+  {
+    "name": "Panel_5838",
+    "parent": "Core_Layer",
+    "destroyUi": "Panel_5838",
+    "components": [
+      {
+        "type": "NeedsCursor"
+      },
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 1 1 0.141"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.2,
+        "alphaMax": 1.0,
+        "duration": 1.5,
+        "restoreOnDisable": true,
+        "includeChildren": false
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-128.646 49.628",
+        "offsetmax": "-49.354 128.372"
+      }
+    ]
+  },
+  {
+    "name": "Image_2605_A",
+    "parent": "Panel_5838",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 0.714 0.412 1",
+        "sprite": "assets/icons/alert_edit.png"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-17.5 -17.5",
+        "offsetmax": "17.5 17.5"
+      }
+    ]
+  },
+  {
+    "name": "Label_2320_A",
+    "parent": "Panel_5838",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "+1",
+        "font": "robotocondensed-regular.ttf",
+        "fontSize": 15,
+        "align": "MiddleCenter",
+        "color": "1 0.713 0.41 1"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-2.587 -2.461",
+        "offsetmax": "31.587 32.261"
+      }
+    ]
+  },
+  {
+    "name": "Panel_5838_2",
+    "parent": "Core_Layer",
+    "destroyUi": "Panel_5838_2",
+    "components": [
+      {
+        "type": "NeedsCursor"
+      },
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 1 1 0.141"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-128.646 -133.217",
+        "offsetmax": "-49.354 -54.473"
+      }
+    ]
+  },
+  {
+    "name": "Image_2605_B",
+    "parent": "Panel_5838_2",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 0.714 0.412 1",
+        "sprite": "assets/icons/alert_edit.png"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-17.5 -17.5",
+        "offsetmax": "17.5 17.5"
+      }
+    ]
+  },
+  {
+    "name": "Label_2320_B",
+    "parent": "Panel_5838_2",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "+1",
+        "font": "robotocondensed-regular.ttf",
+        "fontSize": 15,
+        "align": "MiddleCenter",
+        "color": "1 0.713 0.41 1"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.4,
+        "alphaMax": 1.0,
+        "duration": 1.2,
+        "restoreOnDisable": true,
+        "includeChildren": false
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-2.587 -2.461",
+        "offsetmax": "31.587 32.261"
+      }
+    ]
+  },
+  {
+    "name": "Panel_5838_3",
+    "parent": "Core_Layer",
+    "destroyUi": "Panel_5838_3",
+    "components": [
+      {
+        "type": "NeedsCursor"
+      },
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 1 1 0.141"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.2,
+        "alphaMax": 1.0,
+        "duration": 1.5,
+        "restoreOnDisable": true,
+        "includeChildren": true
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-128.646 -42.819",
+        "offsetmax": "-49.354 35.926"
+      }
+    ]
+  },
+  {
+    "name": "Image_2605_C",
+    "parent": "Panel_5838_3",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 0.714 0.412 1",
+        "sprite": "assets/icons/alert_edit.png"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-17.5 -17.5",
+        "offsetmax": "17.5 17.5"
+      }
+    ]
+  },
+  {
+    "name": "Label_2320_C",
+    "parent": "Panel_5838_3",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "+1",
+        "font": "robotocondensed-regular.ttf",
+        "fontSize": 15,
+        "align": "MiddleCenter",
+        "color": "1 0.713 0.41 1"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-2.587 -2.461",
+        "offsetmax": "31.587 32.261"
+      }
+    ]
+  },
+  {
+    "name": "Panel_5838_1",
+    "parent": "Core_Layer",
+    "destroyUi": "Panel_5838_1",
+    "components": [
+      {
+        "type": "NeedsCursor"
+      },
+      {
+        "type": "UnityEngine.UI.Image",
+        "color": "1 1 1 1",
+        "sprite": "assets/icons/New/assets_content_ui_ui.icon.rust.png"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.2,
+        "alphaMax": 1.0,
+        "duration": 1.5,
+        "restoreOnDisable": true,
+        "includeChildren": false
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "0.124 -128.335",
+        "offsetmax": "79.416 -49.591"
+      }
+    ]
+  },
+  {
+    "name": "Label_7503",
+    "parent": "Core_Layer",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "Pulse",
+        "font": "robotocondensed-regular.ttf",
+        "fontSize": 30,
+        "align": "UpperLeft",
+        "color": "1 1 1 1"
+      },
+      {
+        "type": "UnityEngine.UI.Outline",
+        "color": "0 0 0 0.5",
+        "distance": "1 -1"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.4,
+        "alphaMax": 1.0,
+        "duration": 0.3,
+        "restoreOnDisable": true,
+        "includeChildren": false
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-29.172 54.431",
+        "offsetmax": "98.881 123.569"
+      }
+    ]
+  },
+  {
+    "name": "Button_2172",
+    "parent": "Core_Layer",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Button",
+        "color": "1 1 1 1"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.4,
+        "alphaMax": 1.0,
+        "duration": 1.2,
+        "restoreOnDisable": true,
+        "includeChildren": false
+      },
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "Rust UI Button",
+        "font": "robotocondensed-regular.ttf",
+        "fontSize": 14,
+        "align": "MiddleCenter",
+        "color": "0 0 0 1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "-32.067 -23.43",
+        "offsetmax": "111.607 30.397"
+      }
+    ]
+  },
+  {
+    "name": "Button_2172_1",
+    "parent": "Core_Layer",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Button",
+        "color": "1 1 1 1"
+      },
+      {
+        "type": "Pulse",
+        "alphaMin": 0.0,
+        "alphaMax": 1.0,
+        "duration": 3.0,
+        "restoreOnDisable": true,
+        "includeChildren": true
+      },
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "BTN",
+        "font": "robotocondensed-regular.ttf",
+        "fontSize": 14,
+        "align": "MiddleCenter",
+        "color": "0 0 0 1"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.5 0.5",
+        "anchormax": "0.5 0.5",
+        "offsetmin": "143.445 9.625",
+        "offsetmax": "198.949 64.747"
+      }
+    ]
+  }
+]

@@ -850,6 +850,32 @@ public partial class CommunityEntity
                         scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 1f);
                 break;
                 }
+
+				case "Pulse":
+				{
+    				var c = GetOrAddComponent<Pulse>();
+
+    				if ( ShouldUpdateField( "alphaMin" ) )
+        				c.alphaMin = obj.GetFloat( "alphaMin", allowUpdate ? c.alphaMin : 0.4f );
+
+    				if ( ShouldUpdateField( "alphaMax" ) )
+        				c.alphaMax = obj.GetFloat( "alphaMax", allowUpdate ? c.alphaMax : 1f );
+
+    				if ( ShouldUpdateField( "duration" ) )
+        				c.duration = obj.GetFloat( "duration", allowUpdate ? c.duration : 1.2f );
+
+    				if ( ShouldUpdateField( "restoreOnDisable" ) )
+        				c.restoreOnDisable = obj.GetBoolean( "restoreOnDisable", allowUpdate ? c.restoreOnDisable : true );
+
+    				if ( ShouldUpdateField( "includeChildren" ) )
+        				c.includeChildren = obj.GetBoolean( "includeChildren", allowUpdate ? c.includeChildren : false );
+
+    				if ( !allowUpdate || obj.ContainsKey( "includeChildren" ) )
+        				c.Refresh();
+
+    				HandleEnableState( obj, c );
+    				break;
+				}
         }
     }
 
