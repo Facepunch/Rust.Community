@@ -248,11 +248,7 @@ public partial class CommunityEntity
         {
             Initialize();
 
-            if ( transitionCoroutine != null )
-            {
-                StopCoroutine( transitionCoroutine );
-                transitionCoroutine = null;
-            }
+            StopTransition();
 
             transitionCoroutine = StartCoroutine( ShowRoutine( title, description, image, style ) );
         }
