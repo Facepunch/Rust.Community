@@ -850,6 +850,93 @@ public partial class CommunityEntity
                         scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 1f);
                 break;
                 }
+
+            case "HoverPreview":
+                {
+                    var c = GetOrAddComponent<HoverPreviewComponent>();
+
+                    if ( ShouldUpdateField( "target" ) )
+                    {
+                        string targetName = obj.GetString( "target", string.Empty );
+                        GameObject target = !string.IsNullOrEmpty( targetName ) ? FindPanel( targetName ) : null;
+
+                        c.previewRoot = target != null ? target.GetComponent<RectTransform>() : null;
+                    }
+
+                    if ( ShouldUpdateField( "title" ) )
+                        c.title = obj.GetString( "title", string.Empty );
+
+                    if ( ShouldUpdateField( "description" ) )
+                        c.description = obj.GetString( "description", string.Empty );
+
+                    if ( ShouldUpdateField( "sprite" ) )
+                    {
+                        string spritePath = obj.GetString( "sprite", string.Empty );
+                        c.image = !string.IsNullOrEmpty( spritePath ) ? FileSystem.Load<Sprite>( spritePath ) : null;
+                    }
+
+                    if ( ShouldUpdateField( "hidePreviewOnExit" ) )
+                        c.hidePreviewOnExit = obj.GetBoolean( "hidePreviewOnExit", false );
+
+                    if ( ShouldUpdateField( "useFade" ) )
+                        c.useFade = obj.GetBoolean( "useFade", true );
+
+                    if ( ShouldUpdateField( "fadeIn" ) )
+                        c.fadeInDuration = obj.GetFloat( "fadeIn", 0.12f );
+
+                    if ( ShouldUpdateField( "fadeOut" ) )
+                        c.fadeOutDuration = obj.GetFloat( "fadeOut", 0.08f );
+
+                    if ( ShouldUpdateField( "waitFadeOutBeforeReplace" ) )
+                        c.waitFadeOutBeforeReplace = obj.GetBoolean( "waitFadeOutBeforeReplace", false );
+
+                    if ( ShouldUpdateField( "titleFont" ) )
+                        c.titleFont = LoadFont( obj.GetString( "titleFont", "RobotoCondensed-Bold.ttf" ) );
+
+                    if ( ShouldUpdateField( "descriptionFont" ) )
+                        c.descriptionFont = LoadFont( obj.GetString( "descriptionFont", "RobotoCondensed-Regular.ttf" ) );
+
+                    if ( ShouldUpdateField( "titleFontSize" ) )
+                        c.titleFontSize = obj.GetInt( "titleFontSize", 22 );
+
+                    if ( ShouldUpdateField( "descriptionFontSize" ) )
+                        c.descriptionFontSize = obj.GetInt( "descriptionFontSize", 16 );
+
+                    if ( ShouldUpdateField( "titleColor" ) )
+                        c.titleColor = ColorEx.Parse( obj.GetString( "titleColor", "1 1 1 1" ) );
+
+                    if ( ShouldUpdateField( "descriptionColor" ) )
+                        c.descriptionColor = ColorEx.Parse( obj.GetString( "descriptionColor", "1 1 1 0.75" ) );
+
+                    if ( ShouldUpdateField( "imageColor" ) )
+                        c.imageColor = ColorEx.Parse( obj.GetString( "imageColor", "1 1 1 1" ) );
+
+                    if ( ShouldUpdateField( "backgroundColor" ) )
+                        c.backgroundColor = ColorEx.Parse( obj.GetString( "backgroundColor", "0 0 0 0" ) );
+
+                    if ( ShouldUpdateField( "spacing" ) )
+                        c.spacing = obj.GetFloat( "spacing", 10f );
+
+                    if ( ShouldUpdateField( "imageHeight" ) )
+                        c.imageHeight = obj.GetFloat( "imageHeight", 220f );
+
+                    if ( ShouldUpdateField( "contentAlignment" ) )
+                        c.contentAlignment = ParseEnum(
+                            obj.GetString( "contentAlignment", "TopLeft" ),
+                            HoverPreviewContentAlignment.TopLeft
+                        );
+
+                    if ( ShouldUpdateField( "highlightOnHover" ) )
+                        c.highlightOnHover = obj.GetBoolean( "highlightOnHover", false );
+
+                    if ( ShouldUpdateField( "hoverColor" ) )
+                        c.hoverColor = ColorEx.Parse( obj.GetString( "hoverColor", "1 1 1 0.12" ) );
+
+                    c.Init();
+
+                    HandleEnableState( obj, c );
+                    break;
+                }
         }
     }
 
