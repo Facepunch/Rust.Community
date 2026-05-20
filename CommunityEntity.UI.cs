@@ -558,6 +558,54 @@ public partial class CommunityEntity
 
                     break;
                 }
+            case "SlideButton":
+                {
+                    var c = GetOrAddComponent<SlideButton>();
+                    HandleEnableState( obj, c );
+
+                    if ( ShouldUpdateField( "isOn" ) )
+                        c.isOn = obj.GetBoolean( "isOn", allowUpdate ? c.isOn : false );
+
+                    if ( ShouldUpdateField( "offText" ) )
+                        c.offText = obj.GetString( "offText", allowUpdate ? c.offText : "Off" );
+
+                    if ( ShouldUpdateField( "offCommand" ) )
+                        c.offCommand = obj.GetString( "offCommand", allowUpdate ? c.offCommand : "" );
+
+                    if ( ShouldUpdateField( "offColor" ) )
+                        c.offColor = ColorEx.Parse( obj.GetString( "offColor", "0.35 0.35 0.35 1.0" ) );
+
+                    if ( ShouldUpdateField( "offTextColor" ) )
+                        c.offTextColor = ColorEx.Parse( obj.GetString( "offTextColor", "1.0 1.0 1.0 1.0" ) );
+
+                    if ( ShouldUpdateField( "offSlideDirection" ) )
+                        c.offSlideDirection = ParseEnum( obj.GetString( "offSlideDirection", "Right" ), SlideButton.SlideDirection.Right );
+
+                    if ( ShouldUpdateField( "onText" ) )
+                        c.onText = obj.GetString( "onText", allowUpdate ? c.onText : "On" );
+
+                    if ( ShouldUpdateField( "onCommand" ) )
+                        c.onCommand = obj.GetString( "onCommand", allowUpdate ? c.onCommand : "" );
+
+                    if ( ShouldUpdateField( "onColor" ) )
+                        c.onColor = ColorEx.Parse( obj.GetString( "onColor", "0.2 0.75 0.3 1.0" ) );
+
+                    if ( ShouldUpdateField( "onTextColor" ) )
+                        c.onTextColor = ColorEx.Parse( obj.GetString( "onTextColor", "1.0 1.0 1.0 1.0" ) );
+
+                    if ( ShouldUpdateField( "onSlideDirection" ) )
+                        c.onSlideDirection = ParseEnum( obj.GetString( "onSlideDirection", "Left" ), SlideButton.SlideDirection.Left );
+
+                    if ( ShouldUpdateField( "duration" ) )
+                        c.duration = obj.GetFloat( "duration", allowUpdate ? c.duration : 0.15f );
+
+                    if ( ShouldUpdateField( "slidePixels" ) )
+                        c.slidePixels = obj.GetFloat( "slidePixels", allowUpdate ? c.slidePixels : 30f );
+
+                    c.ApplyInstant();
+
+                    break;
+                }
             case "UnityEngine.UI.HorizontalLayoutGroup":
                 {
                     var c = GetOrAddComponent<HorizontalLayoutGroup>();
