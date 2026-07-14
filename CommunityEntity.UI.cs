@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using Facepunch.Extend;
+using Rust.Workshop;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Facepunch.Extend;
-using Rust.Workshop;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 #if CLIENT
 
@@ -259,6 +259,8 @@ public partial class CommunityEntity
                         c.type = ParseEnum( obj.GetString( "imagetype", "Simple" ), UnityEngine.UI.Image.Type.Simple );
                     if( ShouldUpdateField( "fillCenter" ) )
                         c.fillCenter = obj.GetBoolean("fillCenter", c.fillCenter);
+                    if (obj.ContainsKey("ppuMultiplier"))
+                        c.pixelsPerUnitMultiplier = obj.GetFloat("ppuMultiplier", 1f);
 
                     if ( obj.ContainsKey( "png" ) && uint.TryParse( obj.GetString( "png" ), out var id ) )
                     {
@@ -347,7 +349,8 @@ public partial class CommunityEntity
                 {
                     var c = GetOrAddComponent<UnityEngine.UI.Button>();
                     HandleEnableState( obj, c );
-
+                    if (ShouldUpdateField("interactable"))
+                        c.interactable = obj.GetBoolean("interactable", true);
                     if ( obj.ContainsKey( "command" ) )
                     {
                         var cmd = obj.GetString( "command" );
@@ -394,8 +397,12 @@ public partial class CommunityEntity
                     if (HasField("colorMultiplier"))
                         colors.colorMultiplier = obj.GetFloat("colorMultiplier", 1.0f);
                     if (HasField("fadeDuration"))
+                    {
+                        colors.fadeDuration = 0f;
+                        c.colors = colors;
                         colors.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
-
+                    }
+                    
                     c.colors = colors;
 
                     GraphicComponentCreated( img, obj );
@@ -433,6 +440,8 @@ public partial class CommunityEntity
                     var c = GetOrAddComponent<UnityEngine.UI.InputField>();
                     HandleEnableState( obj, c );
                     c.textComponent = t;
+                    if (ShouldUpdateField("interactable"))
+                        c.interactable = obj.GetBoolean("interactable", true);
                     if ( ShouldUpdateField( "characterLimit" ) )
                         c.characterLimit = obj.GetInt( "characterLimit", allowUpdate ? c.characterLimit : 0 );
 
@@ -668,7 +677,23 @@ public partial class CommunityEntity
 
                     break;
                 }
-            case "Draggable":
+                case "UnityEngine.UI.CanvasGroup":
+                {
+                    var c = GetOrAddComponent<CanvasGroup>();
+                    if (ShouldUpdateField("alpha"))
+                        c.alpha = obj.GetFloat("alpha", 1f);
+                    if (ShouldUpdateField("blocksRaycasts"))
+                        c.blocksRaycasts = obj.GetBoolean("blocksRaycasts", true);
+                    if (ShouldUpdateField("interactable"))
+                        c.interactable = obj.GetBoolean("interactable", true);
+                    if (obj.ContainsKey("fade"))
+                    {
+                        var fade = Vector2Ex.Parse(obj.GetString("fade", "0 1"));
+                        StartCoroutine(FadeCanvasGroup(c, fade.y, fade.x));
+                    }
+                    break;
+                }
+                case "Draggable":
                 {
                     var drag = go.GetComponent<Draggable>();
                     if(!drag){
@@ -737,119 +762,167 @@ public partial class CommunityEntity
                     HandleEnableState( obj, c );
                     break;
                 }
-            case "UnityEngine.UI.ScrollView":
-                {
-                    var scrollRect = GetOrAddComponent<ScrollRect>();
-                    HandleEnableState(obj, scrollRect);
-                    
-                    if(!ScrollViews.Contains(go.name)) ScrollViews.Add(go.name);
-                    // Adding a Canvas allows unity to isolate any changes inside the scrollrect, improving performance as the outer canvas wont need an update on scroll
-                    var canvas = go.GetComponent<Canvas>();
-                    if(!canvas){
-                        canvas = go.AddComponent<Canvas>();
-                        go.AddComponent<GraphicRaycaster>();
-                    }
-
-                    // already present if its being updated
-                    if(!allowUpdate){
-                        // add viewport as child component, dont register it as a ui panel though. this allows scrollbars to resize the viewport if autoHide is set to true
-                        var viewportGO = new GameObject(go.name + "___Viewport");
-                        var viewportRT = viewportGO.AddComponent<RectTransform>();
-                        FitParent(viewportRT);
-                        // this is required if the scrollbar shrinks the viewport, it ensures the viewport is pushed to the top left corner
-                        // the default pivot would center it, meaning the scrollbar would partially cover it instead of being beside it
-                        viewportRT.pivot = new Vector2(0f, 1f);
-                        viewportRT.SetParent(go.transform, false);
-                        var mask = viewportGO.AddComponent<RectMask2D>();
-                    	scrollRect.viewport = viewportRT;
-			    
-                        // if(obj.ContainsKey("maskSoftness"))
-                        //     mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
-			    
-                        // create & register content panel
-                        var childGO = new GameObject(go.name + "___Content");
-                        childGO.transform.SetParent(viewportGO.transform, false);
-                        RegisterUi(childGO);
-                        scrollRect.content = childGO.AddComponent<RectTransform>();
-                    }
-
-                    // initialize from the json object
-                    if(ShouldUpdateField("contentTransform")){
-                        var contentObj = obj.GetObject("contentTransform");
-                        scrollRect.content.anchorMin = Vector2Ex.Parse( contentObj.GetString( "anchormin", "0.0 0.0" ) );
-                        scrollRect.content.anchorMax = Vector2Ex.Parse( contentObj.GetString( "anchormax", "1.0 1.0" ) );
-                        scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
-			// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
-                        scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
-                        scrollRect.content.rotation = Quaternion.Euler(0, 0, obj.GetFloat("rotation", 0));
-                        scrollRect.content.pivot = Vector2Ex.Parse( contentObj.GetString( "pivot", "0.5 0.5" ) ); 
-                    }
-                    if(ShouldUpdateField("horizontal"))
-                        scrollRect.horizontal = obj.GetBoolean("horizontal", false);
-                    if(ShouldUpdateField("vertical"))
-                        scrollRect.vertical = obj.GetBoolean("vertical", false);
-
-                    if(ShouldUpdateField("movementType"))
-                        scrollRect.movementType = ParseEnum<ScrollRect.MovementType>(obj.GetString("movementType", "Clamped"), ScrollRect.MovementType.Clamped);
-
-                    if(ShouldUpdateField("elasticity"))
-                        scrollRect.elasticity = obj.GetFloat("elasticity", 0.1f);
-                    if(ShouldUpdateField("inertia"))
-                        scrollRect.inertia = obj.GetBoolean("inertia", false);
-                    if(ShouldUpdateField("decelerationRate"))
-                        scrollRect.decelerationRate = obj.GetFloat("decelerationRate", 0.135f);
-                    if(ShouldUpdateField("scrollSensitivity"))
-                        scrollRect.scrollSensitivity = obj.GetFloat("scrollSensitivity", 1f);
-
-                    // add scrollbars if objects are present
-                    GameObject barGO;
-                    JSON.Object scrollObj;
-                    bool invert;
-                    bool hideUnlessNeeded;
-                    Scrollbar scrollbar;
-                    // dont need ShouldUpdateField here either
-                    if(scrollRect.horizontal && obj.ContainsKey("horizontalScrollbar")){
-                        barGO = new GameObject("Horizontal Scrollbar");
-                        scrollObj = obj.GetObject("horizontalScrollbar");
-                        invert = scrollObj.GetBoolean("invert", false);
-                        hideUnlessNeeded = scrollObj.GetBoolean("autoHide", false);
-                        scrollbar = barGO.AddComponent<Scrollbar>();
-                        HandleEnableState(scrollObj, scrollbar);
-
-                        barGO.transform.SetParent(go.transform, false);
-                        scrollbar.direction = (invert ? Scrollbar.Direction.LeftToRight : Scrollbar.Direction.RightToLeft);
-                        scrollRect.horizontalScrollbar = scrollbar;
-                        if(hideUnlessNeeded)
-                            scrollRect.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
-
-                        BuildScrollbar(scrollbar, scrollObj, false);
-                    }
-                    // dont need ShouldUpdateField here either
-                    if(scrollRect.vertical && obj.ContainsKey("verticalScrollbar")){
-                        barGO = new GameObject("Vertical Scrollbar");
-                        scrollObj = obj.GetObject("verticalScrollbar");
-                        invert = scrollObj.GetBoolean("invert", false);
-                        hideUnlessNeeded = scrollObj.GetBoolean("autoHide", false);
-                        scrollbar = barGO.AddComponent<Scrollbar>();
-                        HandleEnableState(scrollObj, scrollbar);
-
-                        barGO.transform.SetParent(go.transform, false);
-                        scrollbar.direction = (invert ? Scrollbar.Direction.TopToBottom : Scrollbar.Direction.BottomToTop);
-                        scrollRect.verticalScrollbar = scrollbar;
-                        if(hideUnlessNeeded)
-                            scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
-
-                        BuildScrollbar(scrollbar, scrollObj, true);
-                    }
-
-                    // Add ability to set scroll progress
-                    if (ShouldUpdateField("horizontalNormalizedPosition"))
-                        scrollRect.horizontalNormalizedPosition = obj.GetFloat("horizontalNormalizedPosition", 0f);
-
-                    if (ShouldUpdateField("verticalNormalizedPosition"))
-                        scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 1f);
+            case "UnityEngine.UI.Mask":
+            {
+                var c = GetOrAddComponent<Mask>();
+                HandleEnableState(obj, c);
+                if (ShouldUpdateField("showMaskGraphic"))
+                    c.showMaskGraphic = obj.GetBoolean("showMaskGraphic", true);
                 break;
+            }
+            case "UnityEngine.UI.ScrollView":
+            {
+                var scrollRect = GetOrAddComponent<ScrollRect>();
+                HandleEnableState(obj, scrollRect);
+                    
+                if(!ScrollViews.Contains(go.name)) ScrollViews.Add(go.name);
+                // Adding a Canvas allows unity to isolate any changes inside the scrollrect, improving performance as the outer canvas wont need an update on scroll
+                var canvas = go.GetComponent<Canvas>();
+                if(!canvas){
+                    canvas = go.AddComponent<Canvas>();
+                    go.AddComponent<GraphicRaycaster>();
                 }
+
+                // already present if its being updated
+                if(!allowUpdate){
+                    // add viewport as child component, dont register it as a ui panel though. this allows scrollbars to resize the viewport if autoHide is set to true
+                    var viewportGO = new GameObject(go.name + "___Viewport");
+                    var viewportRT = viewportGO.AddComponent<RectTransform>();
+                    FitParent(viewportRT);
+                    // this is required if the scrollbar shrinks the viewport, it ensures the viewport is pushed to the top left corner
+                    // the default pivot would center it, meaning the scrollbar would partially cover it instead of being beside it
+                    viewportRT.pivot = new Vector2(0f, 1f);
+                    viewportRT.SetParent(go.transform, false);
+                    var mask = viewportGO.AddComponent<RectMask2D>();
+                    scrollRect.viewport = viewportRT;
+			    
+                    // if(obj.ContainsKey("maskSoftness"))
+                    //     mask.softness = Vector2Int.RoundToInt(Vector2Ex.Parse( obj.GetString( "maskSoftness", "0.0 0.0" )));
+			    
+                    // create & register content panel
+                    var childGO = new GameObject(go.name + "___Content");
+                    childGO.transform.SetParent(viewportGO.transform, false);
+                    RegisterUi(childGO);
+                    scrollRect.content = childGO.AddComponent<RectTransform>();
+                }
+
+                // initialize from the json object
+                if(ShouldUpdateField("contentTransform")){
+                    var contentObj = obj.GetObject("contentTransform");
+                    scrollRect.content.anchorMin = Vector2Ex.Parse( contentObj.GetString( "anchormin", "0.0 0.0" ) );
+                    scrollRect.content.anchorMax = Vector2Ex.Parse( contentObj.GetString( "anchormax", "1.0 1.0" ) );
+                    scrollRect.content.offsetMin = Vector2Ex.Parse( contentObj.GetString( "offsetmin", "0.0 0.0" ) );
+		// we dont have to apply the shoddy offsetmax default here because no existing implementations rely on it
+                    scrollRect.content.offsetMax = Vector2Ex.Parse( contentObj.GetString( "offsetmax", "0.0 0.0" ) ); 
+                    scrollRect.content.rotation = Quaternion.Euler(0, 0, obj.GetFloat("rotation", 0));
+                    scrollRect.content.pivot = Vector2Ex.Parse( contentObj.GetString( "pivot", "0.5 0.5" ) ); 
+                }
+                if(ShouldUpdateField("horizontal"))
+                    scrollRect.horizontal = obj.GetBoolean("horizontal", false);
+                if(ShouldUpdateField("vertical"))
+                    scrollRect.vertical = obj.GetBoolean("vertical", false);
+
+                if(ShouldUpdateField("movementType"))
+                    scrollRect.movementType = ParseEnum<ScrollRect.MovementType>(obj.GetString("movementType", "Clamped"), ScrollRect.MovementType.Clamped);
+
+                if(ShouldUpdateField("elasticity"))
+                    scrollRect.elasticity = obj.GetFloat("elasticity", 0.1f);
+                if(ShouldUpdateField("inertia"))
+                    scrollRect.inertia = obj.GetBoolean("inertia", false);
+                if(ShouldUpdateField("decelerationRate"))
+                    scrollRect.decelerationRate = obj.GetFloat("decelerationRate", 0.135f);
+                if(ShouldUpdateField("scrollSensitivity"))
+                    scrollRect.scrollSensitivity = obj.GetFloat("scrollSensitivity", 1f);
+
+                // add scrollbars if objects are present
+                GameObject barGO;
+                JSON.Object scrollObj;
+                bool invert;
+                bool hideUnlessNeeded;
+                Scrollbar scrollbar;
+                // dont need ShouldUpdateField here either
+                if(scrollRect.horizontal && obj.ContainsKey("horizontalScrollbar")){
+                    barGO = new GameObject("Horizontal Scrollbar");
+                    scrollObj = obj.GetObject("horizontalScrollbar");
+                    invert = scrollObj.GetBoolean("invert", false);
+                    hideUnlessNeeded = scrollObj.GetBoolean("autoHide", false);
+                    scrollbar = barGO.AddComponent<Scrollbar>();
+                    HandleEnableState(scrollObj, scrollbar);
+
+                    barGO.transform.SetParent(go.transform, false);
+                    scrollbar.direction = (invert ? Scrollbar.Direction.LeftToRight : Scrollbar.Direction.RightToLeft);
+                    scrollRect.horizontalScrollbar = scrollbar;
+                    if(hideUnlessNeeded)
+                        scrollRect.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+
+                    BuildScrollbar(scrollbar, scrollObj, false);
+                }
+                // dont need ShouldUpdateField here either
+                if(scrollRect.vertical && obj.ContainsKey("verticalScrollbar")){
+                    barGO = new GameObject("Vertical Scrollbar");
+                    scrollObj = obj.GetObject("verticalScrollbar");
+                    invert = scrollObj.GetBoolean("invert", false);
+                    hideUnlessNeeded = scrollObj.GetBoolean("autoHide", false);
+                    scrollbar = barGO.AddComponent<Scrollbar>();
+                    HandleEnableState(scrollObj, scrollbar);
+
+                    barGO.transform.SetParent(go.transform, false);
+                    scrollbar.direction = (invert ? Scrollbar.Direction.TopToBottom : Scrollbar.Direction.BottomToTop);
+                    scrollRect.verticalScrollbar = scrollbar;
+                    if(hideUnlessNeeded)
+                        scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+
+                    BuildScrollbar(scrollbar, scrollObj, true);
+                }
+
+                // Add ability to set scroll progress
+                if (ShouldUpdateField("horizontalNormalizedPosition"))
+                    scrollRect.horizontalNormalizedPosition = obj.GetFloat("horizontalNormalizedPosition", 0f);
+
+                if (ShouldUpdateField("verticalNormalizedPosition"))
+                    scrollRect.verticalNormalizedPosition = obj.GetFloat("verticalNormalizedPosition", 1f);
+            break;
+        }
+            case "Tooltip":
+            {
+                if (TooltipRef.isValid)
+                {
+                    var c = GetOrAddComponent<Tooltip>();
+                    HandleEnableState(obj, c);
+                    if (ShouldUpdateField("tooltipType"))
+                    {
+                        var tooltipType = ParseEnum<TooltipType>(obj.GetString("tooltipType", "Default"), TooltipType.Default);
+                        c.TooltipObject = tooltipType switch
+                        {
+                            TooltipType.AlwaysOnTop => TooltipAlwaysOnTopRef.Get(),
+                            TooltipType.AlwaysOnTopEmoji => TooltipAlwaysOnTopEmojiRef.Get(),
+                            _ => TooltipRef.Get()
+                        };
+                    }
+                    if (ShouldUpdateField("offset"))
+                    {
+                        c.offset = Vector2Ex.Parse(obj.GetString("offset", "8 8"));
+                    }
+                    if (ShouldUpdateField("useCentre"))
+                    {
+                        c.useCentre = obj.GetBoolean("useCentre", false);
+                    }
+                    if (ShouldUpdateField("text"))
+                    {
+                        var text = obj.GetString("text", "Text").Replace("\\n", "\n");
+                        c.SetPhrase(new Translate.Phrase(null, text));
+                    }
+                    if (ShouldUpdateField("delay"))
+                    {
+                        c.delayBeforeAppearing = ParseEnum<Tooltip.DelayType>(obj.GetString("delay", "Short"), Tooltip.DelayType.Short);
+                    }
+                    if (ShouldUpdateField("position"))
+                    {
+                        c.positionMode = ParseEnum<TooltipContainer.PositionMode>(obj.GetString("position", "Auto"), TooltipContainer.PositionMode.Auto);
+                    }
+                }
+                break;
+            }
         }
     }
 
@@ -906,6 +979,9 @@ public partial class CommunityEntity
         block.highlightedColor = ColorEx.Parse( obj.GetString( "highlightColor", "0.17 0.17 0.17 1" ) ); // hover
         block.pressedColor = ColorEx.Parse( obj.GetString( "pressedColor", "0.2 0.2 0.2 1" ) ); // press
         block.selectedColor = block.pressedColor; // never really used, but can still show up sometimes
+        block.fadeDuration = 0f;
+        scrollbar.colors = block;
+        block.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
         scrollbar.colors = block;
 
         // style the background track
@@ -933,6 +1009,23 @@ public partial class CommunityEntity
             rt.offsetMin = new Vector2(0f, -size);
             rt.offsetMax = Vector2.zero;
         }
+    }
+
+    static IEnumerator FadeCanvasGroup(CanvasGroup group, float to, float duration)
+    {
+        float from = group.alpha;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float value = Mathf.Lerp(from, to, elapsed / duration);
+            group.alpha = value;
+            yield return null;
+            // another fade changed the value since we set it, abort
+            if (group.alpha != value)
+                yield break;
+        }
+        group.alpha = to;
     }
 
     // sets the transform to a sensible default
@@ -1043,11 +1136,29 @@ public partial class CommunityEntity
 
         return font;
     }
-    
+
     [RPC_Client]
-    public void DestroyUI( RPCMessage msg )
+    public void DestroyUI(RPCMessage msg)
     {
-        DestroyPanel( msg.read.StringRaw() );
+        DestroyPanel(msg.read.StringRaw());
+        UpdateCanvasesVisibility();
+    }
+
+    [RPC_Client]
+    public void DestroyUIs(RPCMessage msg)
+    {
+        using var destroyUIs = msg.read.Proto<ProtoBuf.CommunityEntity_DestroyUIs>();
+
+        if (destroyUIs.list == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < destroyUIs.list.Count; i++)
+        {
+            DestroyPanel(destroyUIs.list[i]);
+        }
+
         UpdateCanvasesVisibility();
     }
 

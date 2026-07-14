@@ -489,7 +489,7 @@ public partial class CommunityEntity
         public void SendDragRPC()
         {
             // Convert Vector2 -> Vector3 because RPCs don't support serializing a Vector2
-            ClientInstance.ServerRPC<string, Vector3, int>("DragRPC", gameObject.name, PositionForRPC(), (int)positionRPC);
+            ClientInstance.ServerRPC("DragRPC", gameObject.name, (Vector3)PositionForRPC(), (int)positionRPC);
         }
 
         // the same as the extension method, but without the allocation
@@ -502,7 +502,7 @@ public partial class CommunityEntity
         // packetsize go brrrr
         public static void SendDropRPC(string draggedName, string draggedSlot, string swappedName, string swappedSlot)
         {
-            ClientInstance.ServerRPC<string, string, string, string>("DropRPC", draggedName, draggedSlot, swappedName, swappedSlot);
+            ClientInstance.ServerRPC("DropRPC", draggedName, draggedSlot, swappedName, swappedSlot);
         }
 
         public static void Swap(Draggable from, Draggable to)
