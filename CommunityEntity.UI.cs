@@ -402,7 +402,14 @@ public partial class CommunityEntity
                         c.colors = colors;
                         colors.fadeDuration = obj.GetFloat("fadeDuration", 0.1f);
                     }
-                    
+                    else if(!c.IsInteractable())
+                    {
+                        var prevFadeDuration = colors.fadeDuration;
+                        colors.fadeDuration = 0f;
+                        c.colors = colors;
+                        colors.fadeDuration = prevFadeDuration;
+                    }
+
                     c.colors = colors;
 
                     GraphicComponentCreated( img, obj );
@@ -885,7 +892,7 @@ public partial class CommunityEntity
         }
             case "Tooltip":
             {
-                if (TooltipRef.isValid)
+                if (TooltipRef != null && TooltipAlwaysOnTopRef != null && TooltipAlwaysOnTopEmojiRef != null)
                 {
                     var c = GetOrAddComponent<Tooltip>();
                     HandleEnableState(obj, c);
@@ -894,9 +901,9 @@ public partial class CommunityEntity
                         var tooltipType = ParseEnum<TooltipType>(obj.GetString("tooltipType", "Default"), TooltipType.Default);
                         c.TooltipObject = tooltipType switch
                         {
-                            TooltipType.AlwaysOnTop => TooltipAlwaysOnTopRef.Get(),
-                            TooltipType.AlwaysOnTopEmoji => TooltipAlwaysOnTopEmojiRef.Get(),
-                            _ => TooltipRef.Get()
+                            TooltipType.AlwaysOnTop => TooltipAlwaysOnTopRef,
+                            TooltipType.AlwaysOnTopEmoji => TooltipAlwaysOnTopEmojiRef,
+                            _ => TooltipRef
                         };
                     }
                     if (ShouldUpdateField("offset"))
@@ -1075,25 +1082,37 @@ public partial class CommunityEntity
         return System.Enum.TryParse<T>( value, true, out var parsedValue ) ? parsedValue : defaultValue;
     }
 
-    private void GraphicComponentCreated( UnityEngine.UI.Graphic c, JSON.Object obj )
-    {
-        if ( obj.ContainsKey( "fadeIn" ) )
-        {
-            c.canvasRenderer.SetAlpha( 0f );
-            c.CrossFadeAlpha( 1f, obj.GetFloat( "fadeIn", 0 ), true );
-        }
+	private void GraphicComponentCreated(UnityEngine.UI.Graphic c, JSON.Object obj)
+	{
+		if (obj.ContainsKey("fadeIn"))
+		{
+			var group = c.GetComponent<CanvasGroup>();
+			if (group)
+			{
+				group.alpha = 0f;
+				StartCoroutine(FadeCanvasGroup(group, 1f, obj.GetFloat("fadeIn", 0)));
+			}
+			else
+			{
+				c.canvasRenderer.SetAlpha(0f);
+				c.CrossFadeAlpha(1f, obj.GetFloat("fadeIn", 0), true);
+			}
+		}
 
-        if (obj.ContainsKey("placeholderParentId"))
-        {
-            var panel = FindPanel(obj.GetString("placeholderParentId"));
-            if (panel != null && panel.TryGetComponent<InputField>( out var input))
-            {
-                input.placeholder = c;
-            }
-        }
-    }
+		if (obj.ContainsKey("blocksRaycast"))
+			c.raycastTarget = obj.GetBoolean("blocksRaycast", true);
 
-    private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
+		if (obj.ContainsKey("placeholderParentId"))
+		{
+			var panel = FindPanel(obj.GetString("placeholderParentId"));
+			if (panel != null && panel.TryGetComponent<InputField>(out var input))
+			{
+				input.placeholder = c;
+			}
+		}
+	}
+
+	private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
     {
         var www = new WWW( p.Trim() );
 

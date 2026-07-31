@@ -84,7 +84,8 @@ public class cui
 								},
                                 {
                                     ""type"":""Tooltip"",
-                                    ""text"": ""Press this to leave the test""
+                                    ""text"": ""Press this to leave the test"",
+                                    ""position"": ""TopLeft""
                                 }
 							]
 						},

@@ -1,8 +1,10 @@
+using UnityEngine;
+
 public partial class CommunityEntity
 {
-    public GameObjectRef TooltipRef;
-    public GameObjectRef TooltipAlwaysOnTopRef;
-    public GameObjectRef TooltipAlwaysOnTopEmojiRef;
+    public GameObject TooltipRef;
+    public GameObject TooltipAlwaysOnTopRef;
+    public GameObject TooltipAlwaysOnTopEmojiRef;
 
     public enum TooltipType
     {

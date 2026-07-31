@@ -71,7 +71,16 @@ public partial class CommunityEntity
     public void OpenPie(RPCMessage rpc)
     {
         using var pie = rpc.read.Proto<CustomPie>();
-        ContextMenuUI.Start(ContextMenuUI.MenuType.Custom, () => 
+
+        if (UIInventory.isOpen || UICrafting.isOpen || UIContacts.isOpen || UIClans.IsOpen || UIDialog.isOpen)
+        {
+            if (!string.IsNullOrEmpty(pie.closeCommand))
+            {
+                ConsoleSystem.Run(ConsoleSystem.Option.Client.FromServer(), pie.closeCommand);
+            }
+            return;
+        }
+        ContextMenuUI.Start(ContextMenuUI.MenuType.Custom, string.IsNullOrEmpty(pie.closeCommand) ? null : () => 
         {
             ConsoleSystem.Run(ConsoleSystem.Option.Client.FromServer(), pie.closeCommand);
         });
@@ -98,10 +107,12 @@ public partial class CommunityEntity
                 actionNext: string.IsNullOrEmpty(menuNextCommand) ? null : ((ply) =>
                 {
                     ConsoleSystem.Run(ConsoleSystem.Option.Client.FromServer(), menuNextCommand);
+                    PieMenu.Instance.Close(true);
                 }),
                 actionPrev: string.IsNullOrEmpty(menuPrevCommand) ? null : ((ply) =>
                 {
                     ConsoleSystem.Run(ConsoleSystem.Option.Client.FromServer(), menuPrevCommand);
+                    PieMenu.Instance.Close(true);
                 }),
                 order: menu.order,
                 disabled: menu.disabled,

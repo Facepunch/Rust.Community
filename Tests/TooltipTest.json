@@ -1,0 +1,102 @@
+[
+    {
+        "name": "UI",
+        "parent":"Overlay",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.05 0.05 0.05 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0",
+                "anchormax": "1 1"
+            },
+            {
+                "type":"NeedsCursor"
+            }
+        ]
+    },
+    {
+        "name": "Example",
+        "parent":"UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.RawImage",
+                "color": "0.1 0.1 0.1 1.0",
+                "sprite": "Assets/Content/UI/UI.Background.Tile.psd"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.2 0",
+                "anchormax": "0.8 1"
+            },
+            {
+                "type":"NeedsCursor"
+            }
+        ]
+    },
+    {
+        "parent": "Example",
+        "name": "DefaultTimer",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"Here's a text tooltip. Hover over me.",
+                "fontSize":26,
+                "align": "MiddleCenter"
+            },
+            {
+                "type":"Tooltip",
+                "text": "Here's the text component tooltip! :apple: \n Multiline!",
+                "tooltipType": "AlwaysOnTopEmoji"
+              
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0 0.7",
+                "anchormax": "1 0.7",
+                "offsetmin": "0 -50",
+                "offsetmax": "0 0"
+            }
+        ]
+    },
+    {
+        "name": "Button88",
+        "parent": "UI",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Button",
+                "close":"UI",
+                "command":"cui.endtest",
+                "color": "0.9 0.8 0.3 0.8"
+            },
+            {
+              "type":"Tooltip",
+              "text": "End the CUI test"
+            },
+            {
+                "type":"RectTransform",
+                "anchormin": "0.02 0.02",
+                "anchormax": "0.05 0.05"
+            }
+        ]
+    },
+    {
+        "parent": "Button88",
+        "components":
+        [
+            {
+                "type":"UnityEngine.UI.Text",
+                "text":"x",
+                "fontSize":20,
+                "align": "MiddleCenter"
+            }
+        ]
+    }
+]
