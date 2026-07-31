@@ -60,7 +60,8 @@ public partial class CommunityEntity
                 step = 0 - step;
             }
 
-            InvokeRepeating( "UpdateCountdown", interval, interval );
+            // sender = this so the scheduler auto-cancels if the panel is destroyed without End() running
+            InvokeHandler.InvokeRepeating( this, UpdateCountdown, interval, interval );
         }
 
         void UpdateCountdown()
@@ -88,7 +89,7 @@ public partial class CommunityEntity
 
         void End()
         {
-            CancelInvoke( "UpdateCountdown" );
+            InvokeHandler.CancelInvoke( this, UpdateCountdown );
 
             if(!destroyIfDone) return;
 
@@ -97,8 +98,8 @@ public partial class CommunityEntity
 
 	    public void Reset()
         {
-            CancelInvoke( "UpdateCountdown" );
-            InvokeRepeating( "UpdateCountdown", interval, interval );
+            InvokeHandler.CancelInvoke( this, UpdateCountdown );
+            InvokeHandler.InvokeRepeating( this, UpdateCountdown, interval, interval );
 	    }
 
         void UpdateDisplay(float time)

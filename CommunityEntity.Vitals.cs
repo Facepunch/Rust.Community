@@ -8,7 +8,7 @@ public partial class CommunityEntity
     {
         
         // Deserialize list of vitals and update UI
-        var vitals = message.read.Proto<CustomVitals>();
+        using var vitals = message.read.Proto<CustomVitals>();
 
         NoticeArea.Instance?.UpdateCustomVitalsFromServer(vitals);
     }

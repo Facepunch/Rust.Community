@@ -19,7 +19,7 @@ public class cui
 									""type"":""UnityEngine.UI.RawImage"",
 									""imagetype"": ""Tiled"",
 									""color"": ""1.0 1.0 1.0 1.0"",
-									""url"": ""http://files.facepunch.com/garry/2015/June/03/2015-06-03_12-19-17.jpg"",
+									""url"": ""https://files.facepunch.com/garry/2015/June/03/2015-06-03_12-19-17.jpg"",
 								},
 								{
 									""type"":""RectTransform"",
@@ -42,6 +42,10 @@ public class cui
 									""fontSize"":32,
 									""align"": ""MiddleCenter"",
 								},
+                                {
+                                    ""type"":""Tooltip"",
+                                    ""text"": ""Here's the text component tooltip!""
+                                },
 								{
 									""type"":""RectTransform"",
 									""anchormin"": ""0 0.5"",
@@ -77,7 +81,12 @@ public class cui
 									""text"":""YES"",
 									""fontSize"":20,
 									""align"": ""MiddleCenter""
-								}
+								},
+                                {
+                                    ""type"":""Tooltip"",
+                                    ""text"": ""Press this to leave the test"",
+                                    ""position"": ""TopLeft""
+                                }
 							]
 						},
 						{
@@ -138,7 +147,12 @@ public class cui
 									""anchormin"":""0.4 0.4"",
 									""anchormax"":""0.6 0.6"",
 
-								}
+								},
+                                {
+                                    ""type"":""Tooltip"",
+                                    ""text"": ""This is pretty dope, it also supports emoji!\nThis is an apple: :apple:"",
+                                    ""tooltipType"": ""AlwaysOnTopEmoji""
+                                }
 							]
 						},
 						{
