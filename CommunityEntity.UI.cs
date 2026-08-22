@@ -1075,13 +1075,6 @@ public partial class CommunityEntity
         }
     }
 
-    private static T ParseEnum<T>(string value, T defaultValue)
-        where T : struct, System.Enum
-    {
-        if ( string.IsNullOrWhiteSpace( value ) ) return defaultValue;
-        return System.Enum.TryParse<T>( value, true, out var parsedValue ) ? parsedValue : defaultValue;
-    }
-
 	private void GraphicComponentCreated(UnityEngine.UI.Graphic c, JSON.Object obj)
 	{
 		if (obj.ContainsKey("fadeIn"))
