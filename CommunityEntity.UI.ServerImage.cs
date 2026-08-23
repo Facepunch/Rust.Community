@@ -16,11 +16,17 @@ public partial class CommunityEntity
     private class ImageRequest
     {
         public List<Entry> Entries = new List<Entry>();
+        public List<ItemDefinitionEntry> ItemDefinitionEntries = new List<ItemDefinitionEntry>();
 
         public struct Entry
         {
             public UnityEngine.UI.MaskableGraphic graphic;
             public Vector4? slice;
+        }
+
+        public struct ItemDefinitionEntry
+        {
+            public ItemDefinition definition;
         }
     }
 
@@ -107,7 +113,12 @@ public partial class CommunityEntity
             {
                 ApplyCachedTextureToImage(c, texture);
             }
-            
+
+            foreach (var item in request.ItemDefinitionEntries)
+            {
+                ApplyCachedTextureToItem(item, texture);
+            }
+
             // Remove request
             requestingTextureImages.Remove(textureID);
         }
@@ -173,6 +184,39 @@ public partial class CommunityEntity
         RequestImage(id, true);
 
         return null;
+    }
+
+    public void ApplyTextureToItem( ItemDefinition definition, uint textureID )
+    {
+        var texture = GetCachedTexture( textureID );
+        if ( texture == null )
+        {
+            var bytes = FileStorage.client.Get( textureID, FileStorage.Type.png, net.ID );
+            if ( bytes != null )
+            {
+                texture = StoreCachedTexture( textureID, bytes );
+            }
+            else
+            {
+                var request = RequestImage(textureID, true);
+                request.ItemDefinitionEntries.Add(new ImageRequest.ItemDefinitionEntry()
+                {
+                    definition = definition
+                });
+                return;
+            }
+        }
+
+        ApplyCachedTextureToItem( new ImageRequest.ItemDefinitionEntry()
+        {
+            definition = definition
+        }, texture );
+    }
+
+    private void ApplyCachedTextureToItem( ImageRequest.ItemDefinitionEntry entry, CachedTexture texture )
+    {
+        if ( entry.definition != null )
+            entry.definition.iconSprite = texture.GetOrCreateSprite(null);
     }
 
     public void ApplyTextureToImage( UnityEngine.UI.MaskableGraphic component, uint textureID, Vector4? slice = null )

@@ -34,6 +34,18 @@ public partial class CommunityEntity : PointEntity
 		base.ClientInit(info);
 		UpdateCanvasesVisibility();
 	}
+
+	private void ClientDisconnect()
+	{
+		RemoveCustomItems();
+	}
+
+	private static T ParseEnum<T>(string value, T defaultValue)
+		where T : struct, System.Enum
+	{
+		if (string.IsNullOrWhiteSpace(value)) return defaultValue;
+		return System.Enum.TryParse<T>(value, true, out var parsedValue) ? parsedValue : defaultValue;
+	}
 #endif
 
 #if SERVER
