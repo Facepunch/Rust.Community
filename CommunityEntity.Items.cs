@@ -29,10 +29,10 @@ public partial class CommunityEntity
 
         ItemManager.Initialize();
 
-        int itemid = shortname.GetHashCode();
+        int itemid = obj.GetInt("itemid", shortname.GetHashCode());
         if (ItemManager.itemDictionary.ContainsKey(itemid))
         {
-            Debug.LogError($"[CommunityEntity] Custom item shortname '{shortname}' hashes to existing itemid {itemid}; not registering.");
+            Debug.LogError($"[CommunityEntity] Custom item shortname '{shortname}' itemid {itemid} already in use; not registering.");
             return null;
         }
         if (ItemManager.itemDictionaryByName.ContainsKey(shortname))
