@@ -1032,7 +1032,7 @@ public partial class CommunityEntity
             group.alpha = value;
             yield return null;
             // another fade changed the value since we set it, abort
-            if (group.alpha != value)
+            if (group == null || group.alpha != value)
                 yield break;
         }
         
