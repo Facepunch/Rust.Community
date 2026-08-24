@@ -1020,6 +1020,9 @@ public partial class CommunityEntity
 
     static IEnumerator FadeCanvasGroup(CanvasGroup group, float to, float duration)
     {
+        if(group == null)
+			yield break;
+			
         float from = group.alpha;
         float elapsed = 0f;
         while (elapsed < duration)
@@ -1032,7 +1035,9 @@ public partial class CommunityEntity
             if (group.alpha != value)
                 yield break;
         }
-        group.alpha = to;
+        
+        if(group != null)
+			group.alpha = to;
     }
 
     // sets the transform to a sensible default
