@@ -245,6 +245,33 @@ public partial class CommunityEntity
                     break;
                 }
 
+			case "RoundedRect":
+    			{
+        			var c = GetOrAddComponent<RoundedRectGraphic>();
+        			HandleEnableState( obj, c );
+
+        			if ( ShouldUpdateField( "color" ) )
+            			c.color = ColorEx.Parse( obj.GetString( "color", "1.0 1.0 1.0 1.0" ) );
+
+        			if ( ShouldUpdateField( "radius" ) )
+           				c.Radius = obj.GetFloat( "radius", 16f );
+
+        			if ( ShouldUpdateField( "segments" ) )
+           				c.Segments = obj.GetInt( "segments", 8 );
+
+        			if ( ShouldUpdateField( "softness" ) )
+           				c.Softness = obj.GetFloat( "softness", 1.5f );
+
+        			if ( ShouldUpdateField( "sprite" ) && obj.ContainsKey( "sprite" ) )
+            			c.Sprite = FileSystem.Load<Sprite>( obj.GetString( "sprite" ) );
+
+        			if ( ShouldUpdateField( "preserveAspect" ) )
+            			c.PreserveAspect = obj.GetBoolean( "preserveAspect", false );
+
+        			GraphicComponentCreated( c, obj );
+        			break;
+    			}
+
             case "UnityEngine.UI.Image":
                 {
                     var c = GetOrAddComponent<UnityEngine.UI.Image>();

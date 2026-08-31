@@ -1,0 +1,104 @@
+[
+  {
+    "name": "RoundedRectTestTitle",
+    "parent": "Overlay",
+    "components": [
+      {
+        "type": "UnityEngine.UI.Text",
+        "text": "RoundedRect comparison: radius 8 / 24 / 48",
+        "fontSize": 16,
+        "align": "MiddleCenter",
+        "color": "1.0 1.0 1.0 1.0"
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.2 0.65",
+        "anchormax": "0.8 0.70",
+        "offsetmin": "0 0",
+        "offsetmax": "0 0"
+      }
+    ]
+  },
+  {
+    "name": "RoundedRectSmall",
+    "parent": "Overlay",
+    "components": [
+      {
+        "type": "RoundedRect",
+        "color": "0.1 0.1 0.1 0.9",
+        "radius": 8,
+        "segments": 8,
+        "softness": 1.5
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.15 0.45",
+        "anchormax": "0.35 0.57",
+        "offsetmin": "0 0",
+        "offsetmax": "0 0"
+      }
+    ]
+  },
+  {
+    "name": "RoundedRectMedium",
+    "parent": "Overlay",
+    "components": [
+      {
+        "type": "RoundedRect",
+        "color": "0.1 0.25 0.1 0.9",
+        "radius": 24,
+        "segments": 12,
+        "softness": 1.5
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.40 0.45",
+        "anchormax": "0.60 0.57",
+        "offsetmin": "0 0",
+        "offsetmax": "0 0"
+      }
+    ]
+  },
+  {
+    "name": "RoundedRectLarge",
+    "parent": "Overlay",
+    "components": [
+      {
+        "type": "RoundedRect",
+        "color": "0.25 0.1 0.1 0.9",
+        "radius": 48,
+        "segments": 16,
+        "softness": 1.5
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.65 0.45",
+        "anchormax": "0.85 0.57",
+        "offsetmin": "0 0",
+        "offsetmax": "0 0"
+      }
+    ]
+  },
+  {
+    "name": "RoundedRectSprite",
+    "parent": "Overlay",
+    "components": [
+      {
+        "type": "RoundedRect",
+        "sprite": "assets/content/ui/ui.background.tile.psd",
+        "color": "1.0 1.0 1.0 1.0",
+        "radius": 24,
+        "segments": 12,
+        "softness": 1.5,
+        "preserveAspect": false
+      },
+      {
+        "type": "RectTransform",
+        "anchormin": "0.40 0.28",
+        "anchormax": "0.60 0.40",
+        "offsetmin": "0 0",
+        "offsetmax": "0 0"
+      }
+    ]
+  }
+]
