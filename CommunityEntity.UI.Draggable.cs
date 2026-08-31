@@ -377,7 +377,7 @@ public partial class CommunityEntity
             var anchorRT = (anchorObj.transform as RectTransform);
             anchorRT.SetParent(limitParent);
             anchorRT.anchorMin = rt.anchorMin;
-            anchorRT.anchorMax = rt.offsetMax;
+            anchorRT.anchorMax = rt.anchorMax;
             anchorRT.offsetMin = rt.offsetMin;
             anchorRT.offsetMax = rt.offsetMax;
             anchorRT.localPosition = limitParent.InverseTransformPoint(rt.position);

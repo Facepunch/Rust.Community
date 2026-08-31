@@ -1020,6 +1020,10 @@ public partial class CommunityEntity
 
     static IEnumerator FadeCanvasGroup(CanvasGroup group, float to, float duration)
     {
+        if (group == null)
+        {
+            yield break;
+        }
         float from = group.alpha;
         float elapsed = 0f;
         while (elapsed < duration)
@@ -1029,11 +1033,14 @@ public partial class CommunityEntity
             group.alpha = value;
             yield return null;
             // another fade changed the value since we set it, abort
-            if (group.alpha != value)
+            if (group == null || group.alpha != value)
                 yield break;
         }
-        group.alpha = to;
-    }
+        if (group != null)
+        {
+            group.alpha = to;
+        }
+	}
 
     // sets the transform to a sensible default
     private void FitParent(RectTransform transform){
