@@ -88,6 +88,11 @@ public partial class CommunityEntity
             if ( json.ContainsKey( "destroyUi" ) )
             {
                 DestroyPanel( json.GetString( "destroyUi", "AddUI CreatedPanel" ) );
+                if(json.GetBoolean("destroyOnly", false))
+                {
+                    //This request is only to destroy the panel. Continue to the next element.
+                    continue;
+                }
             }
             var parentPanel = FindPanel( json.GetString( "parent", "Overlay" ) );
             var gameObjectName = json.GetString( "name", "AddUI CreatedPanel" );
