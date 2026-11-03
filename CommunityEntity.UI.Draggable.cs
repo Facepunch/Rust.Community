@@ -143,7 +143,7 @@ public partial class CommunityEntity
             // setup values
             rt = (transform as RectTransform);
             canvasGroup = GetComponent<CanvasGroup>();
-            canvas = GetComponentInParent<Canvas>(true).transform;
+            canvas = GetCuiCanvas(GetComponentInParent<Canvas>(true));
             realParent = rt.parent;
             index = rt.GetSiblingIndex();
 
@@ -198,6 +198,7 @@ public partial class CommunityEntity
             rt.SetParent(dragParent);
             if (limitToParent)
                 rt.SetAsLastSibling(); // because chances are we're already parented to it
+            changedParents.Add(rt.parent);
 
             onDragCallback?.Invoke(callbackName);
         }
@@ -247,6 +248,7 @@ public partial class CommunityEntity
                 rt.SetParent(realParent);
                 rt.SetSiblingIndex(index);
             }
+            changedParents.Add(rt.parent);
             onDropCallback?.Invoke(callbackName);
 
             if (!dropAnywhere)

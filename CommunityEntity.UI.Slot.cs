@@ -42,7 +42,7 @@ public partial class CommunityEntity
         public void Init()
         {
             content = GetComponentInChildren<Draggable>();
-            canvas = GetComponentInParent<Canvas>().transform;
+            canvas = GetCuiCanvas(GetComponentInParent<Canvas>());
 
             _initialized = true;
         }

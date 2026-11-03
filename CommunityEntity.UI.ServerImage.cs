@@ -13,9 +13,13 @@ public partial class CommunityEntity
     private static Dictionary<uint, ImageRequest> requestingTextureImages = new Dictionary<uint, ImageRequest>();
     private static Dictionary<uint, CachedTexture> _textureCache = new Dictionary<uint, CachedTexture>();
 
+    // Images that haven't arrived are only asked for again after this long, item icons request every frame
+    private const float ImageRetryDelay = 10f;
+
     private class ImageRequest
     {
         public List<Entry> Entries = new List<Entry>();
+        public RealTimeSince SinceRequested;
 
         public struct Entry
         {
@@ -83,18 +87,11 @@ public partial class CommunityEntity
         }
     }
 
-    [RPC_Client]
-    public void CL_ReceiveFilePng( BaseEntity.RPCMessage msg )
+    // Server images are stored with FileStorage.StoreByCrc so their id is both the part and the crc
+    void IServerFileReceiver.OnServerFileReceived( ulong part, uint textureID, byte[] bytes )
     {
-        var textureID = msg.read.UInt32();
-        var bytes = msg.read.BytesWithSize();
-
+        // The server doesn't have the image (yet), a later use asks again after a delay
         if ( bytes == null ) return;
-
-        if ( FileStorage.client.Store( bytes, FileStorage.Type.png, net.ID ) != textureID )
-        {
-            Log( "Client/Server FileStorage CRC differs" );
-        }
 
         var texture = StoreCachedTexture( textureID, bytes );
 
@@ -144,7 +141,13 @@ public partial class CommunityEntity
         {
             request = new ImageRequest();
             requestingTextureImages[textureID] = request;
-            RequestFileFromServer(textureID, FileStorage.Type.png, "CL_ReceiveFilePng");
+            request.SinceRequested = 0;
+            RequestFileFromServer(this, textureID, textureID);
+        }
+        else if (createRequest && request.SinceRequested > ImageRetryDelay)
+        {
+            request.SinceRequested = 0;
+            RequestFileFromServer(this, textureID, textureID);
         }
         return request;
     }
@@ -159,7 +162,7 @@ public partial class CommunityEntity
             return cachedImage.GetOrCreateSprite(slice);
         }
 
-        var bytes = FileStorage.client.Get(id, FileStorage.Type.png, net.ID);
+        var bytes = FileStorage.client.Get(net.ID, id, id);
 
         // Cached on disk
         if (bytes != null)
@@ -180,7 +183,7 @@ public partial class CommunityEntity
         var texture = GetCachedTexture( textureID );
         if ( texture == null )
         {
-            var bytes = FileStorage.client.Get( textureID, FileStorage.Type.png, net.ID );
+            var bytes = FileStorage.client.Get( net.ID, textureID, textureID );
             if ( bytes != null )
             {
                 texture = StoreCachedTexture( textureID, bytes );
@@ -188,6 +191,7 @@ public partial class CommunityEntity
             else
             {
                 var request = RequestImage(textureID, true);
+                request.Entries.RemoveAll( e => e.graphic == null );
                 request.Entries.Add( new ImageRequest.Entry()
                 {
                     graphic = component, 

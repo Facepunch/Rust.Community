@@ -3,7 +3,7 @@ using ProtoBuf;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class CommunityEntity : PointEntity 
+public partial class CommunityEntity : PointEntity, IServerFileReceiver
 {
 	public static CommunityEntity ServerInstance = null;
 	public static CommunityEntity ClientInstance = null;
@@ -37,6 +37,13 @@ public partial class CommunityEntity : PointEntity
 #endif
 
 #if SERVER
+    internal override void DoServerDestroy()
+    {
+        base.DoServerDestroy();
+
+        FileStorage.server.RemoveAll( net.ID );
+    }
+
     // This mainly exists for our ServerRPC overload generator so this specific overload can exist
     public void SendDestroyUIs(BasePlayer player, List<string> uiPanels)
     {

@@ -1,21 +1,47 @@
-﻿using Facepunch.Extend;
+﻿using Facepunch;
+using Facepunch.Extend;
 using Rust.Workshop;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 #if CLIENT
 
+[DefaultExecutionOrder(-1)] // LateUpdate sorts the blurred layers before UIBlurCanvasesBehind.LateUpdate reads the sort orders its captures are requested at
 public partial class CommunityEntity
 {
     private static List<GameObject> AllUi = new List<GameObject>();
     private static Dictionary<string, GameObject> UiDict = new Dictionary<string, GameObject>();
 
     private static List<string> ScrollViews = new List<string>();
+
+    // With RRP a blur needs a canvas and a UIBlurCanvasesBehind to show the UI drawn before it, but a CUI layer draws as a single canvas
+    // All this shit below is just making sure all the blurred images have a canvas and a UIBlurCanvasesBehind sorted accordingly
+    private const int MaxSortOrdersAboveLayer = 4;
+
+    private struct PlannedSort
+    {
+        public GameObject panel;
+        public int order;
+        public bool capturesBehind;
+    }
+
+    private static readonly Dictionary<GameObject, bool> panelsSortedForBlur = new Dictionary<GameObject, bool>();
+
+    private static readonly HashSet<GameObject> panelsToUnsort = new HashSet<GameObject>();
+    private static readonly List<PlannedSort> plannedSorts = new List<PlannedSort>();
+    private static readonly List<Graphic> maskedGraphics = new List<Graphic>();
+    private static readonly List<Rect> drawnSinceCapture = new List<Rect>();
+    private static readonly Vector3[] panelCorners = new Vector3[4];
+
+    private static readonly HashSet<GameObject> panelsBeingDestroyed = new HashSet<GameObject>();
+    private static readonly HashSet<Transform> changedParents = new HashSet<Transform>();
+    private static readonly Dictionary<Material, bool> blurMaterials = new Dictionary<Material, bool>();
 
     public static void DestroyServerCreatedUI()
     {
@@ -30,6 +56,11 @@ public partial class CommunityEntity
         requestingTextureImages.Clear();
 		ScrollViews.Clear();
         UnloadTextureCache();
+        
+        panelsSortedForBlur.Clear();
+        panelsBeingDestroyed.Clear();
+        changedParents.Clear();
+        blurMaterials.Clear();
 
         // Cleanup any custom vitals we created
         if (NoticeArea.Instance != null)
@@ -110,7 +141,7 @@ public partial class CommunityEntity
             if ( allowUpdate && go == null )
             {
                 Debug.LogWarning( $"[AddUI] Unable to update object '{gameObjectName}': can't be found" );
-                return;
+                break;
             }
 
 
@@ -125,6 +156,8 @@ public partial class CommunityEntity
                     FitParent(rt);
             }
 
+            changedParents.Add(go.transform.parent);
+
             if (json.ContainsKey("activeSelf"))
             {
                 go.SetActive(json.GetBoolean("activeSelf", true));
@@ -134,6 +167,8 @@ public partial class CommunityEntity
             {
                 CreateComponents( go, component.Obj, allowUpdate );
             }
+
+            changedParents.Add(go.transform.parent);
 
             if ( json.ContainsKey( "fadeOut" ) )
             {
@@ -1109,6 +1144,8 @@ public partial class CommunityEntity
 		if (obj.ContainsKey("blocksRaycast"))
 			c.raycastTarget = obj.GetBoolean("blocksRaycast", true);
 
+		EnsureCanvasBlursBehind(c);
+
 		if (obj.ContainsKey("placeholderParentId"))
 		{
 			var panel = FindPanel(obj.GetString("placeholderParentId"));
@@ -1117,6 +1154,299 @@ public partial class CommunityEntity
 				input.placeholder = c;
 			}
 		}
+	}
+
+	private static void EnsureCanvasBlursBehind(UnityEngine.UI.Graphic c)
+	{
+		if (!IsBlurMaterial(c.material))
+		{
+			return;
+		}
+
+		var canvas = c.GetComponentInParent<Canvas>(true);
+		while (canvas != null && !canvas.isRootCanvas && !canvas.overrideSorting)
+		{
+			canvas = canvas.transform.parent.GetComponentInParent<Canvas>(true);
+		}
+
+		if (canvas != null && !canvas.TryGetComponent<UIBlurCanvasesBehind>(out _))
+		{
+			canvas.gameObject.AddComponent<UIBlurCanvasesBehind>();
+		}
+	}
+
+	private void LateUpdate()
+	{
+		if (!isClient || changedParents.Count == 0)
+		{
+			return;
+		}
+        
+		// We only sort changed UIs
+		SortBlurredLayers();
+	}
+
+	private void SortBlurredLayers()
+	{
+		panelsBeingDestroyed.RemoveWhere(panel => panel == null);
+		foreach (GameObject panel in panelsSortedForBlur.Keys)
+		{
+			panelsToUnsort.Add(panel);
+		}
+
+		foreach (Canvas layer in AllCanvases)
+		{
+			if (layer == null || !layer.TryGetComponent<UIBlurCanvasesBehind>(out _))
+			{
+				continue;
+			}
+
+			if (!HasChangedParents(layer.transform))
+			{
+				KeepLayerSorts(layer.transform);
+				continue;
+			}
+
+			int maxOrder = layer.sortingOrder + MaxSortOrdersAboveLayer;
+			int order = layer.sortingOrder;
+			drawnSinceCapture.Clear();
+			
+			for (var i = 0; i < layer.transform.childCount && order <= maxOrder; i++)
+			{
+				PlanPanel(layer.transform.GetChild(i), layer.sortingOrder, maxOrder, ref order);
+			}
+
+			if (order <= maxOrder)
+			{
+				foreach (PlannedSort sort in plannedSorts)
+				{
+					SortPanel(sort.panel, sort.order, sort.capturesBehind);
+				}
+			}
+
+			plannedSorts.Clear();
+		}
+
+		foreach (GameObject panel in panelsToUnsort)
+		{
+			UnsortPanel(panel);
+		}
+
+		panelsToUnsort.Clear();
+		changedParents.Clear();
+	}
+
+	private static bool HasChangedParents(Transform layer)
+	{
+		foreach (Transform parent in changedParents)
+		{
+			if (parent != null && parent.IsChildOf(layer))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static void KeepLayerSorts(Transform layer)
+	{
+		foreach (GameObject panel in panelsSortedForBlur.Keys)
+		{
+			if (panel != null && panel.transform.IsChildOf(layer))
+			{
+				panelsToUnsort.Remove(panel);
+			}
+		}
+	}
+
+	// Goes through the panels in the order they draw and picks the ones needing a canvas of their own
+	private static void PlanPanel(Transform panel, int parentOrder, int maxOrder, ref int order)
+	{
+		if (!panel.gameObject.activeSelf || panelsBeingDestroyed.Contains(panel.gameObject))
+		{
+			return;
+		}
+
+		int childCount = panel.childCount;
+		bool hasGraphic = panel.TryGetComponent<Graphic>(out var graphic);
+
+		if (childCount == 0 && !hasGraphic)
+		{
+			return;
+		}
+
+		bool masked = childCount > 0 && IsMask(panel);
+		var blurred = false;
+		var drawn = false;
+
+		if (masked)
+		{
+			panel.GetComponentsInChildren(maskedGraphics);
+			foreach (Graphic maskedGraphic in maskedGraphics)
+			{
+				blurred |= IsBlur(maskedGraphic);
+				drawn |= IsDrawn(maskedGraphic);
+			}
+			maskedGraphics.Clear();
+		}
+		else if (hasGraphic)
+		{
+			blurred = IsBlur(graphic);
+			drawn = IsDrawn(graphic);
+		}
+
+		Rect rect = blurred || drawn ? GetScreenRect(panel) : default;
+		bool capturesBehind = blurred && CoversDrawnPanel(rect);
+		int panelOrder = parentOrder;
+
+		// A panel left in its parent's canvas while a later order was planned would draw under that sorted panel
+		if (capturesBehind || parentOrder < order)
+		{
+			order++;
+			panelOrder = order;
+			plannedSorts.Add(new PlannedSort { panel = panel.gameObject, order = order, capturesBehind = capturesBehind });
+		}
+
+		// A capture holds everything drawn before it, so the blurs after it only need their own over UI drawn since
+		if (capturesBehind)
+		{
+			drawnSinceCapture.Clear();
+		}
+
+		if (drawn)
+		{
+			drawnSinceCapture.Add(rect);
+		}
+
+		if (masked)
+		{
+			return;
+		}
+
+		for (var i = 0; i < childCount && order <= maxOrder; i++)
+		{
+			PlanPanel(panel.GetChild(i), panelOrder, maxOrder, ref order);
+		}
+	}
+
+	private static Rect GetScreenRect(Transform panel)
+	{
+		((RectTransform)panel).GetWorldCorners(panelCorners);
+		Vector3 min = Vector3.Min(Vector3.Min(panelCorners[0], panelCorners[1]), Vector3.Min(panelCorners[2], panelCorners[3]));
+		Vector3 max = Vector3.Max(Vector3.Max(panelCorners[0], panelCorners[1]), Vector3.Max(panelCorners[2], panelCorners[3]));
+		return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+	}
+
+	private static bool CoversDrawnPanel(Rect rect)
+	{
+		foreach (Rect drawnRect in drawnSinceCapture)
+		{
+			if (drawnRect.Overlaps(rect))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static void SortPanel(GameObject panel, int order, bool capturesBehind)
+	{
+		panelsToUnsort.Remove(panel);
+
+		bool addsCanvas = !panel.TryGetComponent<Canvas>(out var canvas);
+		if (addsCanvas)
+		{
+			canvas = panel.AddComponent<Canvas>();
+			panel.AddComponent<GraphicRaycaster>();
+		}
+
+		panelsSortedForBlur.TryAdd(panel, addsCanvas);
+		canvas.overrideSorting = true;
+
+		// Canvas.sortingOrder's setter re-sorts every overlay canvas even for an unchanged order, and every CUI message plans its layer again
+		if (canvas.sortingOrder != order)
+		{
+			canvas.sortingOrder = order;
+		}
+
+		bool hasCapture = panel.TryGetComponent<UIBlurCanvasesBehind>(out var capture);
+		if (capturesBehind && !hasCapture)
+		{
+			panel.AddComponent<UIBlurCanvasesBehind>();
+		}
+		else if (!capturesBehind && hasCapture)
+		{
+			DestroyImmediate(capture);
+		}
+	}
+
+	private static void UnsortPanel(GameObject panel)
+	{
+		panelsSortedForBlur.Remove(panel, out bool addedCanvas);
+
+		if (panel == null)
+		{
+			return;
+		}
+
+		// DestroyImmediate, since another CUI message in the same frame can sort the panel again, and SortPanel would find a Canvas pending destruction
+		if (panel.TryGetComponent<UIBlurCanvasesBehind>(out var capture))
+		{
+			DestroyImmediate(capture);
+		}
+
+		if (addedCanvas)
+		{
+			DestroyImmediate(panel.GetComponent<GraphicRaycaster>());
+			DestroyImmediate(panel.GetComponent<Canvas>());
+		}
+		else
+		{
+			panel.GetComponent<Canvas>().overrideSorting = false;
+		}
+	}
+
+	private static Transform GetCuiCanvas(Canvas canvas)
+	{
+		while (panelsSortedForBlur.TryGetValue(canvas.gameObject, out bool addedCanvas) && addedCanvas)
+		{
+			canvas = canvas.transform.parent.GetComponentInParent<Canvas>(true);
+		}
+
+		return canvas.transform;
+	}
+
+	private static bool IsMask(Transform panel)
+	{
+		return (panel.TryGetComponent<Mask>(out var mask) && mask.enabled) || (panel.TryGetComponent<RectMask2D>(out var rectMask) && rectMask.enabled);
+	}
+
+	private static bool IsBlur(Graphic graphic)
+	{
+		return graphic.enabled && IsBlurMaterial(graphic.material);
+	}
+
+	private static bool IsDrawn(Graphic graphic)
+	{
+		return graphic.enabled && graphic.color.a > 0f;
+	}
+
+	private static bool IsBlurMaterial(Material material)
+	{
+		if (material == null)
+		{
+			return false;
+		}
+
+		if (!blurMaterials.TryGetValue(material, out bool isBlur))
+		{
+			isBlur = material.shader != null && material.shader.name.StartsWith("UI/Background Blur");
+			blurMaterials.Add(material, isBlur);
+		}
+
+		return isBlur;
 	}
 
 	private IEnumerator LoadTextureFromWWW( UnityEngine.UI.RawImage c, string p )
@@ -1190,16 +1520,17 @@ public partial class CommunityEntity
 
     private void DestroyPanel( string pnlName )
     {
-        GameObject panel;
-        if ( !UiDict.TryGetValue( pnlName, out panel ) ) return;
-
-        UiDict.Remove( pnlName );
+        if ( !UiDict.TryGetValue( pnlName, out var panel ) ) return;
 
         if ( !panel )
+        {
+            UiDict.Remove( pnlName );
+            ScrollViews.Remove( pnlName );
             return;
+        }
 
-        //Remove it from the scrollviews if its present
-        ScrollViews.Remove(pnlName);
+        UnregisterRecursively(panel.transform);
+        changedParents.Add(panel.transform.parent);
 
         var fadeOut = panel.GetComponent<FadeOut>();
         if ( fadeOut )
@@ -1208,8 +1539,41 @@ public partial class CommunityEntity
         }
         else
         {
+            panelsBeingDestroyed.Add(panel);
             Destroy( panel );
         }
+    }
+
+    private void UnregisterRecursively(Transform parent)
+    {
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            UnregisterRecursively(parent.GetChild(i));
+        }
+        AllUi.Remove(parent.gameObject);
+
+        if (UiDict.TryGetValue(parent.name, out var registered) && registered == parent.gameObject)
+        {
+            UiDict.Remove(parent.name);
+            ScrollViews.Remove(parent.name);
+        }
+    }
+
+    [ClientVar(ClientAdmin = true, Help = "Prints all active UI panels to the console")]
+    public static void print_alluis(ConsoleSystem.Arg arg)
+    {
+        var builder = Pool.Get<StringBuilder>();
+        foreach (var ui in AllUi)
+        {
+            if (ui != null)
+                builder.AppendLine(ui.transform.GetRecursiveName());
+            else
+                builder.AppendLine("null");
+        }
+
+        builder.AppendLine("Total: " + AllUi.Count + " active UI panels");
+        Debug.Log(builder.ToString());
+        Pool.FreeUnmanaged(ref builder);
     }
 }
 
