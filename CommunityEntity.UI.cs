@@ -821,6 +821,7 @@ public partial class CommunityEntity
                 // Adding a Canvas allows unity to isolate any changes inside the scrollrect, improving performance as the outer canvas wont need an update on scroll
                 var canvas = go.GetComponent<Canvas>();
                 if(!canvas){
+                    UpdateCanvasesVisibility();
                     canvas = go.AddComponent<Canvas>();
                     go.AddComponent<GraphicRaycaster>();
                 }
